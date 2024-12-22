@@ -122,6 +122,30 @@
       });
     </script>
 
+    <!-- PageLoad event -->
+    <script>
+      alloy('sendEvent', {
+        xdm: {
+          web: {
+            webPageDetails: {
+              URL: 'https://example.com/index.html',
+              referrer: 'https://example.com/index.html',
+              pageInfo: {
+                pageName: 'Home',
+                sysEnv: 'desktop',
+                variant: 'A',
+              },
+            },
+          },
+        },
+        event: {
+          xdm: {
+            eventType: 'pageLoad',
+          },
+        },
+      });
+    </script>
+
     <!-- Adobe Target Reference -->
     <script
       src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js"
