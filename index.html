@@ -126,7 +126,6 @@
     <script>
       alloy('sendEvent', {
         xdm: {
-          eventType: 'pageLoad',
           web: {
             webPageDetails: {
               name: 'Home',
@@ -193,7 +192,7 @@
             </p>
           </header>
           <section class="tiles">
-            <article class="style1">
+            <article class="style1" onclick="handleProductClick('Magna', '/generic/magma')">
               <span class="image">
                 <img src="images/pic01.jpg" alt="" />
               </span>
@@ -204,6 +203,7 @@
                 </div>
               </a>
             </article>
+
             <article class="style2">
               <span class="image">
                 <img src="images/pic02.jpg" alt="" />
@@ -215,6 +215,7 @@
                 </div>
               </a>
             </article>
+
             <article class="style3">
               <span class="image">
                 <img src="images/pic03.jpg" alt="" />
@@ -399,6 +400,22 @@
         </div>
       </footer>
     </div>
+
+    <script>
+      function handleProductClick(name, src) {
+        alloy('sendEvent', {
+          xdm: {
+            web: {
+              webInteraction: {
+                name,
+                type: 'click',
+                URL: src,
+              },
+            },
+          },
+        });
+      }
+    </script>
 
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
