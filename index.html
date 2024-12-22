@@ -126,21 +126,18 @@
     <script>
       alloy('sendEvent', {
         xdm: {
+          eventType: 'pageLoad',
           web: {
             webPageDetails: {
               URL: 'https://example.com/index.html',
               referrer: 'https://example.com/index.html',
+              pageView: 1,
               pageInfo: {
                 pageName: 'Home',
                 sysEnv: 'desktop',
                 variant: 'A',
               },
             },
-          },
-        },
-        event: {
-          xdm: {
-            eventType: 'pageLoad',
           },
         },
       });
