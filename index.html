@@ -37,6 +37,12 @@
 
     <!-- Alloy configuration -->
     <script>
+      window.alloy =
+        window.alloy ||
+        function () {
+          (alloy.q = alloy.q || []).push(arguments);
+        };
+
       alloy('configure', {
         datastreamId: '322f8919-c42d-4143-a6cc-f17ce2f4d1a0',
         orgId: '1C722A9A5F59DECB0A495F9F@AdobeOrg',
