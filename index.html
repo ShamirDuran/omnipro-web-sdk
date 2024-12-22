@@ -35,19 +35,76 @@
     </script>
     <!-- Adobe Prehide -->
 
-    <!-- DataLayer -->
+    <!-- Alloy configuration -->
     <script>
-      window.adobeDataLayer = window.adobeDataLayer || [];
-
-      // Page View Event
-      window.adobeDataLayer.push({
-        event: 'pageLoad',
-        page: {
-          path: '/index.html',
-          name: 'Home',
+      alloy('configure', {
+        datastreamId: '322f8919-c42d-4143-a6cc-f17ce2f4d1a0',
+        orgId: '1C722A9A5F59DECB0A495F9F@AdobeOrg',
+        clickCollectionEnabled: true,
+        clickCollection: {
+          internalLinkEnabled: true,
+          downloadLinkEnabled: true,
+          externalLinkEnabled: true,
+          eventGroupingEnabled: true,
+          sessionStorageEnabled: true,
         },
+        context: ['web', 'device', 'environment', 'placeContext', 'highEntropyUserAgentHints'],
+        debugEnabled: true,
+        defaultConsent: 'pending',
+        downloadLinkQualifier:
+          '\.(exe|zip|wav|mp3|mov|mpg|avi|wmv|pdf|doc|docx|xls|xlsx|ppt|pptx)$',
+        edgeBasePath: 'ee',
+        edgeConfigOverrides: { datastreamId: '322f8919-c42d-4143-a6cc-f17ce2f4d1a0' },
+        edgeDomain: 'data.example.com',
+        idMigrationEnabled: false,
+        onBeforeEventSend: function (content) {
+          if (content.xdm.web?.webReferrer) delete content.xdm.web.webReferrer.URL;
+        },
+        onBeforeLinkClickSend: function (content) {
+          content.xdm.web.webPageDetails.URL = 'https://example.com/current.html';
+        },
+        prehidingStyle: '#container { opacity: 0 !important }',
+        targetMigrationEnabled: true,
+        thirdPartyCookiesEnabled: false,
       });
     </script>
+
+    <!-- Ask for consent -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var consentBanner = document.createElement('div');
+        consentBanner.innerHTML = `
+          <div id="consent-banner" style="position: fixed; bottom: 0; width: 100%; background: #000; color: #fff; padding: 10px; text-align: center;">
+            This website uses cookies to ensure you get the best experience. 
+            <button id="accept-consent" style="margin-left: 10px;">Accept</button>
+          </div>
+        `;
+        document.body.appendChild(consentBanner);
+
+        document.getElementById('accept-consent').addEventListener('click', function () {
+          document.getElementById('consent-banner').style.display = 'none';
+          alloy('setConsent', {
+            consent: [
+              {
+                standard: 'Adobe',
+                version: '2.0',
+                value: {
+                  collect: {
+                    val: 'y',
+                  },
+                  metadata: {
+                    time: new Date().toISOString(),
+                  },
+                },
+              },
+            ],
+          });
+        });
+      });
+    </script>
+
+    <!-- DataLayer -->
+    <script></script>
 
     <!-- Adobe Target Reference -->
     <script
