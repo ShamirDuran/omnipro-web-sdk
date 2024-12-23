@@ -124,6 +124,8 @@
         <div class="inner">
           <h1>Generic Page</h1>
           <span class="image main"><img src="images/pic13.jpg" alt="" /></span>
+
+          <button>Testing</button>
           <p>
             Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus.
             Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam,
@@ -222,6 +224,27 @@
         </div>
       </footer>
     </div>
+
+    <script>
+      function addToCart() {
+        // push adobeDataLayer event add to cart with some test data
+        window.adobeDataLayer.push({
+          event: 'addToCart',
+          product: {
+            productInfo: {
+              productID: '12345',
+              productName: 'Test Product',
+              productCategory: 'Test Category',
+              productSubCategory: 'Test Subcategory',
+              productBrand: 'Test Brand',
+              productVariant: 'Test Variant',
+              productPrice: 100.0,
+              productQuantity: 1,
+            },
+          },
+        });
+      }
+    </script>
 
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
