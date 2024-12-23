@@ -35,6 +35,50 @@
     </script>
     <!-- Adobe Prehide -->
 
+    <!-- Digital Data -->
+    <script>
+      window.digitalData = {
+        user: [
+          {
+            profile: [
+              {
+                attributes: {
+                  loggedIn: true, // Indica si el usuario está autenticado
+                  userId: '1005333241', // ID del usuario
+                  userType: 'premium', // Tipo de usuario
+                },
+              },
+            ],
+          },
+        ],
+        page: {
+          pageInfo: {
+            pageName: 'Generic Page',
+            destinationURL: document.location.href,
+            referringURL: document.referrer,
+          },
+        },
+      };
+    </script>
+
+    <!-- DataLayer -->
+    <script>
+      window.adobeDataLayer = window.adobeDataLayer || [];
+
+      // Page View Event
+      window.adobeDataLayer.push({
+        event: 'pageLoad',
+        page: {
+          path: '/generic.html',
+          name: 'Generic Page',
+          isHomePage: true,
+          url: document.location.href,
+        },
+      });
+    </script>
+
+    <script src="adobe-client-data-layer.min.js" defer async></script>
+
     <!-- Adobe Target Reference -->
     <script
       src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js"
