@@ -76,7 +76,14 @@
       });
     </script>
 
+    <script src="//152-ZQW-300.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1002"></form>
+    <script>
+      MktoForms2.loadForm('//152-ZQW-300.mktoweb.com', '152-ZQW-300', 1002);
+    </script>
+
     <script src="adobe-client-data-layer.min.js" defer async></script>
+    <script src="//152-ZQW-300.mktoweb.com/js/forms2/js/forms2.min.js"></script>
 
     <!-- Adobe Target Reference -->
     <script
@@ -84,6 +91,7 @@
       async
     ></script>
   </head>
+
   <body class="is-preload">
     <!-- Wrapper -->
     <div id="wrapper">
@@ -131,6 +139,11 @@
               feugiat veroeros aliquam. Lorem ipsum dolor sit amet nullam dolore.
             </p>
           </header>
+
+          <button id="loadFormButton">Cargar Formulario</button>
+
+          <div id="formContainer"></div>
+
           <section class="tiles">
             <article class="style1">
               <span class="image">
@@ -338,6 +351,15 @@
         </div>
       </footer>
     </div>
+
+    <script>
+      document.getElementById('loadFormButton').addEventListener('click', function () {
+        MktoForms2.loadForm('//152-ZQW-300.mktoweb.com', '152-ZQW-300', 1002, function (form) {
+          // El formulario se ha cargado en el contenedor con id "formContainer"
+          form.render('#formContainer');
+        });
+      });
+    </script>
 
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
