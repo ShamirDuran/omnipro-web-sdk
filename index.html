@@ -8,9 +8,14 @@
   <head>
     <title>Phantom by HTML5</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
     <link rel="stylesheet" href="assets/css/main.css" />
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <noscript
+      ><link rel="stylesheet" href="assets/css/noscript.css"
+    /></noscript>
 
     <!-- Adobe Prehide -->
     <script>
@@ -18,8 +23,8 @@
         var i = e.head;
         if (i) {
           if (a) return;
-          var o = e.createElement('style');
-          (o.id = 'alloy-prehiding'),
+          var o = e.createElement("style");
+          (o.id = "alloy-prehiding"),
             (o.innerText = n),
             i.appendChild(o),
             setTimeout(function () {
@@ -28,12 +33,13 @@
         }
       })(
         document,
-        document.location.href.indexOf('adobe_authoring_enabled') !== -1,
-        '.personalization-container { opacity: 0 !important }',
+        document.location.href.indexOf("adobe_authoring_enabled") !== -1,
+        ".personalization-container { opacity: 0 !important }",
         3000
       );
     </script>
     <!-- Adobe Prehide -->
+
 
     <!-- Alloy configuration -->
     <script>
@@ -43,9 +49,9 @@
           (alloy.q = alloy.q || []).push(arguments);
         };
 
-      alloy('configure', {
-        datastreamId: '322f8919-c42d-4143-a6cc-f17ce2f4d1a0',
-        orgId: '1C722A9A5F59DECB0A495F9F@AdobeOrg',
+      alloy("configure", {
+        datastreamId: "322f8919-c42d-4143-a6cc-f17ce2f4d1a0",
+        orgId: "1C722A9A5F59DECB0A495F9F@AdobeOrg",
         clickCollectionEnabled: true,
         clickCollection: {
           internalLinkEnabled: true,
@@ -54,22 +60,32 @@
           eventGroupingEnabled: true,
           sessionStorageEnabled: true,
         },
-        context: ['web', 'device', 'environment', 'placeContext', 'highEntropyUserAgentHints'],
+        context: [
+          "web",
+          "device",
+          "environment",
+          "placeContext",
+          "highEntropyUserAgentHints",
+        ],
         debugEnabled: true,
-        defaultConsent: 'pending',
+        defaultConsent: "pending",
         downloadLinkQualifier:
-          '\.(exe|zip|wav|mp3|mov|mpg|avi|wmv|pdf|doc|docx|xls|xlsx|ppt|pptx)$',
-        edgeBasePath: 'ee',
-        edgeConfigOverrides: { datastreamId: '322f8919-c42d-4143-a6cc-f17ce2f4d1a0' },
-        edgeDomain: 'data.example.com',
+          "\.(exe|zip|wav|mp3|mov|mpg|avi|wmv|pdf|doc|docx|xls|xlsx|ppt|pptx)$",
+        edgeBasePath: "ee",
+        edgeConfigOverrides: {
+          datastreamId: "322f8919-c42d-4143-a6cc-f17ce2f4d1a0",
+        },
+        edgeDomain: "data.example.com",
         idMigrationEnabled: false,
         onBeforeEventSend: function (content) {
-          if (content.xdm.web?.webReferrer) delete content.xdm.web.webReferrer.URL;
+          if (content.xdm.web?.webReferrer)
+            delete content.xdm.web.webReferrer.URL;
         },
         onBeforeLinkClickSend: function (content) {
-          content.xdm.web.webPageDetails.URL = 'https://example.com/current.html';
+          content.xdm.web.webPageDetails.URL =
+            "https://example.com/current.html";
         },
-        prehidingStyle: '#container { opacity: 0 !important }',
+        prehidingStyle: "#container { opacity: 0 !important }",
         targetMigrationEnabled: true,
         thirdPartyCookiesEnabled: false,
       });
@@ -79,19 +95,19 @@
     <script>
       // check if already consented
       alloy.ready(function () {
-        alloy('getConsent', {
+        alloy("getConsent", {
           callback: function (consent) {
-            if (consent === 'pending') {
-              document.getElementById('consent-banner').style.display = 'block';
+            if (consent === "pending") {
+              document.getElementById("consent-banner").style.display = "block";
             } else {
-              document.getElementById('consent-banner').style.display = 'none';
+              document.getElementById("consent-banner").style.display = "none";
             }
           },
         });
       });
 
-      document.addEventListener('DOMContentLoaded', function () {
-        var consentBanner = document.createElement('div');
+      document.addEventListener("DOMContentLoaded", function () {
+        var consentBanner = document.createElement("div");
         consentBanner.innerHTML = `
           <div id="consent-banner" style="position: fixed; bottom: 0; width: 100%; background: #000; color: #fff; padding: 10px; text-align: center; z-index: 1000;">
             This website uses cookies to ensure you get the best experience. 
@@ -100,35 +116,37 @@
         `;
         document.body.appendChild(consentBanner);
 
-        document.getElementById('accept-consent').addEventListener('click', function () {
-          document.getElementById('consent-banner').style.display = 'none';
-          alloy('setConsent', {
-            consent: [
-              {
-                standard: 'Adobe',
-                version: '2.0',
-                value: {
-                  collect: {
-                    val: 'y',
-                  },
-                  metadata: {
-                    time: new Date().toISOString(),
+        document
+          .getElementById("accept-consent")
+          .addEventListener("click", function () {
+            document.getElementById("consent-banner").style.display = "none";
+            alloy("setConsent", {
+              consent: [
+                {
+                  standard: "Adobe",
+                  version: "2.0",
+                  value: {
+                    collect: {
+                      val: "y",
+                    },
+                    metadata: {
+                      time: new Date().toISOString(),
+                    },
                   },
                 },
-              },
-            ],
+              ],
+            });
           });
-        });
       });
     </script>
 
     <!-- PageLoad event -->
     <script>
-      alloy('sendEvent', {
+      alloy("sendEvent", {
         xdm: {
           web: {
             webPageDetails: {
-              name: 'Home',
+              name: "Home",
             },
           },
         },
@@ -184,9 +202,10 @@
               template designed by HTML5 UP.
             </h1>
             <p>
-              Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod sit amet nisi euismod
-              sed cursus arcu elementum ipsum arcu vivamus quis venenatis orci lorem ipsum et magna
-              feugiat veroeros aliquam. Lorem ipsum dolor sit amet nullam dolore.
+              Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod
+              sit amet nisi euismod sed cursus arcu elementum ipsum arcu vivamus
+              quis venenatis orci lorem ipsum et magna feugiat veroeros aliquam.
+              Lorem ipsum dolor sit amet nullam dolore.
             </p>
           </header>
           <section class="tiles">
@@ -197,7 +216,10 @@
               <a href="generic.html">
                 <h2>Magna</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -208,7 +230,10 @@
               <a href="generic.html">
                 <h2>Lorem</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -219,7 +244,10 @@
               <a href="generic.html">
                 <h2>Feugiat</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -230,7 +258,10 @@
               <a href="generic.html">
                 <h2>Tempus</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -241,7 +272,10 @@
               <a href="generic.html">
                 <h2>Aliquam</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -252,7 +286,10 @@
               <a href="generic.html">
                 <h2>Veroeros</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -263,7 +300,10 @@
               <a href="generic.html">
                 <h2>Ipsum</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -274,7 +314,10 @@
               <a href="generic.html">
                 <h2>Dolor</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -285,7 +328,10 @@
               <a href="generic.html">
                 <h2>Nullam</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -296,7 +342,10 @@
               <a href="generic.html">
                 <h2>Ultricies</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -307,7 +356,10 @@
               <a href="generic.html">
                 <h2>Dictum</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -318,7 +370,10 @@
               <a href="generic.html">
                 <h2>Pretium</h2>
                 <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+                  <p>
+                    Sed nisl arcu euismod sit amet nisi lorem etiam dolor
+                    veroeros et feugiat.
+                  </p>
                 </div>
               </a>
             </article>
@@ -337,10 +392,19 @@
                   <input type="text" name="name" id="name" placeholder="Name" />
                 </div>
                 <div class="field half">
-                  <input type="email" name="email" id="email" placeholder="Email" />
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Email"
+                  />
                 </div>
                 <div class="field">
-                  <textarea name="message" id="message" placeholder="Message"></textarea>
+                  <textarea
+                    name="message"
+                    id="message"
+                    placeholder="Message"
+                  ></textarea>
                 </div>
               </div>
               <ul class="actions">
@@ -377,10 +441,14 @@
                 >
               </li>
               <li>
-                <a href="#" class="icon brands style2 fa-500px"><span class="label">500px</span></a>
+                <a href="#" class="icon brands style2 fa-500px"
+                  ><span class="label">500px</span></a
+                >
               </li>
               <li>
-                <a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a>
+                <a href="#" class="icon solid style2 fa-phone"
+                  ><span class="label">Phone</span></a
+                >
               </li>
               <li>
                 <a href="#" class="icon solid style2 fa-envelope"
