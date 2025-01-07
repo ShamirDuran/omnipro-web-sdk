@@ -18,7 +18,26 @@
     </noscript>
 
     <!-- Adobe Prehide -->
-    <script> !function(e,a,n,t){var i=e.head;if(i){ if (a) return; var o=e.createElement("style"); o.id="alloy-prehiding",o.innerText=n,i.appendChild(o),setTimeout(function(){o.parentNode&&o.parentNode.removeChild(o)},t)}} (document, document.location.href.indexOf("mboxEdit") !== -1, "body { opacity: 0 !important }", 3000); </script>
+    <script>
+      !(function (e, a, n, t) {
+        var i = e.head;
+        if (i) {
+          if (a) return;
+          var o = e.createElement("style");
+          (o.id = "alloy-prehiding"),
+            (o.innerText = n),
+            i.appendChild(o),
+            setTimeout(function () {
+              o.parentNode && o.parentNode.removeChild(o);
+            }, t);
+        }
+      })(
+        document,
+        document.location.href.indexOf("adobe_authoring_enabled") !== -1,
+        ".personalization-container { opacity: 0 !important }",
+        3000
+      );
+    </script>
     <!-- Adobe Prehide -->
 
     <!-- DataLayer -->
@@ -37,7 +56,7 @@
       });
     </script>
 
-    <script src="adobe-client-data-layer.min.js" defer async></script>
+    <script src="adobe-client-data-layer.min.js" defer async></>
 
     <!-- Adobe Target Reference -->
     <script
@@ -109,7 +128,10 @@
           <section class="tiles">
             <article class="style1">
               <span class="image">
-                <img src="https://bestfriends.org/sites/default/files/styles/hero_mobile/public/hero-dash/Asana3808_Dashboard_Standard.jpg?h=ebad9ecf&itok=cWevo33k" alt="" />
+                <img
+                  src="https://bestfriends.org/sites/default/files/styles/hero_mobile/public/hero-dash/Asana3808_Dashboard_Standard.jpg?h=ebad9ecf&itok=cWevo33k"
+                  alt=""
+                />
               </span>
               <a href="generic.html">
                 <h2>Magna</h2>
