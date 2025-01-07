@@ -18,7 +18,39 @@
     </noscript>
 
     <!-- Adobe Prehide -->
-    <script> !function(e,a,n,t){var i=e.head;if(i){ if (a) return; var o=e.createElement("style"); o.id="alloy-prehiding",o.innerText=n,i.appendChild(o),setTimeout(function(){o.parentNode&&o.parentNode.removeChild(o)},t)}} (document, document.location.href.indexOf("mboxEdit") !== -1, "body { opacity: 0 !important }", 3000); </script>
+    <script>
+      //prehiding snippet for Adobe Target with asynchronous tags deployment
+      ;(function(win, doc, style, timeout) {
+      var STYLE_ID = 'at-body-style';
+      function getParent() {
+         return doc.getElementsByTagName('head')[0];
+      }
+      function addStyle(parent, id, def) {
+         if (!parent) {
+         return;
+         }
+         var style = doc.createElement('style');
+         style.id = id;
+         style.innerHTML = def;
+         parent.appendChild(style);
+      }
+      function removeStyle(parent, id) {
+         if (!parent) {
+         return;
+         }
+         var style = doc.getElementById(id);
+         if (!style) {
+         return;
+         }
+         parent.removeChild(style);
+      }
+      addStyle(getParent(), STYLE_ID, style);
+      setTimeout(function() {
+         removeStyle(getParent(), STYLE_ID);
+      }, timeout);
+      }(window, document, "body {opacity: 0 !important}", 3000));
+   </script>
+   
     <!-- Adobe Prehide -->
 
     <!-- DataLayer -->
