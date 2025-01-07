@@ -13,12 +13,31 @@
       content="width=device-width, initial-scale=1, user-scalable=no"
     />
     <link rel="stylesheet" href="assets/css/main.css" />
-    <noscript
-      ><link rel="stylesheet" href="assets/css/noscript.css"
-    /></noscript>
+    <noscript>
+      <link rel="stylesheet" href="assets/css/noscript.css" />
+    </noscript>
 
     <!-- Adobe Prehide -->
-
+    <script>
+      !(function (e, a, n, t) {
+        var i = e.head;
+        if (i) {
+          if (a) return;
+          var o = e.createElement("style");
+          (o.id = "alloy-prehiding"),
+            (o.innerText = n),
+            i.appendChild(o),
+            setTimeout(function () {
+              o.parentNode && o.parentNode.removeChild(o);
+            }, t);
+        }
+      })(
+        document,
+        document.location.href.indexOf("adobe_authoring_enabled") !== -1,
+        ".personalization-container { opacity: 0 !important }",
+        3000
+      );
+    </script>
     <!-- Adobe Prehide -->
 
     <!-- DataLayer -->
@@ -27,10 +46,10 @@
 
       // Page View Event
       window.adobeDataLayer.push({
-        event: 'pageLoad',
+        event: "pageLoad",
         page: {
-          path: '/index.html',
-          name: 'Home Page',
+          path: "/index.html",
+          name: "Home Page",
           isHomePage: true,
           url: document.location.href,
         },
@@ -40,7 +59,10 @@
     <script src="adobe-client-data-layer.min.js" defer async></script>
 
     <!-- Adobe Target Reference -->
-    <script src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js" async></script>
+    <script
+      src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js"
+      async
+    ></script>
     <!-- Adobe Target Reference -->
 
     <script src="adobe-client-data-layer.min.js" defer async></script>
