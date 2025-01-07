@@ -35,6 +35,7 @@
     </script>
     <!-- Adobe Prehide -->
 
+<<<<<<< HEAD
     <script>
       window.alloy =
         window.alloy ||
@@ -87,6 +88,52 @@
       });
     </script>
 
+=======
+    <!-- Digital Data -->
+    <script>
+      window.digitalData = {
+        user: [
+          {
+            profile: [
+              {
+                attributes: {
+                  loggedIn: true, // Indica si el usuario está autenticado
+                  userId: '1005333241', // ID del usuario
+                  userType: 'premium', // Tipo de usuario
+                },
+              },
+            ],
+          },
+        ],
+        page: {
+          pageInfo: {
+            pageName: 'Generic Page',
+            destinationURL: document.location.href,
+            referringURL: document.referrer,
+          },
+        },
+      };
+    </script>
+
+    <!-- DataLayer -->
+    <script>
+      window.adobeDataLayer = window.adobeDataLayer || [];
+
+      // Page View Event
+      window.adobeDataLayer.push({
+        event: 'pageLoad',
+        page: {
+          path: '/generic.html',
+          name: 'Generic Page',
+          isHomePage: true,
+          url: document.location.href,
+        },
+      });
+    </script>
+
+    <script src="adobe-client-data-layer.min.js" defer async></script>
+
+>>>>>>> 8b0badfbed577549ff90666eaafce70a9a4c463f
     <!-- Adobe Target Reference -->
     <script
       src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js"
@@ -132,6 +179,8 @@
         <div class="inner">
           <h1>Generic Page</h1>
           <span class="image main"><img src="images/pic13.jpg" alt="" /></span>
+
+          <button onclick="addToCart()">Testing</button>
           <p>
             Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus.
             Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam,
@@ -230,6 +279,27 @@
         </div>
       </footer>
     </div>
+
+    <script>
+      function addToCart() {
+        // push adobeDataLayer event add to cart with some test data
+        window.adobeDataLayer.push({
+          event: 'addToCart',
+          product: {
+            productInfo: {
+              productID: '12345',
+              productName: 'Test Product',
+              productCategory: 'Test Category',
+              productSubCategory: 'Test Subcategory',
+              productBrand: 'Test Brand',
+              productVariant: 'Test Variant',
+              productPrice: 100.0,
+              productQuantity: 1,
+            },
+          },
+        });
+      }
+    </script>
 
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>

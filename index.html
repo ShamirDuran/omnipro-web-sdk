@@ -19,139 +19,31 @@
 
     <!-- Adobe Prehide -->
     <script>
-      !(function (e, a, n, t) {
-        var i = e.head;
-        if (i) {
-          if (a) return;
-          var o = e.createElement("style");
-          (o.id = "alloy-prehiding"),
-            (o.innerText = n),
-            i.appendChild(o),
-            setTimeout(function () {
-              o.parentNode && o.parentNode.removeChild(o);
-            }, t);
-        }
-      })(
-        document,
-        document.location.href.indexOf("adobe_authoring_enabled") !== -1,
-        ".personalization-container { opacity: 0 !important }",
-        3000
-      );
+      !function(e,a,n,t){var i=e.head;if(i){
+      if (a) return;
+      var o=e.createElement("style");
+      o.id="alloy-prehiding",o.innerText=n,i.appendChild(o),setTimeout(function(){o.parentNode&&o.parentNode.removeChild(o)},t)}}
+      (document, document.location.href.indexOf("adobe_authoring_enabled") !== -1, ".personalization-container { opacity: 0 !important }", 3000);
     </script>
     <!-- Adobe Prehide -->
 
-
-    <!-- Alloy configuration -->
+    <!-- DataLayer -->
     <script>
-      window.alloy =
-        window.alloy ||
-        function () {
-          (alloy.q = alloy.q || []).push(arguments);
-        };
+      window.adobeDataLayer = window.adobeDataLayer || [];
 
-      alloy("configure", {
-        datastreamId: "322f8919-c42d-4143-a6cc-f17ce2f4d1a0",
-        orgId: "1C722A9A5F59DECB0A495F9F@AdobeOrg",
-        clickCollectionEnabled: true,
-        clickCollection: {
-          internalLinkEnabled: true,
-          downloadLinkEnabled: true,
-          externalLinkEnabled: true,
-          eventGroupingEnabled: true,
-          sessionStorageEnabled: true,
+      // Page View Event
+      window.adobeDataLayer.push({
+        event: 'pageLoad',
+        page: {
+          path: '/index.html',
+          name: 'Home Page',
+          isHomePage: true,
+          url: document.location.href,
         },
-        context: [
-          "web",
-          "device",
-          "environment",
-          "placeContext",
-          "highEntropyUserAgentHints",
-        ],
-        debugEnabled: true,
-        defaultConsent: "pending",
-        downloadLinkQualifier:
-          "\.(exe|zip|wav|mp3|mov|mpg|avi|wmv|pdf|doc|docx|xls|xlsx|ppt|pptx)$",
-        edgeBasePath: "ee",
-        edgeConfigOverrides: {
-          datastreamId: "322f8919-c42d-4143-a6cc-f17ce2f4d1a0",
-        },
-        edgeDomain: "data.example.com",
-        idMigrationEnabled: false,
-        onBeforeEventSend: function (content) {
-          if (content.xdm.web?.webReferrer)
-            delete content.xdm.web.webReferrer.URL;
-        },
-        onBeforeLinkClickSend: function (content) {
-          content.xdm.web.webPageDetails.URL =
-            "https://example.com/current.html";
-        },
-        prehidingStyle: "#container { opacity: 0 !important }",
-        targetMigrationEnabled: true,
-        thirdPartyCookiesEnabled: false,
       });
     </script>
 
-    <!-- Ask for consent -->
-    <script>
-      // check if already consented
-      alloy.ready(function () {
-        alloy("getConsent", {
-          callback: function (consent) {
-            if (consent === "pending") {
-              document.getElementById("consent-banner").style.display = "block";
-            } else {
-              document.getElementById("consent-banner").style.display = "none";
-            }
-          },
-        });
-      });
-
-      document.addEventListener("DOMContentLoaded", function () {
-        var consentBanner = document.createElement("div");
-        consentBanner.innerHTML = `
-          <div id="consent-banner" style="position: fixed; bottom: 0; width: 100%; background: #000; color: #fff; padding: 10px; text-align: center; z-index: 1000;">
-            This website uses cookies to ensure you get the best experience. 
-            <button id="accept-consent" style="margin-left: 10px;">Accept</button>
-          </div>
-        `;
-        document.body.appendChild(consentBanner);
-
-        document
-          .getElementById("accept-consent")
-          .addEventListener("click", function () {
-            document.getElementById("consent-banner").style.display = "none";
-            alloy("setConsent", {
-              consent: [
-                {
-                  standard: "Adobe",
-                  version: "2.0",
-                  value: {
-                    collect: {
-                      val: "y",
-                    },
-                    metadata: {
-                      time: new Date().toISOString(),
-                    },
-                  },
-                },
-              ],
-            });
-          });
-      });
-    </script>
-
-    <!-- PageLoad event -->
-    <script>
-      alloy("sendEvent", {
-        xdm: {
-          web: {
-            webPageDetails: {
-              name: "Home",
-            },
-          },
-        },
-      });
-    </script>
+    <script src="adobe-client-data-layer.min.js" defer async></script>
 
     <!-- Adobe Target Reference -->
     <script
@@ -159,7 +51,10 @@
       async
     ></script>
     <!-- Adobe Target Reference -->
+
+    <script src="adobe-client-data-layer.min.js" defer async></script>
   </head>
+
   <body class="is-preload">
     <!-- Wrapper -->
     <div id="wrapper">
@@ -208,6 +103,15 @@
               Lorem ipsum dolor sit amet nullam dolore.
             </p>
           </header>
+
+          <script src="//152-ZQW-300.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+          <form id="mktoForm_1002"></form>
+          <script>
+            MktoForms2.loadForm('//152-ZQW-300.mktoweb.com', '152-ZQW-300', 1002, function (form) {
+              MktoForms2.lightbox(form).show();
+            });
+          </script>
+
           <section class="tiles">
             <article class="style1">
               <span class="image">
