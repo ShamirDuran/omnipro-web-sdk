@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      id="att_lightbox"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      "
+    >
+      <div
+        class="att_lightbox_background"
+        style="
+          display: block;
+          position: fixed;
+          width: 100vw;
+          height: 100vh;
+          top: 0;
+          left: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          z-index: 1000;
+          margin: 0;
+          padding: 0;
+        "
+      ></div>
+      <div
+        class="att_popup"
+        style="
+          margin: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          z-index: 1001;
+          border-radius: 5px;
+          position: relative;
+        "
+      >
+        <div
+          class="att_lightbox_contents"
+          style="
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%;
+          "
+        >
+          <img
+            src="https://s7d1.scene7.com/is/image/Targetimportadoraricamar/popup_primera_compra-1?tm=1736546666598&fit=constrain&hei=800&wid=800"
+            alt="Popup Image"
+            style="cursor: pointer; max-width: 582px"
+            id="att_popup_image"
+          />
+          <span
+            id="att_lightbox_close"
+            class="close_button"
+            style="
+              font-size: 40px;
+              font-weight: 500;
+              color: #fff;
+              position: absolute;
+              top: 10px;
+              right: 15px;
+              cursor: pointer;
+            "
+            >&times;</span
+          >
+          <span
+            id="att_redirect_button"
+            style="
+              position: absolute;
+              top: 62%;
+              width: 60%;
+              height: 43px;
+              cursor: pointer;
+            "
+          ></span>
+          <span
+            id="att_reject_button"
+            style="
+              position: absolute;
+              top: 70%;
+              width: 45%;
+              height: 40px;
+              cursor: pointer;
+            "
+          ></span>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
