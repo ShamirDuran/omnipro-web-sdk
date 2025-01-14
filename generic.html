@@ -8,9 +8,14 @@
   <head>
     <title>Generic - Phantom by HTML5 UP</title>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
     <link rel="stylesheet" href="assets/css/main.css" />
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    <noscript
+      ><link rel="stylesheet" href="assets/css/noscript.css"
+    /></noscript>
 
     <!-- Adobe Prehide -->
     <script>
@@ -18,8 +23,8 @@
         var i = e.head;
         if (i) {
           if (a) return;
-          var o = e.createElement('style');
-          (o.id = 'alloy-prehiding'),
+          var o = e.createElement("style");
+          (o.id = "alloy-prehiding"),
             (o.innerText = n),
             i.appendChild(o),
             setTimeout(function () {
@@ -28,8 +33,8 @@
         }
       })(
         document,
-        document.location.href.indexOf('adobe_authoring_enabled') !== -1,
-        '.personalization-container { opacity: 0 !important }',
+        document.location.href.indexOf("adobe_authoring_enabled") !== -1,
+        ".personalization-container { opacity: 0 !important }",
         3000
       );
     </script>
@@ -42,9 +47,9 @@
           (alloy.q = alloy.q || []).push(arguments);
         };
 
-      alloy('configure', {
-        datastreamId: '322f8919-c42d-4143-a6cc-f17ce2f4d1a0',
-        orgId: '1C722A9A5F59DECB0A495F9F@AdobeOrg',
+      alloy("configure", {
+        datastreamId: "322f8919-c42d-4143-a6cc-f17ce2f4d1a0",
+        orgId: "1C722A9A5F59DECB0A495F9F@AdobeOrg",
         clickCollectionEnabled: true,
         clickCollection: {
           internalLinkEnabled: true,
@@ -53,22 +58,32 @@
           eventGroupingEnabled: true,
           sessionStorageEnabled: true,
         },
-        context: ['web', 'device', 'environment', 'placeContext', 'highEntropyUserAgentHints'],
+        context: [
+          "web",
+          "device",
+          "environment",
+          "placeContext",
+          "highEntropyUserAgentHints",
+        ],
         debugEnabled: true,
-        defaultConsent: 'pending',
+        defaultConsent: "pending",
         downloadLinkQualifier:
-          '\.(exe|zip|wav|mp3|mov|mpg|avi|wmv|pdf|doc|docx|xls|xlsx|ppt|pptx)$',
-        edgeBasePath: 'ee',
-        edgeConfigOverrides: { datastreamId: '322f8919-c42d-4143-a6cc-f17ce2f4d1a0' },
-        edgeDomain: 'data.example.com',
+          "\.(exe|zip|wav|mp3|mov|mpg|avi|wmv|pdf|doc|docx|xls|xlsx|ppt|pptx)$",
+        edgeBasePath: "ee",
+        edgeConfigOverrides: {
+          datastreamId: "322f8919-c42d-4143-a6cc-f17ce2f4d1a0",
+        },
+        edgeDomain: "data.example.com",
         idMigrationEnabled: false,
         onBeforeEventSend: function (content) {
-          if (content.xdm.web?.webReferrer) delete content.xdm.web.webReferrer.URL;
+          if (content.xdm.web?.webReferrer)
+            delete content.xdm.web.webReferrer.URL;
         },
         onBeforeLinkClickSend: function (content) {
-          content.xdm.web.webPageDetails.URL = 'https://example.com/current.html';
+          content.xdm.web.webPageDetails.URL =
+            "https://example.com/current.html";
         },
-        prehidingStyle: '#container { opacity: 0 !important }',
+        prehidingStyle: "#container { opacity: 0 !important }",
         targetMigrationEnabled: true,
         thirdPartyCookiesEnabled: false,
       });
@@ -76,11 +91,11 @@
 
     <!-- PageLoad event -->
     <script>
-      alloy('sendEvent', {
+      alloy("sendEvent", {
         xdm: {
           web: {
             webPageDetails: {
-              name: 'Generic',
+              name: "Generic",
             },
           },
         },
@@ -90,7 +105,10 @@
     <script src="adobe-client-data-layer.min.js" async defer></script>
 
     <!-- Adobe Target Reference -->
-    <script src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js" async></script>
+    <script
+      src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js"
+      async
+    ></script>
     <!-- Adobe Target Reference -->
   </head>
   <body class="is-preload">
@@ -134,29 +152,35 @@
 
           <button onclick="addToCart()">Testing</button>
           <p>
-            Donec eget ex magna. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-            Pellentesque venenatis dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam,
-            vitae egestas enim auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit
-            amet, fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit. Donec urna ex,
-            lacinia in purus ac, pretium pulvinar mauris. Curabitur sapien risus, commodo eget
-            turpis at, elementum convallis elit. Pellentesque enim turpis, hendrerit tristique.
+            Donec eget ex magna. Interdum et malesuada fames ac ante ipsum
+            primis in faucibus. Pellentesque venenatis dolor imperdiet dolor
+            mattis sagittis. Praesent rutrum sem diam, vitae egestas enim auctor
+            sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet,
+            fergiat. Pellentesque in mi eu massa lacinia malesuada et a elit.
+            Donec urna ex, lacinia in purus ac, pretium pulvinar mauris.
+            Curabitur sapien risus, commodo eget turpis at, elementum convallis
+            elit. Pellentesque enim turpis, hendrerit tristique.
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis dapibus rutrum facilisis.
-            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-            himenaeos. Etiam tristique libero eu nibh porttitor fermentum. Nullam venenatis erat id
-            vehicula viverra. Nunc ultrices eros ut ultricies condimentum. Mauris risus lacus,
-            blandit sit amet venenatis non, bibendum vitae dolor. Nunc lorem mauris, fringilla in
-            aliquam at, euismod in lectus. Pellentesque habitant morbi tristique senectus et netus
-            et malesuada fames ac turpis egestas. In non lorem sit amet elit placerat maximus.
-            Pellentesque aliquam maximus risus, vel venenatis mauris vehicula hendrerit.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
+            dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora
+            torquent per conubia nostra, per inceptos himenaeos. Etiam tristique
+            libero eu nibh porttitor fermentum. Nullam venenatis erat id
+            vehicula viverra. Nunc ultrices eros ut ultricies condimentum.
+            Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae
+            dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in
+            lectus. Pellentesque habitant morbi tristique senectus et netus et
+            malesuada fames ac turpis egestas. In non lorem sit amet elit
+            placerat maximus. Pellentesque aliquam maximus risus, vel venenatis
+            mauris vehicula hendrerit.
           </p>
           <p>
-            Interdum et malesuada fames ac ante ipsum primis in faucibus. Pellentesque venenatis
-            dolor imperdiet dolor mattis sagittis. Praesent rutrum sem diam, vitae egestas enim
-            auctor sit amet. Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien
-            risus, commodo eget turpis at, elementum convallis elit. Pellentesque enim turpis,
-            hendrerit tristique lorem ipsum dolor.
+            Interdum et malesuada fames ac ante ipsum primis in faucibus.
+            Pellentesque venenatis dolor imperdiet dolor mattis sagittis.
+            Praesent rutrum sem diam, vitae egestas enim auctor sit amet.
+            Pellentesque leo mauris, consectetur id ipsum sit amet, fersapien
+            risus, commodo eget turpis at, elementum convallis elit.
+            Pellentesque enim turpis, hendrerit tristique lorem ipsum dolor.
           </p>
         </div>
       </div>
@@ -172,10 +196,19 @@
                   <input type="text" name="name" id="name" placeholder="Name" />
                 </div>
                 <div class="field half">
-                  <input type="email" name="email" id="email" placeholder="Email" />
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    placeholder="Email"
+                  />
                 </div>
                 <div class="field">
-                  <textarea name="message" id="message" placeholder="Message"></textarea>
+                  <textarea
+                    name="message"
+                    id="message"
+                    placeholder="Message"
+                  ></textarea>
                 </div>
               </div>
               <ul class="actions">
@@ -212,10 +245,14 @@
                 >
               </li>
               <li>
-                <a href="#" class="icon brands style2 fa-500px"><span class="label">500px</span></a>
+                <a href="#" class="icon brands style2 fa-500px"
+                  ><span class="label">500px</span></a
+                >
               </li>
               <li>
-                <a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a>
+                <a href="#" class="icon solid style2 fa-phone"
+                  ><span class="label">Phone</span></a
+                >
               </li>
               <li>
                 <a href="#" class="icon solid style2 fa-envelope"
@@ -236,15 +273,15 @@
       function addToCart() {
         // push adobeDataLayer event add to cart with some test data
         window.adobeDataLayer.push({
-          event: 'addToCart',
+          event: "addToCart",
           product: {
             productInfo: {
-              productID: '12345',
-              productName: 'Test Product',
-              productCategory: 'Test Category',
-              productSubCategory: 'Test Subcategory',
-              productBrand: 'Test Brand',
-              productVariant: 'Test Variant',
+              productID: "12345",
+              productName: "Test Product",
+              productCategory: "Test Category",
+              productSubCategory: "Test Subcategory",
+              productBrand: "Test Brand",
+              productVariant: "Test Variant",
               productPrice: 100.0,
               productQuantity: 1,
             },
