@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    </style>
+
+    <style>
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background-color: #f9f9f9;
+        width: 80%;
+        max-width: 700px;
+        border-radius: 10px;
+        padding: 20px;
+        display: flex;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+
+      .modal-left {
+        flex: 1;
+        padding: 20px;
+      }
+
+      .modal-left img {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .modal-right {
+        flex: 1;
+        padding: 20px;
+      }
+
+      .modal-right form {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .modal-right form label {
+        margin: 10px 0 5px;
+      }
+
+      .modal-right form input,
+      .modal-right form select,
+      .modal-right form button {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+      .modal-right form button {
+        background-color: #000;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .modal-right form button:hover {
+        background-color: #333;
+      }
+
+      .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 26px;
+        font-weight: 500;
+        cursor: pointer;
+        color: #000;
+      }
+
+      .close-btn:hover {
+        color: #333;
+        font-weight: 800;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <div class="modal-left">
+          <img
+            src="https://i.pinimg.com/736x/de/70/e4/de70e47188c2922080f7b707cf732035.jpg"
+            alt="Placeholder"
+          />
+          <h2>Libera tu potencial creativo</h2>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id
+            nisi non orci eleifend porttitor. Integer at orci et elit fringilla
+            posuere.
+          </p>
+        </div>
+        <div class="modal-right">
+          <form method="POST" enctype="multipart/form-data" id="lead-form">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" placeholder="Ingrese su nombre" />
+
+            <label for="correo">Correo electrónico</label>
+            <input type="email" id="correo" placeholder="Ingrese su correo" />
+
+            <label for="especializacion">Especialización</label>
+            <select id="especializacion">
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option value="diseño">Diseño</option>
+              <option value="fotografía">Fotografía</option>
+              <option value="otros">Otros</option>
+            </select>
+
+            <label for="experiencia">Experiencia</label>
+            <select id="experiencia">
+              <option value="" disabled selected>Seleccione una opción</option>
+              <option value="principiante">Principiante</option>
+              <option value="intermedio">Intermedio</option>
+              <option value="avanzado">Avanzado</option>
+            </select>
+
+            <label for="images">Cargar imagenes</label>
+            <input type="file" id="images" accept="image/*" multiple required />
+
+            <div>
+              <input type="checkbox" id="suscribirse" />
+              <label for="suscribirse">Suscribirse al boletín</label>
+            </div>
+
+            <button type="submit">Enviar →</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        window.adobeDataLayer = window.adobeDataLayer || [];
+      });
+
+      document
+        .querySelector(".close-btn")
+        .addEventListener("click", function () {
+          document.querySelector(".modal").style.display = "none";
+        });
+
+      document
+        .getElementById("lead-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          sendHttpRequest();
+        });
+
+      function sendHttpRequest() {
+        const nombre = document.getElementById("nombre").value;
+        const correo = document.getElementById("correo").value;
+        const especializacion =
+          document.getElementById("especializacion").value;
+        const experiencia = document.getElementById("experiencia").value;
+        const suscribirse = document.getElementById("suscribirse").checked;
+        const images = document.getElementById("images").files;
+
+        const formData = new FormData();
+        formData.append("nombre", nombre);
+        formData.append("correo", correo);
+        formData.append("especializacion", especializacion);
+        formData.append("experiencia", experiencia);
+        formData.append("suscribirse", suscribirse);
+
+        for (let i = 0; i < images.length; i++) {
+          formData.append("images", images[i]);
+        }
+
+        fetch("http://localhost:3000/api/assets/", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Success:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+  </body>
+</html>
