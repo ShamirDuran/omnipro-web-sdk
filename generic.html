@@ -102,19 +102,17 @@
       });
     </script>
 
-    <script src="adobe-client-data-layer.min.js" async defer></script>
-
     <!-- Adobe Target Reference -->
-    <script
+    <!-- <script
       src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js"
       async
-    ></script>
+    ></script> -->
     <!-- Adobe Target Reference -->
   </head>
 
   <body class="is-preload">
     <!-- Form Marketo -->
-    <script src="//152-ZQW-300.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <!-- <script src="//152-ZQW-300.mktoweb.com/js/forms2/js/forms2.min.js"></script>
     <form id="mktoForm_1002"></form>
     <script>
       MktoForms2.loadForm(
@@ -122,11 +120,59 @@
         "152-ZQW-300",
         1002,
         function (form) {
+          fetch("http://localhost:3000/api/test")
+            .then((response) => response.json())
+            .then((data) => {
+              const careers = data.careers;
+
+              // Asegúrate de que el formulario está listo antes de modificarlo
+              form.onSuccess(function () {
+                return false; // Previene el envío automático para pruebas
+              });
+
+              // Encuentra el select dinámicamente
+              const selectField = document.querySelector(
+                "#new_customopportunitytest"
+              );
+
+              // Limpia las opciones actuales
+              selectField.innerHTML = "";
+
+              // Agrega un placeholder o valor predeterminado
+              const placeholderOption = document.createElement("option");
+              placeholderOption.value = "";
+              placeholderOption.textContent = "Select...";
+              selectField.appendChild(placeholderOption);
+
+              // Agrega las opciones dinámicamente
+              careers.forEach(({ value, label }) => {
+                const option = document.createElement("option");
+                option.value = value;
+                option.textContent = label;
+                selectField.appendChild(option);
+              });
+
+              // Abre el formulario en un lightbox
+              MktoForms2.lightbox(form).show();
+            })
+            .catch((error) => console.error("Error:", error));
+        }
+      );
+    </script> -->
+    <!-- Form Marketo -->
+
+    <script src="//nd.nasdaq.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_9350"></form>
+    <script>
+      MktoForms2.loadForm(
+        "//nd.nasdaq.com",
+        "303-QKM-463",
+        9350,
+        function (form) {
           MktoForms2.lightbox(form).show();
         }
       );
     </script>
-    <!-- Form Marketo -->
 
     <!-- Wrapper -->
     <div id="wrapper">
