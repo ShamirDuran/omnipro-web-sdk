@@ -9,6 +9,14 @@
       body {
         font-family: Arial, Helvetica, sans-serif;
       }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        margin: 0px;
+        margin-bottom: 10px;
+      }
     </style>
 
     <style>
@@ -27,28 +35,20 @@
 
       .modal-content {
         background-color: #f9f9f9;
+        display: flex;
+        flex-direction: column;
         width: 80%;
-        max-width: 700px;
+        max-width: 500px;
         border-radius: 10px;
-        padding: 20px;
+        padding: 25px 30px;
         display: flex;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         position: relative;
       }
 
-      .modal-left {
-        flex: 1;
-        padding: 20px;
-      }
-
-      .modal-left img {
-        width: 100%;
-        margin-bottom: 10px;
-      }
-
       .modal-right {
+        margin-top: 10px;
         flex: 1;
-        padding: 20px;
       }
 
       .modal-right form {
@@ -64,7 +64,6 @@
       .modal-right form select,
       .modal-right form button {
         padding: 10px;
-        margin-bottom: 10px;
         border-radius: 5px;
         border: 1px solid #ccc;
         font-size: 14px;
@@ -95,58 +94,93 @@
         color: #333;
         font-weight: 800;
       }
+
+      .submit-button {
+        margin-top: 10px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .mb-2 {
+        margin-bottom: 20px;
+      }
+
+      .mb-1 {
+        margin-bottom: 10px;
+      }
+
+      .metadata-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        gap: 10px;
+      }
+
+      .metadata-row input {
+        width: 48%;
+      }
+
+      .add-metadata-btn {
+        align-self: flex-start;
+        padding: 5px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f0f0f0;
+        cursor: pointer;
+      }
+
+      .add-metadata-btn:hover {
+        background-color: #e0e0e0;
+      }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/uuid@11.0.5/dist/cjs-browser/index.min.js"></script>
   </head>
 
   <body>
     <div class="modal">
       <div class="modal-content">
         <span class="close-btn">&times;</span>
-        <div class="modal-left">
-          <img
-            src="https://i.pinimg.com/736x/de/70/e4/de70e47188c2922080f7b707cf732035.jpg"
-            alt="Placeholder"
-          />
-          <h2>Libera tu potencial creativo</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id
-            nisi non orci eleifend porttitor. Integer at orci et elit fringilla
-            posuere.
-          </p>
-        </div>
+        <h1 style="align-self: center">Upload Asset</h1>
         <div class="modal-right">
-          <form method="POST" enctype="multipart/form-data" id="lead-form">
-            <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" placeholder="Ingrese su nombre" />
+          <form method="POST" enctype="multipart/form-data" id="asset-form">
+            <div class="form-group mb-2">
+              <h3>Propiedades</h3>
 
-            <label for="correo">Correo electrónico</label>
-            <input type="email" id="correo" placeholder="Ingrese su correo" />
-
-            <label for="especializacion">Especialización</label>
-            <select id="especializacion">
-              <option value="" disabled selected>Seleccione una opción</option>
-              <option value="diseño">Diseño</option>
-              <option value="fotografía">Fotografía</option>
-              <option value="otros">Otros</option>
-            </select>
-
-            <label for="experiencia">Experiencia</label>
-            <select id="experiencia">
-              <option value="" disabled selected>Seleccione una opción</option>
-              <option value="principiante">Principiante</option>
-              <option value="intermedio">Intermedio</option>
-              <option value="avanzado">Avanzado</option>
-            </select>
-
-            <label for="images">Cargar imagenes</label>
-            <input type="file" id="images" accept="image/*" multiple required />
-
-            <div>
-              <input type="checkbox" id="suscribirse" />
-              <label for="suscribirse">Suscribirse al boletín</label>
+              <label for="folder">Folder</label>
+              <select id="folder" required>
+                <option value="" disabled selected>
+                  Seleccione una opción
+                </option>
+              </select>
             </div>
 
-            <button type="submit">Enviar →</button>
+            <!-- Logica para agregar custom metadata. Diseño debe ser doble columna, izquierda nombre metadata y derecha valor. Debe tener un botón para agregar nuevo e irlos apilando -->
+            <div class="form-group mb-1" id="metadata-container">
+              <h3>Metadata</h3>
+              <div class="metadata-row">
+                <input type="text" placeholder="Nombre" />
+                <input type="text" placeholder="Valor" />
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="add-metadata-btn"
+              id="add-metadata-btn"
+            >
+              Agregar Metadata
+            </button>
+
+            <div class="form-group" style="margin-top: 20px">
+              <h3>Cargar imagen</h3>
+              <input type="file" id="images" accept="image/*" required />
+            </div>
+
+            <button class="submit-button" type="submit">Enviar →</button>
           </form>
         </div>
       </div>
@@ -155,6 +189,7 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         window.adobeDataLayer = window.adobeDataLayer || [];
+        loadFolders();
       });
 
       document
@@ -164,27 +199,68 @@
         });
 
       document
-        .getElementById("lead-form")
+        .getElementById("asset-form")
         .addEventListener("submit", function (event) {
           event.preventDefault();
           sendHttpRequest();
         });
 
+      document
+        .getElementById("add-metadata-btn")
+        .addEventListener("click", function () {
+          const container = document.getElementById("metadata-container");
+          const row = document.createElement("div");
+          row.className = "metadata-row";
+          row.innerHTML = `
+            <input type="text" placeholder="Nombre" />
+            <input type="text" placeholder="Valor" />
+          `;
+          container.appendChild(row);
+        });
+
+      document.getElementById("images").addEventListener("change", function () {
+        const fileInput = document.getElementById("images");
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const newFileName =
+            crypto.randomUUID() + "." + file.name.split(".").pop();
+        }
+      });
+
+      function loadFolders() {
+        fetch("http://localhost:3000/api/assets/folders")
+          .then((response) => response.json())
+          .then((data) => {
+            const folderSelect = document.getElementById("folder");
+            data.forEach((folder) => {
+              const option = document.createElement("option");
+              option.value = folder.id;
+              option.textContent = folder.name;
+              folderSelect.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Error loading folders:", error);
+          });
+      }
+
       function sendHttpRequest() {
-        const nombre = document.getElementById("nombre").value;
-        const correo = document.getElementById("correo").value;
-        const especializacion =
-          document.getElementById("especializacion").value;
-        const experiencia = document.getElementById("experiencia").value;
-        const suscribirse = document.getElementById("suscribirse").checked;
+        const folder = document.getElementById("folder").value;
         const images = document.getElementById("images").files;
 
         const formData = new FormData();
-        formData.append("nombre", nombre);
-        formData.append("correo", correo);
-        formData.append("especializacion", especializacion);
-        formData.append("experiencia", experiencia);
-        formData.append("suscribirse", suscribirse);
+        formData.append("folder", folder);
+
+        const metadataContainer = document.getElementById("metadata-container");
+        const metadataRows =
+          metadataContainer.querySelectorAll(".metadata-row");
+        metadataRows.forEach((row) => {
+          const name = row.children[0].value;
+          const value = row.children[1].value;
+          if (name && value) {
+            formData.append(`metadata[${name}]`, value);
+          }
+        });
 
         for (let i = 0; i < images.length; i++) {
           formData.append("images", images[i]);
