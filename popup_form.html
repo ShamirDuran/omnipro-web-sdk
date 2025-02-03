@@ -120,7 +120,19 @@
       }
 
       .metadata-row input {
-        width: 48%;
+        width: 40%;
+      }
+
+      .metadata-row .delete-metadata-btn {
+        padding: 5px 10px;
+        border-radius: 5px;
+        aspect-ratio: 3/1;
+        background-color: red;
+        cursor: pointer;
+      }
+
+      .metadata-row .delete-metadata-btn:hover {
+        background-color: rgba(255, 0, 0, 0.748);
       }
 
       .add-metadata-btn {
@@ -158,13 +170,8 @@
               </select>
             </div>
 
-            <!-- Logica para agregar custom metadata. Diseño debe ser doble columna, izquierda nombre metadata y derecha valor. Debe tener un botón para agregar nuevo e irlos apilando -->
             <div class="form-group mb-1" id="metadata-container">
               <h3>Metadata</h3>
-              <div class="metadata-row">
-                <input type="text" placeholder="Nombre" />
-                <input type="text" placeholder="Valor" />
-              </div>
             </div>
 
             <button
@@ -212,20 +219,13 @@
           const row = document.createElement("div");
           row.className = "metadata-row";
           row.innerHTML = `
-            <input type="text" placeholder="Nombre" />
-            <input type="text" placeholder="Valor" />
+            <input type="text" placeholder="Nombre" required />
+            <input type="text" placeholder="Valor" required />
+            <button type="button" class="delete-metadata-btn">&times;</button>
           `;
           container.appendChild(row);
+          addDeleteEvent(row.querySelector(".delete-metadata-btn"));
         });
-
-      document.getElementById("images").addEventListener("change", function () {
-        const fileInput = document.getElementById("images");
-        if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          const newFileName =
-            crypto.randomUUID() + "." + file.name.split(".").pop();
-        }
-      });
 
       function loadFolders() {
         fetch("http://localhost:3000/api/assets/folders")
@@ -255,8 +255,8 @@
         const metadataRows =
           metadataContainer.querySelectorAll(".metadata-row");
         metadataRows.forEach((row) => {
-          const name = row.children[0].value;
-          const value = row.children[1].value;
+          const name = row.querySelector('input[placeholder="Nombre"]').value;
+          const value = row.querySelector('input[placeholder="Valor"]').value;
           if (name && value) {
             formData.append(`metadata[${name}]`, value);
           }
@@ -278,6 +278,14 @@
             console.error("Error:", error);
           });
       }
+
+      function addDeleteEvent(button) {
+        button.addEventListener("click", function () {
+          button.parentElement.remove();
+        });
+      }
+
+      document.querySelectorAll(".delete-metadata-btn").forEach(addDeleteEvent);
     </script>
   </body>
 </html>
