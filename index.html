@@ -388,23 +388,18 @@
           type: "web.webinteraction.linkClicks",
           decisionScopes: ["__view__"],
           xdm: {
-            // web: {
-            //   webPageDetails: {
-            //     plazoSimulado: plazoSimulado,
-            //     montoSimulado: 115000,
-            //     tipoCredito: "Personal",
-            //     tipoProducto: "Crédito",
-            //     tipoSimulacion: "Crédito Express",
-            //     tipoCliente: "Nuevo",
-            //   },
-            // },
-            customObject: {
-              plazoSimulado: plazoSimulado,
-              montoSimulado: 115000,
-              tipoCredito: "Personal",
-              tipoProducto: "Crédito",
-              tipoSimulacion: "Crédito Express",
-              tipoCliente: "Nuevo",
+            web: {
+              webPageDetails: {
+                plazoSimulado: plazoSimulado,
+                montoSimulado: 115000,
+                tipoCredito: "Personal",
+                tipoProducto: "Crédito",
+                tipoSimulacion: "Crédito Express",
+                tipoCliente: "Nuevo",
+              },
+              customObject: {
+                plazoSimulado: plazoSimulado,
+              },
             },
           },
           data: {
