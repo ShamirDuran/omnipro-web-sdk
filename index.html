@@ -106,7 +106,7 @@
       <div id="main">
         <div class="inner">
           <header>
-            <h1>
+            <h1 id="titulo">
               This is Phantom, a free, fully responsive site<br />
               template designed by HTML5 UP.
             </h1>
@@ -379,7 +379,7 @@
     </div>
 
     <script>
-      const h1 = document.querySelector("main h1");
+      const h1 = document.getElementById("titulo");
       h1.addEventListener("click", () => {
         window.alloy("sendEvent", {
           renderDecisions: true,
