@@ -45,17 +45,17 @@
       window.adobeDataLayer = window.adobeDataLayer || [];
 
       // Page View Event
-      window.adobeDataLayer.push({
-        event: "pageLoad",
-        page: {
-          path: "/index.html",
-          name: "Home Page",
-          isHomePage: true,
-          url: document.location.href,
-        },
-        country: "Colombia",
-        dob: "2000-03-15",
-      });
+      // window.adobeDataLayer.push({
+      //   event: "pageLoad",
+      //   page: {
+      //     path: "/index.html",
+      //     name: "Home Page",
+      //     isHomePage: true,
+      //     url: document.location.href,
+      //   },
+      //   country: "Colombia",
+      //   dob: "2000-03-15",
+      // });
     </script>
 
     <!-- Adobe Target Reference -->
@@ -377,6 +377,29 @@
         </div>
       </footer>
     </div>
+
+    <script>
+      const h1 = document.querySelector("main h1");
+      h1.addEventListener("click", () => {
+        window.alloy("sendEvent", {
+          renderDecisions: true,
+          type: "web.webinteraction.linkClicks",
+          decisionScopes: ["__view__"],
+          xdm: {
+            web: {
+              webPageDetails: {
+                plazoSimulado: 24,
+                montoSimulado: 115000,
+                tipoCredito: "Personal",
+                tipoProducto: "Crédito",
+                tipoSimulacion: "Crédito Express",
+                tipoCliente: "Nuevo",
+              },
+            },
+          },
+        });
+      });
+    </script>
 
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
