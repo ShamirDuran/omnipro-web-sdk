@@ -380,37 +380,37 @@
 
     <script>
       const h1 = document.getElementById("titulo");
-      // h1.addEventListener("click", () => {
-      //   const plazoSimulado = prompt("Please enter a value:");
-      //
-      //   window.alloy("sendEvent", {
-      //     renderDecisions: true,
-      //     type: "web.webinteraction.linkClicks",
-      //     decisionScopes: ["__view__"],
-      //     xdm: {
-      //       web: {
-      //         webPageDetails: {
-      //           plazoSimulado: plazoSimulado,
-      //           montoSimulado: 115000,
-      //           tipoCredito: "Personal",
-      //           tipoProducto: "Crédito",
-      //           tipoSimulacion: "Crédito Express",
-      //           tipoCliente: "Nuevo",
-      //         },
-      //       },
-      //     },
-      //     data: {
-      //       __adobe: {
-      //         target: {
-      //           "profile.montoPrestamoSimulado": 1150000,
-      //           "profile.pagoFijo": 100000,
-      //           "profile.plazoSimulado": plazoSimulado,
-      //           "profile.producto": "Credito Express",
-      //         },
-      //       },
-      //     },
-      //   });
-      // });
+      h1.addEventListener("click", () => {
+        const plazoSimulado = prompt("Please enter a value:");
+
+        window.alloy("sendEvent", {
+          renderDecisions: true,
+          type: "web.webinteraction.linkClicks",
+          decisionScopes: ["__view__"],
+          xdm: {
+            web: {
+              webPageDetails: {
+                plazoSimulado: plazoSimulado,
+                montoSimulado: 115000,
+                tipoCredito: "Personal",
+                tipoProducto: "Crédito",
+                tipoSimulacion: "Crédito Express",
+                tipoCliente: "Nuevo",
+              },
+            },
+          },
+          data: {
+            __adobe: {
+              target: {
+                "profile.montoPrestamoSimulado": 1150000,
+                "profile.pagoFijo": 100000,
+                "profile.plazoSimulado": plazoSimulado,
+                "profile.producto": "Credito Express",
+              },
+            },
+          },
+        });
+      });
     </script>
 
     <!-- Scripts -->
