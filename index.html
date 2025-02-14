@@ -381,6 +381,8 @@
     <script>
       const h1 = document.getElementById("titulo");
       h1.addEventListener("click", () => {
+        const plazoSimulado = prompt("Please enter a value:");
+
         window.alloy("sendEvent", {
           renderDecisions: true,
           type: "web.webinteraction.linkClicks",
@@ -388,7 +390,7 @@
           xdm: {
             web: {
               webPageDetails: {
-                plazoSimulado: 24,
+                plazoSimulado: plazoSimulado,
                 montoSimulado: 115000,
                 tipoCredito: "Personal",
                 tipoProducto: "Crédito",
@@ -402,7 +404,7 @@
               target: {
                 "profile.montoPrestamoSimulado": 1150000,
                 "profile.pagoFijo": 100000,
-                "profile.plazoSimulado": 48,
+                "profile.plazoSimulado": plazoSimulado,
                 "profile.producto": "Credito Express",
               },
             },
