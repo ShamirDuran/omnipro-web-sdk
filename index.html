@@ -59,8 +59,13 @@
     </script>
 
     <!-- Adobe Target Reference -->
-    <script
+    <!-- <script
       src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js"
+      async
+    ></script> -->
+
+    <script
+      src="https://assets.adobedtm.com/f2b1a59e47dd/4409df7f1ad9/launch-7543e2be8535-development.min.js"
       async
     ></script>
 
@@ -387,18 +392,7 @@
           renderDecisions: true,
           type: "web.webinteraction.linkClicks",
           decisionScopes: ["__view__"],
-          xdm: {
-            web: {
-              webPageDetails: {
-                plazoSimulado: plazoSimulado,
-                montoSimulado: 115000,
-                tipoCredito: "Personal",
-                tipoProducto: "Crédito",
-                tipoSimulacion: "Crédito Express",
-                tipoCliente: "Nuevo",
-              },
-            },
-          },
+          xdm: {},
           data: {
             __adobe: {
               target: {
