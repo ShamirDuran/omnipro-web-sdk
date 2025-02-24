@@ -57,24 +57,16 @@
       //   dob: "2000-03-15",
       // });
 
-      console.log("test alloy");
-
       window.alloy("sendEvent", {
         renderDecisions: true,
         type: "web.webinteraction.linkClicks",
         decisionScopes: ["__view__"],
         xdm: {},
         data: {
-          analytics: {
-            customDimensions: {
-              eVars: {
-                eVar1: "Page name",
-              },
-            },
-            event1to100: {
-              event1: {
-                value: 1,
-              },
+          __adobe: {
+            target: {
+              "profile.profesion": profesion,
+              "profile.ocupacion": ocupacion,
             },
           },
         },
@@ -145,6 +137,28 @@
               Lorem ipsum dolor sit amet nullam dolore.
             </p>
           </header>
+
+          <div id="adobe-dc-view" style="height: 360px; width: 500px"></div>
+          <script src="https://acrobatservices.adobe.com/view-sdk/viewer.js"></script>
+          <script type="text/javascript">
+            document.addEventListener("adobe_dc_view_sdk.ready", function () {
+              var adobeDCView = new AdobeDC.View({
+                clientId: "3de345aafb9240babb0ecacad1dba3ba",
+                divId: "adobe-dc-view",
+              });
+              adobeDCView.previewFile(
+                {
+                  content: {
+                    location: {
+                      url: "https://omni-s3-poc-test.s3.us-east-1.amazonaws.com/Bodea+Brochure.pdf",
+                    },
+                  },
+                  metaData: { fileName: "Bodea Brochure.pdf" },
+                },
+                { embedMode: "SIZED_CONTAINER" }
+              );
+            });
+          </script>
 
           <section class="tiles">
             <article class="style1">
