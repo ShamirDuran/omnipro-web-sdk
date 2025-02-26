@@ -214,31 +214,34 @@
         },
       });
 
-      adobe.target
-        .getOffers({
-          request: {
-            execute: {
-              mboxes: [
-                {
-                  name: "offertSimuladorCredito",
-                },
-              ],
+      document.addEventListener("adobe.target.loaded", function () {
+        // El SDK de Adobe Target está listo
+        adobe.target
+          .getOffers({
+            request: {
+              execute: {
+                mboxes: [
+                  {
+                    name: "offertSimuladorCredito",
+                  },
+                ],
+              },
             },
-          },
-        })
-        .then((response) => {
-          const offers = response.execute.mboxes[0].options;
-          if (offers && offers.length > 0) {
-            const offerContent = offers[0].content;
-            console.log("Oferta obtenida:", offerContent);
-            // Aplica la oferta
-          } else {
-            console.log("No se encontró la oferta.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error al obtener la oferta:", error);
-        });
+          })
+          .then((response) => {
+            const offers = response.execute.mboxes[0].options;
+            if (offers && offers.length > 0) {
+              const offerContent = offers[0].content;
+              console.log("Oferta obtenida:", offerContent);
+              // Aplica la oferta en tu sitio web
+            } else {
+              console.log("No se encontró la oferta.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error al obtener la oferta:", error);
+          });
+      });
 
       document
         .getElementById("autoFill-step2")
