@@ -215,6 +215,8 @@
       });
 
       document.addEventListener("adobe.target.loaded", function () {
+        console.log("Adobe Target SDK is ready");
+
         // El SDK de Adobe Target está listo
         adobe.target
           .getOffers({
