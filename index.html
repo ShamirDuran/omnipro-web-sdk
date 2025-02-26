@@ -40,24 +40,6 @@
     </script>
     <!-- Adobe Prehide -->
 
-    <!-- DataLayer -->
-    <script>
-      // window.alloy("sendEvent", {
-      //   renderDecisions: true,
-      //   type: "web.webinteraction.linkClicks",
-      //   decisionScopes: ["__view__"],
-      //   xdm: {},
-      //   data: {
-      //     __adobe: {
-      //       target: {
-      //         "profile.profesion": profesion,
-      //         "profile.ocupacion": ocupacion,
-      //       },
-      //     },
-      //   },
-      // });
-    </script>
-
     <!-- Adobe Target Reference -->
     <script
       src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js"
@@ -66,7 +48,6 @@
 
     <!-- Script Dynamic Chat -->
     <script src="https://assets.adoberesources.net/loader.js?orgId=1C722A9A5F59DECB0A495F9F%40AdobeOrg&instanceId=omniprosvc2&env=prod&geo=va7"></script>
-    <!-- Adobe Target Reference -->
   </head>
 
   <body class="is-preload">
@@ -110,6 +91,7 @@
               This is Phantom, a free, fully responsive site<br />
               template designed by HTML5 UP.
             </h1>
+            <h3 id="adobe_ecid"></h3>
             <p>
               Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod
               sit amet nisi euismod sed cursus arcu elementum ipsum arcu vivamus
@@ -439,6 +421,7 @@
       });
     </script>
 
+    <!-- dataLayer PageLoad -->
     <script>
       window.adobeDataLayer = window.adobeDataLayer || [];
 
