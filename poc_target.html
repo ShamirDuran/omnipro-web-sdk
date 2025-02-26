@@ -214,6 +214,27 @@
         },
       });
 
+      // Get offer from Target
+      window.adobe.target.getOffer({
+        mbox: "offertSimuladorCredito", // Nombre de la oferta en Target
+        success: function (offer) {
+          console.log("Oferta recibida:", offer);
+
+          //   // Aplica la oferta al contenedor en el HTML
+          //   window.adobe.target.applyOffer({
+          //     mbox: "offertSimuladorCredito",
+          //     offer: offer,
+          //   });
+
+          //   // Si necesitas manejar el JSON manualmente
+          //   const jsonData = JSON.parse(offer[0].content); // Convierte la oferta a objeto
+          //   console.log("Nombre del usuario:", jsonData.nombre);
+        },
+        error: function (status, error) {
+          console.error("Error al obtener la oferta:", status, error);
+        },
+      });
+
       document
         .getElementById("autoFill-step2")
         .addEventListener("click", function () {
