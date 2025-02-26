@@ -214,21 +214,20 @@
         },
       });
 
-      // Get offer from Target using alloy and sendEvent
-      // Paso 1: Recuperar la oferta (proposición) usando el scope "offertSimuladorCredito"
-      alloy("sendEvent", {
-        decisionScopes: ["offertSimuladorCredito, __view__"],
-      })
-        .then(function (result) {
-          // Paso 2: Obtener las proposiciones (ofertas) devueltas por Adobe Target
-          var retrievedPropositions = result.propositions;
-
-          console.log("Propositions: ", retrievedPropositions);
-        })
-        .then(function (applyPropositionsResult) {})
-        .catch(function (error) {
-          console.error("Error al recuperar o aplicar la oferta:", error);
-        });
+      // use getOffert para obtener la oferta offertSimuladorCredito
+      window.adobe.target.getOffer({
+        request: {
+          execute: {
+            pageLoad: {},
+          },
+        },
+        success: function (response) {
+          console.log("Offer: ", response);
+        },
+        error: function (status, error) {
+          console.error("Error: ", status, error);
+        },
+      });
 
       document
         .getElementById("autoFill-step2")
