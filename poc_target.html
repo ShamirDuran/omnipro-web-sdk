@@ -214,14 +214,21 @@
         },
       });
 
-      adobe.target.getOffers({
-        decisioningMethod: "offertSimuladorCredito",
-        request: {
-          prefetch: {
-            views: [{}],
-          },
-        },
-      });
+      // Get offer from Target using alloy and sendEvent
+      // Paso 1: Recuperar la oferta (proposición) usando el scope "offertSimuladorCredito"
+      alloy("sendEvent", {
+        decisionScopes: ["offertSimuladorCredito"],
+      })
+        .then(function (result) {
+          // Paso 2: Obtener las proposiciones (ofertas) devueltas por Adobe Target
+          var retrievedPropositions = result.propositions;
+
+          console.log("Propositions: ", retrievedPropositions);
+        })
+        .then(function (applyPropositionsResult) {})
+        .catch(function (error) {
+          console.error("Error al recuperar o aplicar la oferta:", error);
+        });
 
       document
         .getElementById("autoFill-step2")
@@ -241,19 +248,19 @@
           console.log("Step1: ", nombre);
 
           // Send event to Target
-          // window.alloy("sendEvent", {
-          //   renderDecisions: true,
-          //   type: "web.webinteraction.linkClicks",
-          //   decisionScopes: ["__view__"],
-          //   xdm: {},
-          //   data: {
-          //     __adobe: {
-          //       target: {
-          //         "profile.nombre": nombre,
-          //       },
-          //     },
-          //   },
-          // });
+          window.alloy("sendEvent", {
+            renderDecisions: true,
+            type: "web.webinteraction.linkClicks",
+            decisionScopes: ["__view__"],
+            xdm: {},
+            data: {
+              __adobe: {
+                target: {
+                  "profile.nombre": nombre,
+                },
+              },
+            },
+          });
 
           // Hide first form and show second form
           document.getElementById("interestForm-step1").classList.add("hidden");
