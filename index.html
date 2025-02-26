@@ -42,19 +42,6 @@
 
     <!-- DataLayer -->
     <script>
-      window.adobeDataLayer = window.adobeDataLayer || [];
-
-      // Page View Event
-      window.adobeDataLayer.push({
-        event: "pageLoad",
-        page: {
-          path: "/index.html",
-          name: "Home Page",
-          isHomePage: true,
-          url: document.location.href,
-        },
-      });
-
       // window.alloy("sendEvent", {
       //   renderDecisions: true,
       //   type: "web.webinteraction.linkClicks",
@@ -131,7 +118,7 @@
             </p>
           </header>
 
-          <div
+          <!-- <div
             id="adobe-dc-view"
             style="height: 500px; width: '100%'; margin-bottom: 10px"
           ></div>
@@ -154,7 +141,7 @@
                 { embedMode: "SIZED_CONTAINER" }
               );
             });
-          </script>
+          </script> -->
 
           <section class="tiles">
             <article class="style1">
@@ -449,6 +436,21 @@
             },
           },
         });
+      });
+    </script>
+
+    <script>
+      window.adobeDataLayer = window.adobeDataLayer || [];
+
+      // Page View Event
+      window.adobeDataLayer.push({
+        event: "pageLoad",
+        page: {
+          path: "/index.html",
+          name: "Home Page",
+          isHomePage: true,
+          url: document.location.href,
+        },
       });
     </script>
 
