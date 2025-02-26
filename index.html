@@ -45,32 +45,30 @@
       window.adobeDataLayer = window.adobeDataLayer || [];
 
       // Page View Event
-      // window.adobeDataLayer.push({
-      //   event: "pageLoad",
-      //   page: {
-      //     path: "/index.html",
-      //     name: "Home Page",
-      //     isHomePage: true,
-      //     url: document.location.href,
-      //   },
-      //   country: "Colombia",
-      //   dob: "2000-03-15",
-      // });
-
-      window.alloy("sendEvent", {
-        renderDecisions: true,
-        type: "web.webinteraction.linkClicks",
-        decisionScopes: ["__view__"],
-        xdm: {},
-        data: {
-          __adobe: {
-            target: {
-              "profile.profesion": profesion,
-              "profile.ocupacion": ocupacion,
-            },
-          },
+      window.adobeDataLayer.push({
+        event: "pageLoad",
+        page: {
+          path: "/index.html",
+          name: "Home Page",
+          isHomePage: true,
+          url: document.location.href,
         },
       });
+
+      // window.alloy("sendEvent", {
+      //   renderDecisions: true,
+      //   type: "web.webinteraction.linkClicks",
+      //   decisionScopes: ["__view__"],
+      //   xdm: {},
+      //   data: {
+      //     __adobe: {
+      //       target: {
+      //         "profile.profesion": profesion,
+      //         "profile.ocupacion": ocupacion,
+      //       },
+      //     },
+      //   },
+      // });
     </script>
 
     <!-- Adobe Target Reference -->
