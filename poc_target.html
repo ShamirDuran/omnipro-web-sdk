@@ -124,6 +124,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simulador de Préstamo</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="container">
@@ -212,46 +213,27 @@
           url: document.location.href,
         },
       });
-      // Función para obtener y aplicar la oferta
-      function obtenerYMostrarOferta() {
-        if (
-          typeof adobe !== "undefined" &&
-          typeof adobe.target !== "undefined"
-        ) {
-          // El SDK está listo, obtenemos la oferta
-          adobe.target
-            .getOffers({
-              request: {
-                execute: {
-                  mboxes: [
-                    {
-                      name: "offertSimuladorCredito", // Nombre de la oferta
-                    },
-                  ],
-                },
-              },
-            })
-            .then((response) => {
-              const offers = response.execute.mboxes[0].options;
-              if (offers && offers.length > 0) {
-                const offerContent = offers[0].content;
-                console.log("Oferta obtenida:", offerContent);
-              } else {
-                console.log("No se encontró la oferta.");
-              }
-            })
-            .catch((error) => {
-              console.error("Error al obtener la oferta:", error);
-            });
-        } else {
-          // Si el SDK no está listo, reintentamos después de un tiempo
-          console.log("Adobe Target no está listo. Reintentando...");
-          setTimeout(obtenerYMostrarOferta, 500); // Reintenta después de 500 ms
-        }
-      }
 
-      // Iniciamos el proceso después de un timeout inicial
-      setTimeout(obtenerYMostrarOferta, 1000); // Espera 1 segundo antes de intentar
+      // Get offer from Target
+      window.adobe.target.getOffer({
+        mbox: "offertSimuladorCredito", // Nombre de la oferta en Target
+        success: function (offer) {
+          console.log("Oferta recibida:", offer);
+
+          //   // Aplica la oferta al contenedor en el HTML
+          //   window.adobe.target.applyOffer({
+          //     mbox: "offertSimuladorCredito",
+          //     offer: offer,
+          //   });
+
+          //   // Si necesitas manejar el JSON manualmente
+          //   const jsonData = JSON.parse(offer[0].content); // Convierte la oferta a objeto
+          //   console.log("Nombre del usuario:", jsonData.nombre);
+        },
+        error: function (status, error) {
+          console.error("Error al obtener la oferta:", status, error);
+        },
+      });
 
       document
         .getElementById("autoFill-step2")
