@@ -179,9 +179,10 @@
       });
 
       // Llamar a Target para Step 1
-      alloy("sendEvent", {
-        decisionScopes: ["offertSimuladorCredito"],
-      })
+      window
+        .alloy("sendEvent", {
+          decisionScopes: ["offertSimuladorCredito"],
+        })
         .then(function (result) {
           console.log("Oferta Step 1:", result.propositions);
         })
@@ -193,26 +194,27 @@
         console.log("Step1: ", nombre);
 
         // Notificar a Adobe Target que el usuario pasó al Step 2
-        alloy("triggerView", { viewName: "Step2View" });
+        windows.alloy("triggerView", { viewName: "Step2View" });
 
         // Llamar a Target para Step 2
-        alloy("sendEvent", {
-          decisionScopes: ["offertSimuladorCredito"],
-          xdm: {
-            web: {
-              webPageDetails: {
-                URL: window.location.href,
+        windows
+          .alloy("sendEvent", {
+            decisionScopes: ["offertSimuladorCredito"],
+            xdm: {
+              web: {
+                webPageDetails: {
+                  URL: window.location.href,
+                },
               },
             },
-          },
-          data: {
-            __adobe: {
-              target: {
-                "profile.nombre": nombre,
+            data: {
+              __adobe: {
+                target: {
+                  "profile.nombre": nombre,
+                },
               },
             },
-          },
-        })
+          })
           .then(function (result) {
             console.log("Oferta Step 2:", result.propositions);
 
