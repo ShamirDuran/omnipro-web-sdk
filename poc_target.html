@@ -214,26 +214,21 @@
         },
       });
 
-      // Get offer from Target
-      window.adobe.target.getOffer({
-        mbox: "offertSimuladorCredito", // Nombre de la oferta en Target
-        success: function (offer) {
-          console.log("Oferta recibida:", offer);
+      // Get offer from Target using alloy and sendEvent
+      // Paso 1: Recuperar la oferta (proposición) usando el scope "offertSimuladorCredito"
+      alloy("sendEvent", {
+        decisionScopes: ["offertSimuladorCredito"], // Nombre de la oferta
+      })
+        .then(function (result) {
+          // Paso 2: Obtener las proposiciones (ofertas) devueltas por Adobe Target
+          var retrievedPropositions = result.propositions;
 
-          //   // Aplica la oferta al contenedor en el HTML
-          //   window.adobe.target.applyOffer({
-          //     mbox: "offertSimuladorCredito",
-          //     offer: offer,
-          //   });
-
-          //   // Si necesitas manejar el JSON manualmente
-          //   const jsonData = JSON.parse(offer[0].content); // Convierte la oferta a objeto
-          //   console.log("Nombre del usuario:", jsonData.nombre);
-        },
-        error: function (status, error) {
-          console.error("Error al obtener la oferta:", status, error);
-        },
-      });
+          console.log("Propositions: ", retrievedPropositions);
+        })
+        .then(function (applyPropositionsResult) {})
+        .catch(function (error) {
+          console.error("Error al recuperar o aplicar la oferta:", error);
+        });
 
       document
         .getElementById("autoFill-step2")
