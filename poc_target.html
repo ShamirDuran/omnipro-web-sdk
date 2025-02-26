@@ -194,10 +194,10 @@
         console.log("Step1: ", nombre);
 
         // Notificar a Adobe Target que el usuario pasó al Step 2
-        windows.alloy("triggerView", { viewName: "Step2View" });
+        window.alloy("triggerView", { viewName: "Step2View" });
 
         // Llamar a Target para Step 2
-        windows
+        window
           .alloy("sendEvent", {
             decisionScopes: ["offertSimuladorCredito"],
             xdm: {
