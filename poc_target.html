@@ -209,6 +209,17 @@
     </div>
 
     <script>
+      window.adobeDataLayer = window.adobeDataLayer || [];
+      window.adobeDataLayer.push({
+        event: "pageLoad",
+        page: {
+          path: "/poc_target_profiles.html",
+          name: "PoC Target Profiles",
+          isHomePage: false,
+          url: document.location.href,
+        },
+      });
+
       document
         .getElementById("autoFill-step2")
         .addEventListener("click", function () {
