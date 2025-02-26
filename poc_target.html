@@ -217,7 +217,7 @@
       // Get offer from Target using alloy and sendEvent
       // Paso 1: Recuperar la oferta (proposición) usando el scope "offertSimuladorCredito"
       alloy("sendEvent", {
-        decisionScopes: ["offertSimuladorCredito"], // Nombre de la oferta
+        decisionScopes: ["offertSimuladorCredito, __view__"],
       })
         .then(function (result) {
           // Paso 2: Obtener las proposiciones (ofertas) devueltas por Adobe Target
