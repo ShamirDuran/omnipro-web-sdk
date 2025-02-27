@@ -332,9 +332,9 @@
             const { propositions } = response;
             console.log("Offer: ", propositions[0]);
 
-            if (!propositions.length) return;
+            if (!propositions.length || !propositions[0].items.length) return;
+            const { imageUrl, nombre } = propositions[0].items[0].data.content;
 
-            const { imageUrl, nombre } = propositions[0];
             document.getElementById("personalizedBanner2").src = imageUrl;
             document.getElementById("step2-nombre").innerText = nombre;
           });
