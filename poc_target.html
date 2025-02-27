@@ -259,9 +259,17 @@
             .getElementById("interestForm-step2")
             .classList.remove("hidden");
 
-          window.adobeDataLayer.push({
-            event: "formStep2Displayed",
-          });
+          // get offert o display
+         windows.alloy("sendEvent", {
+          renderDecisions: true,
+          type: "web.webinteraction.linkClicks",
+          decisionScopes: ["offertSimuladorCredito"],
+          xdm: {},
+         })
+          .then((response) => {
+            console.log("Offert response: ", response);
+          })
+
         });
 
       document
