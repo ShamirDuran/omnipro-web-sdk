@@ -210,8 +210,6 @@
     </div>
 
     <script>
-      validatePreviousData();
-
       window.adobeDataLayer = window.adobeDataLayer || [];
       window.adobeDataLayer.push({
         event: "pageLoad",
@@ -222,6 +220,8 @@
           url: document.location.href,
         },
       });
+
+      validatePreviousData();
 
       // Auto fill step 2
       document
