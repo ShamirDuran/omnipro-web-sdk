@@ -210,15 +210,15 @@
 
       // Get offer from Target using alloy and sendEvent
       // Paso 1: Recuperar la oferta (proposición) usando el scope "offertSimuladorCredito"
-      // window
-      //   .alloy("sendEvent", {
-      //     renderDecisions: true,
-      //     decisionScopes: ["offertSimuladorCredito"],
-      //   })
-      //   .then((result) => {
-      //     const { prepositions } = result;
-      //     console.log("prepositions", prepositions);
-      //   });
+      window
+        .alloy("sendEvent", {
+          renderDecisions: true,
+          decisionScopes: ["offertSimuladorCredito"],
+        })
+        .then((result) => {
+          const { prepositions } = result;
+          console.log("prepositions", prepositions);
+        });
 
       document
         .getElementById("autoFill-step2")
@@ -235,25 +235,22 @@
           e.preventDefault();
           var nombre = document.getElementById("nombre").value;
 
-          window.adobeDataLayer.push({
-            event: "originadorCreditoStep1",
-            nombre,
-          });
+          console.log("Step1: ", nombre);
 
           // Send event to Target
-          // window.alloy("sendEvent", {
-          //   renderDecisions: true,
-          //   type: "web.webinteraction.linkClicks",
-          //   decisionScopes: ["__view__, offertSimuladorCredito"],
-          //   xdm: {},
-          //   data: {
-          //     __adobe: {
-          //       target: {
-          //         "profile.nombre": nombre,
-          //       },
-          //     },
-          //   },
-          // });
+          window.alloy("sendEvent", {
+            renderDecisions: true,
+            type: "web.webinteraction.linkClicks",
+            decisionScopes: ["__view__, offertSimuladorCredito"],
+            xdm: {},
+            data: {
+              __adobe: {
+                target: {
+                  "profile.nombre": nombre,
+                },
+              },
+            },
+          });
 
           // Hide first form and show second form
           document.getElementById("interestForm-step1").classList.add("hidden");
@@ -274,8 +271,7 @@
           var pagoFijo = document.getElementById("pagoFijo").value;
           var tasaInteres = document.getElementById("tasaInteres").value;
 
-          window.adobeDataLayer.push({
-            event: "originadorCreditoStep2",
+          console.log("Step2: ", {
             montoPrestamoSimulado,
             plazoSimulado,
             tipoIngreso,
@@ -284,23 +280,23 @@
           });
 
           // Send event to Target
-          // window.alloy("sendEvent", {
-          //   renderDecisions: true,
-          //   type: "web.webinteraction.linkClicks",
-          //   decisionScopes: ["__view__"],
-          //   xdm: {},
-          //   data: {
-          //     __adobe: {
-          //       target: {
-          //         "profile.plazoSimulado": plazoSimulado,
-          //         "profile.tipoIngreso": tipoIngreso,
-          //         "profile.pagoFijo": pagoFijo,
-          //         "profile.tasaInteres": tasaInteres,
-          //         "profile.montoPrestamoSimulado": montoPrestamoSimulado,
-          //       },
-          //     },
-          //   },
-          // });
+          window.alloy("sendEvent", {
+            renderDecisions: true,
+            type: "web.webinteraction.linkClicks",
+            decisionScopes: ["__view__"],
+            xdm: {},
+            data: {
+              __adobe: {
+                target: {
+                  "profile.plazoSimulado": plazoSimulado,
+                  "profile.tipoIngreso": tipoIngreso,
+                  "profile.pagoFijo": pagoFijo,
+                  "profile.tasaInteres": tasaInteres,
+                  "profile.montoPrestamoSimulado": montoPrestamoSimulado,
+                },
+              },
+            },
+          });
 
           Swal.fire({
             title: "Gracias por preferirnos",
