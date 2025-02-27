@@ -210,6 +210,8 @@
     </div>
 
     <script>
+      validatePreviousData();
+
       window.adobeDataLayer = window.adobeDataLayer || [];
       window.adobeDataLayer.push({
         event: "pageLoad",
@@ -253,15 +255,8 @@
             },
           });
 
-          // Hide first form and show second form
-          document.getElementById("step1").classList.add("hidden");
-          document.getElementById("step2").classList.remove("hidden");
-
-          document
-            .getElementById("interestForm-step2")
-            .classList.remove("hidden");
-
           // get offert o display
+          nextStep();
           getOffer();
         });
 
@@ -322,23 +317,42 @@
         document.getElementById("tasaInteres").value = "";
       }
 
-      function getOffer() {
-        window
-          .alloy("sendEvent", {
-            renderDecisions: true,
-            type: "web.webinteraction.linkClicks",
-            decisionScopes: ["offertSimuladorCredito"],
-          })
-          .then((response) => {
-            const { propositions } = response;
-            console.log("Offer: ", propositions[0]);
+      async function getOffer() {
+        const response = await window.alloy("sendEvent", {
+          type: "web.webinteraction.pageView",
+          renderDecisions: true,
+          decisionScopes: ["offertSimuladorCredito"],
+        });
 
-            if (!propositions.length || !propositions[0].items.length) return;
-            const { imageUrl, nombre } = propositions[0].items[0].data.content;
+        const { propositions } = response;
+        console.log("Offer: ", propositions);
 
-            document.getElementById("personalizedBanner2").src = imageUrl;
-            document.getElementById("step2-nombre").innerText = nombre;
-          });
+        if (!propositions.length || !propositions[0].items.length) return false;
+
+        const proposition = propositions[0];
+        proposition.renderAttempted = true;
+
+        const { imageUrl, nombre } = proposition.items[0].data.content;
+
+        document.getElementById("personalizedBanner2").src = imageUrl;
+        document.getElementById("step2-nombre").innerText = nombre;
+
+        return true;
+      }
+
+      function nextStep() {
+        // Hide first form and show second form
+        document.getElementById("step1").classList.add("hidden");
+        document.getElementById("step2").classList.remove("hidden");
+
+        document
+          .getElementById("interestForm-step2")
+          .classList.remove("hidden");
+      }
+
+      async function validatePreviousData() {
+        const offerExists = await getOffer();
+        if (offerExists) nextStep();
       }
     </script>
   </body>
