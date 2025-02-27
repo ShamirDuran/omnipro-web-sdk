@@ -120,12 +120,7 @@
   </head>
 
   <body>
-    <div class="container">
-      <!-- <img
-            class="banner"
-            src="https://cdn.aglty.io/scotiabank-colombia/prestamos-banner-20-9-2024.jpg"
-            alt="Logo"
-          /> -->
+    <div id="step1" class="container">
       <img
         id="personalizedBanner"
         class="banner"
@@ -146,8 +141,24 @@
           <input type="text" id="nombre" name="nombre" value="" required />
           <button id="btnInterestFormStep1" type="submit">Siguiente</button>
         </form>
+    </div>
 
-        <form id="interestForm-step2" class="hidden">
+    <div id="step2" class="container hidden">
+      <img
+        id="personalizedBanner2"
+        class="banner"
+        src="https://cdn.aglty.io/scotiabank-colombia/prestamos-banner-20-9-2024.jpg"
+        alt="Logo"
+      />
+
+      <div class="p-20">
+        <h1>Simula tu <span class="highlight">préstamo</span></h1>
+        <p>
+          <span id="step2-nombre"></span> Calcula el monto, el plazo y el número de quincenas que mejor se
+          acomoden a tu estilo de vida.
+        </p>
+
+        <form id="interestForm-step2">
           <label for="montoPrestamoSimulado"
             >¿Cuánto dinero necesitas?
             <span id="autoFill-step2" style="cursor: pointer" title="Auto-fill"
@@ -208,17 +219,6 @@
         },
       });
 
-      // Get offer from Target using alloy and sendEvent
-      // Paso 1: Recuperar la oferta (proposición) usando el scope "offertSimuladorCredito"
-      // window.alloy("sendEvent", {
-      //   renderDecisions: true,
-      //   decisionScopes: ["offertSimuladorCredito"],
-      // });
-      // .then((result) => {
-      //   const { prepositions } = result;
-      //   console.log("prepositions", prepositions);
-      // });
-
       // Auto fill step 2
       document
         .getElementById("autoFill-step2")
@@ -252,7 +252,9 @@
           });
 
           // Hide first form and show second form
-          document.getElementById("interestForm-step1").classList.add("hidden");
+          document.getElementById("step1").classList.add("hidden");
+          document.getElementById("step2").classList.remove("hidden");
+          
           document
             .getElementById("interestForm-step2")
             .classList.remove("hidden");
