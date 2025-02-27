@@ -351,6 +351,7 @@
       }
 
       async function validatePreviousData() {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         const offerExists = await getOffer();
         if (offerExists) nextStep();
       }
