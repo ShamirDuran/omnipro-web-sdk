@@ -330,6 +330,7 @@
           })
           .then((response) => {
             const { propositions } = response;
+            console.log("Offer: ", propositions[0]);
 
             if (!propositions.length) return;
 
