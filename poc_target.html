@@ -213,17 +213,12 @@
       // Paso 1: Recuperar la oferta (proposición) usando el scope "offertSimuladorCredito"
       window
         .alloy("sendEvent", {
+          renderDecisions: true,
           decisionScopes: ["offertSimuladorCredito"],
         })
-        .then(function (result) {
-          // Paso 2: Obtener las proposiciones (ofertas) devueltas por Adobe Target
-          var retrievedPropositions = result.propositions;
-
-          console.log("Propositions: ", retrievedPropositions);
-        })
-        .then(function (applyPropositionsResult) {})
-        .catch(function (error) {
-          console.error("Error al recuperar o aplicar la oferta:", error);
+        .then((result) => {
+          const { prepositions } = result;
+          console.log("prepositions", prepositions);
         });
 
       document
