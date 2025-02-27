@@ -219,6 +219,7 @@
       //   console.log("prepositions", prepositions);
       // });
 
+      // Auto fill step 2
       document
         .getElementById("autoFill-step2")
         .addEventListener("click", function () {
@@ -228,19 +229,18 @@
           document.getElementById("tasaInteres").value = "15%";
         });
 
+      // Submit step 1
       document
         .getElementById("btnInterestFormStep1")
         .addEventListener("click", function (e) {
           e.preventDefault();
           var nombre = document.getElementById("nombre").value;
 
-          console.log("Step1: ", nombre);
-
           // Send event to Target
           window.alloy("sendEvent", {
             renderDecisions: true,
             type: "web.webinteraction.linkClicks",
-            decisionScopes: ["__view__, offertSimuladorCredito"],
+            decisionScopes: ["__view__"],
             xdm: {},
             data: {
               __adobe: {
@@ -256,6 +256,10 @@
           document
             .getElementById("interestForm-step2")
             .classList.remove("hidden");
+
+          window.adobeDataLayer.push({
+            event: "formStep2Displayed",
+          });
         });
 
       document
