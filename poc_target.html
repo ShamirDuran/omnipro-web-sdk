@@ -333,10 +333,26 @@
         const proposition = propositions[0];
         proposition.renderAttempted = true;
 
-        const { imageUrl, nombre } = proposition.items[0].data.content;
+        const {
+          imageUrl,
+          nombre,
+          montoPrestamoSimulado,
+          plazoSimulado,
+          tipoIngreso,
+          pagoFijo,
+          tasaInteres,
+        } = proposition.items[0].data.content;
 
         document.getElementById("personalizedBanner2").src = imageUrl;
         document.getElementById("step2-nombre").innerText = nombre;
+
+        // cargar datos en form
+        document.getElementById("montoPrestamoSimulado").value =
+          montoPrestamoSimulado;
+        document.getElementById("plazoSimulado").value = plazoSimulado;
+        document.getElementById("tipoIngreso").value = tipoIngreso;
+        document.getElementById("pagoFijo").value = pagoFijo;
+        document.getElementById("tasaInteres").value = tasaInteres;
 
         return true;
       }
