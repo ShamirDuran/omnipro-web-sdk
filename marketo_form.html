@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketo Form</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    <script src="//152-ZQW-300.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1046"></form>
+
+    <script>
+      MktoForms2.loadForm(
+        "//152-ZQW-300.mktoweb.com",
+        "152-ZQW-300",
+        1046,
+        function (form) {
+          fetch(
+            "https://tranquil-mermaid-ac18aa.netlify.app/.netlify/functions/api/forms"
+          )
+            .then((response) => response.json())
+            .then((response) => {
+              const programs = response.data;
+
+              form.onSuccess(() => false); // Previene el envío automático para pruebas
+
+              const selectProgram = document.querySelector("#nombre_programa");
+              selectProgram.innerHTML =
+                '<option value="">Select...</option>' +
+                programs
+                  .map(
+                    ({ id, name }) => `<option value="${id}">${name}</option>`
+                  )
+                  .join("");
+            })
+            .catch((error) => console.error("Error:", error));
+        }
+      );
+    </script>
+  </body>
+</html>
