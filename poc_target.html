@@ -86,6 +86,10 @@
       .hidden {
         display: none;
       }
+
+      .mt-1 {
+        margin-top: 10px;
+      }
     </style>
 
     <!-- Flicker script -->
@@ -140,6 +144,15 @@
         <form id="interestForm-step1">
           <label for="nombre">Nombre</label>
           <input type="text" id="nombre" name="nombre" value="" required />
+
+          <label class="mt-1" for="fechaNacimiento">Fecha de Nacimiento</label>
+          <input
+            type="date"
+            id="fechaNacimiento"
+            name="fechaNacimiento"
+            required
+          />
+
           <button id="btnInterestFormStep1" type="submit">Siguiente</button>
         </form>
       </div>
@@ -239,6 +252,8 @@
         .addEventListener("click", function (e) {
           e.preventDefault();
           var nombre = document.getElementById("nombre").value;
+          var fechaNacimiento =
+            document.getElementById("fechaNacimiento").value;
 
           // Send event to Target
           window.alloy("sendEvent", {
@@ -250,6 +265,7 @@
               __adobe: {
                 target: {
                   "profile.nombre": nombre,
+                  "profile.fechaNacimiento": fechaNacimiento,
                 },
               },
             },
