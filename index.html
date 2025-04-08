@@ -448,6 +448,9 @@
               if (propositions) {
                 for (var i = 0; i < propositions.length; i++) {
                   var proposition = propositions[i];
+
+                  console.log("inner", proposition);
+
                   if (proposition.scope === "conversionTest") {
                     window.alloy("sendEvent", {
                       renderDecisions: true,
