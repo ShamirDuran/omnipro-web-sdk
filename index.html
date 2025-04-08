@@ -429,9 +429,39 @@
       document
         .querySelector("#header > div > nav > ul > li > a")
         .addEventListener("click", function () {
-          window.adobe.target.trackEvent({
-            mbox: "header-menu-click",
-          });
+          window
+            .alloy("sendEvent", {
+              xdm: {},
+              decisionScopes: ["header-menu-click"],
+            })
+            .then(function (result) {
+              var proposition = result.propositions;
+              console.log("proposition", proposition);
+
+              if (propositions) {
+                for (var i = 0; i < propositions.length; i++) {
+                  var proposition = propositions[i];
+                  if (proposition.scope === "conversionTest") {
+                    alloy("sendEvent", {
+                      xdm: {
+                        eventType: "decisioning.propositionDisplay",
+                        _experience: {
+                          decisioning: {
+                            propositions: [
+                              {
+                                id: proposition.id,
+                                scope: proposition.scope,
+                                scopeDetails: proposition.scopeDetails,
+                              },
+                            ],
+                          },
+                        },
+                      },
+                    });
+                  }
+                }
+              }
+            });
         });
     </script>
 
