@@ -432,6 +432,7 @@
           window
             .alloy("sendEvent", {
               xdm: {},
+              renderDecisions: true,
               decisionScopes: ["header-menu-click"],
             })
             .then(function (result) {
@@ -448,11 +449,16 @@
                 for (var i = 0; i < propositions.length; i++) {
                   var proposition = propositions[i];
                   if (proposition.scope === "conversionTest") {
-                    alloy("sendEvent", {
+                    window.alloy("sendEvent", {
+                      renderDecisions: true,
+                      type: "web.webinteraction.linkClicks",
                       xdm: {
                         eventType: "decisioning.propositionInteract",
                         _experience: {
                           decisioning: {
+                            propositionEventType: {
+                              interact: 1,
+                            },
                             propositions: [
                               {
                                 id: proposition.id,
