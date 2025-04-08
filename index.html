@@ -425,54 +425,6 @@
       });
     </script>
 
-    <script>
-      document
-        .querySelector("#header > div > nav > ul > li > a")
-        .addEventListener("click", function () {
-          window
-            .alloy("sendEvent", {
-              xdm: {},
-              decisionScopes: ["header-menu-click"],
-            })
-            .then(function (result) {
-              var propositions = result.propositions;
-              if (propositions) {
-                for (var i = 0; i < propositions.length; i++) {
-                  var proposition = propositions[i];
-
-                  console.log(
-                    "Proposition ID: " +
-                      proposition.id +
-                      ", Scope: " +
-                      proposition.scope +
-                      ", Scope Details: " +
-                      JSON.stringify(proposition.scopeDetails)
-                  );
-
-                  if (proposition.scope === "header-menu-click") {
-                    window.alloy("sendEvent", {
-                      xdm: {
-                        eventType: "decisioning.propositionDisplay",
-                        _experience: {
-                          decisioning: {
-                            propositions: [
-                              {
-                                id: proposition.id,
-                                scope: proposition.scope,
-                                scopeDetails: proposition.scopeDetails,
-                              },
-                            ],
-                          },
-                        },
-                      },
-                    });
-                  }
-                }
-              }
-            });
-        });
-    </script>
-
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/browser.min.js"></script>
