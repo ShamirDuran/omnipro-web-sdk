@@ -439,7 +439,17 @@
               if (propositions) {
                 for (var i = 0; i < propositions.length; i++) {
                   var proposition = propositions[i];
-                  if (proposition.scope === "conversionTest") {
+
+                  console.log(
+                    "Proposition ID: " +
+                      proposition.id +
+                      ", Scope: " +
+                      proposition.scope +
+                      ", Scope Details: " +
+                      JSON.stringify(proposition.scopeDetails)
+                  );
+
+                  if (proposition.scope === "header-menu-click") {
                     window.alloy("sendEvent", {
                       xdm: {
                         eventType: "decisioning.propositionDisplay",
