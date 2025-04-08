@@ -438,12 +438,6 @@
             .then(function (result) {
               var propositions = result.propositions;
               console.log("proposition", propositions);
-              console.log("propositions.id", propositions.id);
-              console.log("propositions.scope", propositions.scope);
-              console.log(
-                "propositions.scopeDetails",
-                propositions.scopeDetails
-              );
 
               if (propositions) {
                 for (var i = 0; i < propositions.length; i++) {
@@ -454,7 +448,6 @@
                   if (proposition.scope === "conversionTest") {
                     window.alloy("sendEvent", {
                       renderDecisions: true,
-                      type: "web.webinteraction.linkClicks",
                       xdm: {
                         eventType: "decisioning.propositionInteract",
                         _experience: {
