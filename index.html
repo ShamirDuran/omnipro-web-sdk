@@ -48,6 +48,29 @@
 
     <!-- Script Dynamic Chat -->
     <script src="https://assets.adoberesources.net/loader.js?orgId=1C722A9A5F59DECB0A495F9F%40AdobeOrg&instanceId=omniprosvc2&env=prod&geo=va7"></script>
+
+    <script type="text/javascript">
+      (function () {
+        var didInit = false;
+        function initMunchkin() {
+          if (didInit === false) {
+            didInit = true;
+            Munchkin.init("402-ALY-118");
+          }
+        }
+        var s = document.createElement("script");
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "//munchkin.marketo.net/munchkin.js";
+        s.onreadystatechange = function () {
+          if (this.readyState == "complete" || this.readyState == "loaded") {
+            initMunchkin();
+          }
+        };
+        s.onload = initMunchkin;
+        document.getElementsByTagName("head")[0].appendChild(s);
+      })();
+    </script>
   </head>
 
   <body class="is-preload">
@@ -422,6 +445,67 @@
         pagoFijo: 5.0,
         tasaInteres: "43.8%",
         producto: "Credito expres",
+      });
+    </script>
+
+    <script>
+      setTimeout(() => {}, 3000).then(() => {
+        var xpath =
+          "/html/body/div[10]/div[2]/div/div/div/div[1]/section[5]/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/a";
+        var result = document.evaluate(
+          xpath,
+          document,
+          null,
+          XPathResult.FIRST_ORDERED_NODE_TYPE,
+          null
+        );
+        var element = result.singleNodeValue;
+
+        element.addEventListener("click", function () {
+          window
+            .alloy("sendEvent", {
+              xdm: {},
+              decisionScopes: ["experience-clicked"],
+            })
+            .then(function (result) {
+              var propositions = result.propositions;
+              console.log("before preposition", propositions);
+
+              if (propositions) {
+                for (var i = 0; i < propositions.length; i++) {
+                  var proposition = propositions[i];
+
+                  console.log("proposition", proposition);
+
+                  if (proposition.scope === "experience-clicked") {
+                    console.log("entro");
+
+                    window.alloy("sendEvent", {
+                      xdm: {
+                        eventType: "decisioning.propositionDisplay",
+                        web: {
+                          webPageDetails: {
+                            viewName: new Date.now().toString(),
+                          },
+                        },
+                        _experience: {
+                          decisioning: {
+                            propositions: [
+                              {
+                                id: proposition.id,
+                                scope: proposition.scope,
+                                scopeDetails: proposition.scopeDetails,
+                              },
+                            ],
+                          },
+                        },
+                      },
+                    });
+                  }
+                }
+              }
+            });
+        });
       });
     </script>
 
