@@ -449,63 +449,61 @@
     </script>
 
     <script>
-      setTimeout(() => {}, 3000).then(() => {
-        var xpath =
-          "/html/body/div[10]/div[2]/div/div/div/div[1]/section[5]/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/a";
-        var result = document.evaluate(
-          xpath,
-          document,
-          null,
-          XPathResult.FIRST_ORDERED_NODE_TYPE,
-          null
-        );
-        var element = result.singleNodeValue;
+      var xpath =
+        "/html/body/div[10]/div[2]/div/div/div/div[1]/section[5]/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/a";
+      var result = document.evaluate(
+        xpath,
+        document,
+        null,
+        XPathResult.FIRST_ORDERED_NODE_TYPE,
+        null
+      );
+      var element = result.singleNodeValue;
 
-        element.addEventListener("click", function () {
-          window
-            .alloy("sendEvent", {
-              xdm: {},
-              decisionScopes: ["experience-clicked"],
-            })
-            .then(function (result) {
-              var propositions = result.propositions;
-              console.log("before preposition", propositions);
+      element.addEventListener("click", function () {
+        window
+          .alloy("sendEvent", {
+            xdm: {},
+            decisionScopes: ["experience-clicked"],
+          })
+          .then(function (result) {
+            var propositions = result.propositions;
+            console.log("before preposition", propositions);
 
-              if (propositions) {
-                for (var i = 0; i < propositions.length; i++) {
-                  var proposition = propositions[i];
+            if (propositions) {
+              for (var i = 0; i < propositions.length; i++) {
+                var proposition = propositions[i];
 
-                  console.log("proposition", proposition);
+                console.log("proposition", proposition);
 
-                  if (proposition.scope === "experience-clicked") {
-                    console.log("entro");
+                if (proposition.scope === "experience-clicked") {
+                  console.log("entro");
 
-                    window.alloy("sendEvent", {
-                      xdm: {
-                        eventType: "decisioning.propositionDisplay",
-                        web: {
-                          webPageDetails: {
-                            viewName: new Date.now().toString(),
-                          },
-                        },
-                        _experience: {
-                          decisioning: {
-                            propositions: [
-                              {
-                                id: proposition.id,
-                                scope: proposition.scope,
-                                scopeDetails: proposition.scopeDetails,
-                              },
-                            ],
-                          },
+                  window.alloy("sendEvent", {
+                    xdm: {
+                      eventType: "decisioning.propositionDisplay",
+                      web: {
+                        webPageDetails: {
+                          viewName: new Date.now().toString(),
                         },
                       },
-                    });
-                  }
+                      _experience: {
+                        decisioning: {
+                          propositions: [
+                            {
+                              id: proposition.id,
+                              scope: proposition.scope,
+                              scopeDetails: proposition.scopeDetails,
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  });
                 }
               }
-            });
-        });
+            }
+          });
       });
     </script>
 
