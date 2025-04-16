@@ -6,18 +6,14 @@
 -->
 <html>
   <head>
-    <title>Test</title>
+    <title>IE Test</title>
     <meta charset="utf-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=no"
     />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <noscript>
-      <link rel="stylesheet" href="assets/css/noscript.css" />
-    </noscript>
 
-    <!-- Adobe Prehide -->
+    <!-- Flicker script -->
     <script>
       !(function (e, a, n, t) {
         var i = e.head;
@@ -38,17 +34,8 @@
         3000
       );
     </script>
-    <!-- Adobe Prehide -->
 
-    <!-- Adobe Target Reference -->
-    <script
-      src="https://assets.adobedtm.com/27a87f218a28/d000d1a04f96/launch-1540681c5b7d-development.min.js"
-      async
-    ></script>
-
-    <!-- Script Dynamic Chat -->
-    <script src="https://assets.adoberesources.net/loader.js?orgId=1C722A9A5F59DECB0A495F9F%40AdobeOrg&instanceId=omniprosvc2&env=prod&geo=va7"></script>
-
+    <!-- Munchkin Code Dev -->
     <script type="text/javascript">
       (function () {
         var didInit = false;
@@ -71,6 +58,12 @@
         document.getElementsByTagName("head")[0].appendChild(s);
       })();
     </script>
+
+    <!-- Adobe Launch Script Dev -->
+    <script
+      src="https://assets.adobedtm.com/c319523f1a52/b4fac05f4bac/launch-9156699116b6-development.min.js"
+      async
+    ></script>
   </head>
 
   <body class="is-preload">
@@ -123,31 +116,6 @@
               Lorem ipsum dolor sit amet nullam dolore.
             </p>
           </header>
-
-          <!-- <div
-            id="adobe-dc-view"
-            style="height: 500px; width: '100%'; margin-bottom: 10px"
-          ></div>
-          <script src="https://acrobatservices.adobe.com/view-sdk/viewer.js"></script>
-          <script type="text/javascript">
-            document.addEventListener("adobe_dc_view_sdk.ready", function () {
-              var adobeDCView = new AdobeDC.View({
-                clientId: "3de345aafb9240babb0ecacad1dba3ba",
-                divId: "adobe-dc-view",
-              });
-              adobeDCView.previewFile(
-                {
-                  content: {
-                    location: {
-                      url: "https://omni-s3-poc-test.s3.us-east-1.amazonaws.com/Bodea+Brochure.pdf",
-                    },
-                  },
-                  metaData: { fileName: "Bodea Brochure.pdf" },
-                },
-                { embedMode: "SIZED_CONTAINER" }
-              );
-            });
-          </script> -->
 
           <section class="tiles">
             <article class="style1">
@@ -408,105 +376,6 @@
         </div>
       </footer>
     </div>
-
-    <script>
-      const h1 = document.getElementById("titulo");
-      h1.addEventListener("click", () => {
-        const plazoSimulado = prompt("Please enter a value:");
-
-        window.alloy("sendEvent", {
-          renderDecisions: true,
-          type: "web.webinteraction.linkClicks",
-          decisionScopes: ["__view__"],
-          xdm: {},
-          data: {
-            __adobe: {
-              target: {
-                "profile.montoPrestamoSimulado": 1150000,
-                "profile.pagoFijo": 100000,
-                "profile.plazoSimulado": plazoSimulado,
-                "profile.producto": "Credito Express",
-              },
-            },
-          },
-        });
-      });
-    </script>
-
-    <!-- dataLayer PageLoad -->
-    <script>
-      window.adobeDataLayer = window.adobeDataLayer || [];
-
-      // Page View Event
-      window.adobeDataLayer.push({
-        event: "originadorSimulacion",
-        montoPrestamoSimulado: 15.0,
-        plazoSimulado: 24,
-        comprobarIngresosSimulador: "Persona asalariada",
-        pagoFijo: 5.0,
-        tasaInteres: "43.8%",
-        producto: "Credito expres",
-      });
-    </script>
-
-    <script>
-      var xpath =
-        "/html/body/div[10]/div[2]/div/div/div/div[1]/section[5]/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/a";
-      var result = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      );
-      var element = result.singleNodeValue;
-
-      element.addEventListener("click", function () {
-        window
-          .alloy("sendEvent", {
-            xdm: {},
-            decisionScopes: ["experience-clicked"],
-          })
-          .then(function (result) {
-            var propositions = result.propositions;
-            console.log("before preposition", propositions);
-
-            if (propositions) {
-              for (var i = 0; i < propositions.length; i++) {
-                var proposition = propositions[i];
-
-                console.log("proposition", proposition);
-
-                if (proposition.scope === "experience-clicked") {
-                  console.log("entro");
-
-                  window.alloy("sendEvent", {
-                    xdm: {
-                      eventType: "decisioning.propositionDisplay",
-                      web: {
-                        webPageDetails: {
-                          viewName: new Date.now().toString(),
-                        },
-                      },
-                      _experience: {
-                        decisioning: {
-                          propositions: [
-                            {
-                              id: proposition.id,
-                              scope: proposition.scope,
-                              scopeDetails: proposition.scopeDetails,
-                            },
-                          ],
-                        },
-                      },
-                    },
-                  });
-                }
-              }
-            }
-          });
-      });
-    </script>
 
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
