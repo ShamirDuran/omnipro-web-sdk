@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<!--
-	Phantom by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
 <html>
   <head>
     <title>Página de prueba</title>
@@ -435,19 +430,17 @@
       });
     </script>
 
-    <!-- dataLayer PageLoad -->
+    <!-- Category Affinity -->
     <script>
-      window.adobeDataLayer = window.adobeDataLayer || [];
-
-      // Page View Event
-      window.adobeDataLayer.push({
-        event: "originadorSimulacion",
-        montoPrestamoSimulado: 15.0,
-        plazoSimulado: 24,
-        comprobarIngresosSimulador: "Persona asalariada",
-        pagoFijo: 5.0,
-        tasaInteres: "43.8%",
-        producto: "Credito expres",
+      window.alloy("sendEvent", {
+        xdm: {
+          web: {
+            webPageDetails: {
+              name: "Home Page",
+              category: "Electronics",
+            },
+          },
+        },
       });
     </script>
 
@@ -463,6 +456,7 @@
       );
       var element = result.singleNodeValue;
 
+      // Envio reporte click a Target
       element.addEventListener("click", function () {
         window
           .alloy("sendEvent", {
@@ -471,17 +465,11 @@
           })
           .then(function (result) {
             var propositions = result.propositions;
-            console.log("before preposition", propositions);
-
             if (propositions) {
               for (var i = 0; i < propositions.length; i++) {
                 var proposition = propositions[i];
 
-                console.log("proposition", proposition);
-
                 if (proposition.scope === "experience-clicked") {
-                  console.log("entro");
-
                   window.alloy("sendEvent", {
                     xdm: {
                       eventType: "decisioning.propositionDisplay",
