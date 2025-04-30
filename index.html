@@ -432,15 +432,19 @@
     </script>
 
     <!-- Category Affinity -->
-    <script type="text/javascript">
-      function targetPageParams() {
-        console.log("targetPageParams");
-
-        return "profile.testAffinity=electronicos";
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        targetPageParams();
+    <script>
+      window.alloy("sendEvent", {
+        renderDecisions: true,
+        type: "web.webinteraction.pageViews",
+        decisionScopes: ["__view__"],
+        xdm: {},
+        data: {
+          __adobe: {
+            target: {
+              "user.categoryId": "electronics",
+            },
+          },
+        },
       });
     </script>
 

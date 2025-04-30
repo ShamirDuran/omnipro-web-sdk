@@ -665,6 +665,22 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
       </footer>
     </div>
 
+    <script>
+      window.alloy("sendEvent", {
+        renderDecisions: true,
+        type: "web.webinteraction.pageViews",
+        decisionScopes: ["__view__"],
+        xdm: {},
+        data: {
+          __adobe: {
+            target: {
+              "user.categoryId": "loands",
+            },
+          },
+        },
+      });
+    </script>
+
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/browser.min.js"></script>
