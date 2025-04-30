@@ -406,6 +406,7 @@
       </footer>
     </div>
 
+    <!-- Script target profile -->
     <script>
       const h1 = document.getElementById("titulo");
       h1.addEventListener("click", () => {
@@ -435,8 +436,13 @@
       function targetPageParams() {
         return "profile.testAffinity=electronicos";
       }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        targetPageParams();
+      });
     </script>
 
+    <!-- Script target report -->
     <script>
       var xpath =
         "/html/body/div[10]/div[2]/div/div/div/div[1]/section[5]/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/a";
