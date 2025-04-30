@@ -433,18 +433,20 @@
 
     <!-- Category Affinity -->
     <script>
-      window.alloy("sendEvent", {
-        renderDecisions: true,
-        type: "web.webinteraction.pageViews",
-        decisionScopes: ["__view__"],
-        xdm: {},
-        data: {
-          __adobe: {
-            target: {
-              "user.categoryId": "electronics",
+      document.addEventListener("DOMContentLoaded", function () {
+        window.alloy("sendEvent", {
+          renderDecisions: true,
+          type: "web.webinteraction.pageViews",
+          decisionScopes: ["__view__"],
+          xdm: {},
+          data: {
+            __adobe: {
+              target: {
+                "user.categoryId": "electronics",
+              },
             },
           },
-        },
+        });
       });
     </script>
 
