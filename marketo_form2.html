@@ -14,12 +14,49 @@
 
       body {
         display: flex;
-        height: 100vh;
         justify-content: center;
         align-items: center;
+        background-color: #000;
+        height: 100vh;
+      }
+
+      .mktoFieldWrap:has(
+          input:not([type="checkbox"]):not([type="radio"]),
+          select
+        )
+        > label {
+        display: none;
+      }
+
+      .mktoForm {
+        background-color: #fff;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        max-width: 700px;
+        max-height: 85vh;
+        overflow: scroll;
+      }
+
+      .mktoGutter {
+        width: 0 !important;
+      }
+
+      .mktoFormRow,
+      .mktoFieldWrap,
+      .mktoFormCol,
+      .mktoField {
+        width: 100% !important;
+      }
+
+      .mktoField,
+      .mktoTextField {
+        border-color: transparent;
+        border-bottom: 1px solid #000;
       }
     </style>
 
+    <!-- Munchkin code -->
     <script type="text/javascript">
       (function () {
         var didInit = false;
@@ -43,13 +80,16 @@
         document.getElementsByTagName("head")[0].appendChild(s);
       })();
     </script>
+
+    <!-- Form library Mkto -->
+    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
   </head>
 
   <body>
-    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-    <form id="mktoForm_1018"></form>
+    <form id="mktoForm_1045"></form>
+
     <script>
-      MktoForms2.loadForm("//402-ALY-118.mktoweb.com", "402-ALY-118", 1018);
+      MktoForms2.loadForm("//402-ALY-118.mktoweb.com", "402-ALY-118", 1045);
     </script>
   </body>
 </html>
