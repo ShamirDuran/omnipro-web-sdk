@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <!-- launch -->
+    <script
+      src="https://assets.adobedtm.com/f2b1a59e47dd/4409df7f1ad9/launch-256fc14d46f2.min.js"
+      async
+    ></script>
+  </head>
+
+  <style>
+    .custom-body {
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .target-button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      background-color: #007bff;
+      color: white;
+    }
+
+    .target-button:hover {
+      background-color: blue;
+    }
+  </style>
+
+  <div class="custom-body">
+    <button class="target-button" id="credinegocio">Credinegocio</button>
+    <button class="target-button" id="credioficio">Credioficio</button>
+    <button class="target-button" id="tradicional">Tradicional</button>
+    <button class="target-button" id="creditoYa">CreditoYa</button>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      document.getElementById("credinegocio").onclick = function () {
+        window.alloy("sendEvent", {
+          renderDecisions: true,
+          type: "web.webinteraction.linkClicks",
+          decisionScopes: ["__view__"],
+          xdm: {},
+          data: {
+            __adobe: {
+              target: {
+                "profile.montoPrestamoSimulado": "17000",
+                "profile.comprobarIngresosSimulador": "Persona asalariada",
+                "profile.antiguedadEmpresa": "2010-03-03",
+                "profile.fechaNacimiento": "03/03/1997",
+                "profile.buroExitosoSMS": "true",
+                "profile.plazoSimulado": "48",
+                "profile.comprobarIngresos": "CARTA DE INGRESOS",
+              },
+            },
+          },
+        });
+      };
+
+      document.getElementById("credioficio").onclick = function () {
+        window.alloy("sendEvent", {
+          renderDecisions: true,
+          type: "web.webinteraction.linkClicks",
+          decisionScopes: ["__view__"],
+          xdm: {},
+          data: {
+            __adobe: {
+              target: {
+                "profile.montoPrestamoSimulado": "17000",
+                "profile.plazoSimulado": "48",
+                "profile.fechaNacimiento": "03/03/1997",
+                "profile.comprobarIngresos": "CARTA DE INGRESOS",
+                "profile.buroExitosoSMS": "true",
+                "profile.ocupacion": "CULTIVO DE ALGODON",
+              },
+            },
+          },
+        });
+      };
+
+      document.getElementById("tradicional").onclick = function () {
+        window.alloy("sendEvent", {
+          renderDecisions: true,
+          type: "web.webinteraction.linkClicks",
+          decisionScopes: ["__view__"],
+          xdm: {},
+          data: {
+            __adobe: {
+              target: {
+                "profile.montoPrestamoSimulado": "17000",
+                "profile.plazoSimulado": "48",
+                "profile.buroExitosoSMS": "true",
+                "profile.fechaNacimiento": "03/03/1997",
+                "profile.antiguedadEmpresa": "2010-03-03",
+              },
+            },
+          },
+        });
+      };
+
+      document.getElementById("creditoYa").onclick = function () {
+        window.alloy("sendEvent", {
+          renderDecisions: true,
+          type: "web.webinteraction.linkClicks",
+          decisionScopes: ["__view__"],
+          xdm: {},
+          data: {
+            __adobe: {
+              target: {
+                "profile.fechaNacimiento": "03/03/1997",
+                "profile.comprobarIngresosSimulador": "Persona asalariada",
+                "profile.montoPrestamoSimulado": "17000",
+                "profile.plazoSimulado": "48",
+              },
+            },
+          },
+        });
+      };
+    }, 300);
+  </script>
+</html>
