@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script
+      src="https://assets.adobedtm.com/27a87f218a28/8b6035e4e91c/launch-07fc264cb0fc-development.min.js"
+      async
+    ></script>
+  </head>
+  <body>
+    <button id="trigger">Trigger Event</button>
+
+    <script>
+      window.adobeDataLayer.push({
+        event: "weatherEvent",
+        eventInfo: {
+          latitude: 52.52,
+          longitude: 13.419998,
+          generationtime_ms: 0.03790855407714844,
+          utc_offset_seconds: 0,
+          timezone: "GMT",
+          timezone_abbreviation: "GMT",
+          elevation: 38.0,
+          hourly_units: {
+            time: "iso8601",
+            temperature_2m: "°C",
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

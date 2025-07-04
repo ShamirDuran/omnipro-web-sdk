@@ -1,0 +1,43 @@
+{
+  "requestId": "string",
+  "handle": [
+    {
+      "payload": [
+        {
+          "id": "string",
+          "scope": "string",
+          "scopeDetails": {
+            "decisionProvider": "string",
+            "activity": {
+              "id": "string"
+            }
+          },
+          "items": [
+            {
+              "id": "0",
+              "schema": "https://ns.adobe.com/personalization/json-content-item",
+              "meta": {
+                "activity.name": "target-activity-name",
+                "activity.id": "target-activity-id",
+                "experience.name": "experience-name",
+                "option.name": "ode-offer-name"
+              },
+              "data": {
+                "id": "string",
+                "format": "application/json",
+                "content": {
+                  "title": "string",
+                  "description": "string",
+                  "ctaLabel": "string",
+                  "ctaLink": "string",
+                  "cardArt": "string"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "type": "personalization:decisions"
+    }
+  ]
+}

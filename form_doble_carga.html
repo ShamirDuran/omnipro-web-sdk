@@ -13,7 +13,7 @@
       }
 
       .hidden {
-        display: none;
+        display: none !important;
       }
 
       .visible {
@@ -128,6 +128,13 @@
       .close-modal:hover {
         background: #f0f0f0;
       }
+
+      .form-in-screen {
+        display: flex;
+        justify-content: right;
+        align-items: right;
+        padding: 100px;
+      }
     </style>
   </head>
 
@@ -136,10 +143,24 @@
       <div>
         <h3>Programs</h3>
         <div id="programs-list"></div>
+        <!-- Formulario de Marketo que siempre esta visible -->
+        <div id="container-form-screen" class="form-in-screen">
+          <form id="mktoForm_1002"></form>
+        </div>
       </div>
 
-      <form id="mktoForm_1002"></form>
+      <!-- Marketo forms library -->
       <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+
+      <!-- Formulario de Marketo que se muestra en tipo pop-up -->
+      <div class="modal hidden">
+        <a class="close-modal">X</a>
+        <div class="backdrop"></div>
+
+        <div id="container-form-modal">
+          <form id="mktoForm_1002"></form>
+        </div>
+      </div>
 
       <script>
         MktoForms2.loadForm(
@@ -147,42 +168,8 @@
           "402-ALY-118",
           1002,
           function (form) {
-            console.log("the form is loaded");
-            // add onReady form events
-
-            form.onValidate(function (status) {
-              console.log(status, "status");
-            });
-
-            form.onSubmit(function (event) {
-              return false; // prevent the form from submitting
-            });
-
             form.onSuccess(function (values, followUpUrl) {
-              console.log("Form submitted successfully", values);
-              const programaSeleccionado = values.ie_interestedin;
-
-              switch (programaSeleccionado) {
-                case "Master programs":
-                  window.location.href =
-                    "https://www.example.com/programa1-brochure.pdf";
-                  break;
-                case "Undergraduate degrees":
-                  window.location.href =
-                    "https://www.example.com/programa2-brochure.pdf";
-                  break;
-                case "Executive Education":
-                  window.location.href =
-                    "https://www.example.com/programa3-brochure.pdf";
-                  break;
-
-                default:
-                  window.location.href =
-                    "https://www.example.com/default-brochure.pdf";
-                  break;
-              }
-
-              return false; // prevent the form from submitting
+              return false; // Prevent default form submission
             });
           }
         );
@@ -229,14 +216,26 @@
         },
       ];
 
-      function handleButtonClick(event) {
+      /// Función que se ejecuta cuando se hace click sobre la tarjeta de un programa, lo cual despliega el pop-up
+      function handleProgramCardClick(event) {
         if (event.target.tagName === "BUTTON") {
+          // Se obtiene el ID del programa seleccionado
+          const programId = event.target.dataset.id;
+          const allInputPrograms = document.querySelectorAll(
+            "#mshied_currentprogramid"
+          );
+
+          allInputPrograms.forEach((item, index) => {
+            item.value = programId;
+          });
+
           const modal = document.querySelector(".modal");
           modal.classList.remove("hidden");
           modal.classList.add("visible");
         }
       }
 
+      /// Función que renderiza el listado de programas en la pantalla
       function renderPrograms(programs) {
         const list = document.getElementById("programs-list");
         list.innerHTML = programs
@@ -248,7 +247,7 @@
         <div><strong>${p.name}</strong></div>
         <div>ID: ${p.id}</div>
         <div style="flex:1"></div>
-        <button onclick="handleButtonClick(event)">Download Brochure</button>
+        <button onclick="handleProgramCardClick(event)" data-id="${p.id}">Download Brochure</button>
           </div>
         </div>
           `
@@ -259,13 +258,13 @@
       document.addEventListener("DOMContentLoaded", function () {
         renderPrograms(programs);
 
-        // document
-        //   .querySelector(".close-modal")
-        //   .addEventListener("click", function () {
-        //     const modal = document.querySelector(".modal");
-        //     modal.classList.remove("visible");
-        //     modal.classList.add("hidden");
-        //   });
+        document
+          .querySelector(".close-modal")
+          .addEventListener("click", function () {
+            const modal = document.querySelector(".modal");
+            modal.classList.remove("visible");
+            modal.classList.add("hidden");
+          });
       });
     </script>
   </body>
