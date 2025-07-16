@@ -92,7 +92,31 @@
         "//402-ALY-118.mktoweb.com",
         "402-ALY-118",
         1045,
-        function (form) {}
+        function (form) {
+          const pathwayPicklist = document.getElementById("pathwayPicklist");
+          const programPicklist = document.getElementById("programPicklist");
+
+          if (pathwayPicklist) {
+            pathwayPicklist.addEventListener("change", function (e) {
+              const selectedPathway = e.target.selectedPathway;
+
+              fetch(`https://ejemplo.com/api/pathway${value}`)
+                .then((response) => response.json())
+                .then((data) => {
+                  // Suponiendo que data es un array de opciones [{ value: '...', label: '...' }]
+                  if (programPicklist) {
+                    programPicklist.innerHTML = "";
+                    data.forEach((option) => {
+                      const opt = document.createElement("option");
+                      opt.value = option.value;
+                      opt.textContent = option.label;
+                      programPicklist.appendChild(opt);
+                    });
+                  }
+                });
+            });
+          }
+        }
       );
     </script>
   </body>
