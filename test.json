@@ -1,43 +1,127 @@
 {
-  "requestId": "string",
+  "requestId": "b15aeb4e-c876-4303-8646-ace17adb89e2-713c9ccba7ee4a92",
   "handle": [
+    {
+      "payload": [],
+      "type": "activation:pull",
+      "eventIndex": 0
+    },
     {
       "payload": [
         {
-          "id": "string",
-          "scope": "string",
+          "id": "15081d0f-a6c9-4af6-a08c-5b05597d7aec",
+          "scope": "web://localhost#AEM_CF",
           "scopeDetails": {
-            "decisionProvider": "string",
+            "decisionProvider": "AJO",
+            "correlationID": "763cad29-33f9-452f-ba96-94ef6ee2811c-0",
+            "strategies": [
+              {
+                "strategyID": "4i6oQh4gZhb4E8hlfBYz26",
+                "treatmentID": "0b4d23d692cd08c20aa5"
+              }
+            ],
+            "characteristics": {
+              "eventToken": "eyJtZXNzYWdlRXhlY3V0aW9uIjp7Im1lc3NhZ2VFeGVjdXRpb25JRCI6IlVFOkluYm91bmQiLCJtZXNzYWdlSUQiOiJiNTJkZGQ5ZS01ZTU0LTRlMWMtYTA2OS0xZTQ2OWQ2M2YwZTgiLCJtZXNzYWdlUHVibGljYXRpb25JRCI6Ijc2M2NhZDI5LTMzZjktNDUyZi1iYTk2LTk0ZWY2ZWUyODExYyIsIm1lc3NhZ2VUeXBlIjoibWFya2V0aW5nIiwiY2FtcGFpZ25JRCI6ImE0NTgwMTg1LWYwNjAtNDYyYy05ZjBhLTU0ZDRiYzYyYWJmNSIsImNhbXBhaWduVmVyc2lvbklEIjoiZTk4YzZjMWQtZjJlMi00YmNjLWFkODctNmZjMjc5MmExMTI4IiwiY2FtcGFpZ25BY3Rpb25JRCI6IjRkMmM5NzFkLTQ2YmUtNDlkMC1hYThmLTA5YzVhZmI0ZWYxZSJ9LCJtZXNzYWdlUHJvZmlsZSI6eyJtZXNzYWdlUHJvZmlsZUlEIjoiNTcyNWE0MDUtNzZhZC00YTQwLTk3NWYtYWFlY2YzZTQwNzJjIiwiY2hhbm5lbCI6eyJfaWQiOiJodHRwczovL25zLmFkb2JlLmNvbS94ZG0vY2hhbm5lbHMvY29kZSIsIl90eXBlIjoiaHR0cHM6Ly9ucy5hZG9iZS5jb20veGRtL2NoYW5uZWwtdHlwZXMvY29kZSJ9fX0="
+            },
+            "rank": 1,
             "activity": {
-              "id": "string"
+              "id": "a4580185-f060-462c-9f0a-54d4bc62abf5#4d2c971d-46be-49d0-aa8f-09c5afb4ef1e",
+              "priority": 0,
+              "matchedSurfaces": ["web://localhost/#AEM_CF"]
             }
           },
           "items": [
             {
-              "id": "0",
+              "id": "7012120c-e2ed-4247-afb2-dfab58424555",
               "schema": "https://ns.adobe.com/personalization/json-content-item",
-              "meta": {
-                "activity.name": "target-activity-name",
-                "activity.id": "target-activity-id",
-                "experience.name": "experience-name",
-                "option.name": "ode-offer-name"
-              },
               "data": {
-                "id": "string",
-                "format": "application/json",
                 "content": {
-                  "title": "string",
-                  "description": "string",
-                  "ctaLabel": "string",
-                  "ctaLink": "string",
-                  "cardArt": "string"
+                  "headline": "Earn 20.000 when you sign up for new card at [[apr_rate]]",
+                  "description": "Add an Additional Delta SkyMiles* Reserve Card Member. Term apply",
+                  "cta_label": "Explore Offer",
+                  "cta_link": "https://www.americanexpress.com/us/credit-card/card/delta-skymiles-reserve-american-express-card",
+                  "page": "Overview",
+                  "display_rank": "1",
+                  "customer_treatment_status": "ELEGIBLE",
+                  "placement": "code",
+                  "domain": "Card",
+                  "conversion_tracking_code": "YzMk5uwwGQlNGdWWf+QcHg",
+                  "unique_card_number": "*******9312",
+                  "first_name": "null",
+                  "customer_journey_id": "campaign",
+                  "show_card_art": "true",
+                  "card_art": "true",
+                  "product_display": "Delta SkyMiles* Reserve Card",
+                  "icon": "airplane",
+                  "metadata": {
+                    "UI_Metadata": {
+                      "component_Variant": "C",
+                      "component_params": {
+                        "button_size": "small",
+                        "background_color": "#transparent",
+                        "icon_visibility": "Visible",
+                        "border_radius": "0px"
+                      }
+                    },
+                    "Dynamic_Content_Metadata": {
+                      "has_placeholders": true,
+                      "placeholders": [
+                        {
+                          "key": "points",
+                          "fields": ["Headline Text"],
+                          "source": "AJO-D"
+                        },
+                        {
+                          "key": "apr_rate",
+                          "fields": ["Headline Text"],
+                          "source": "APR"
+                        }
+                      ]
+                    }
+                  }
                 }
               }
             }
           ]
         }
       ],
-      "type": "personalization:decisions"
+      "type": "personalization:decisions",
+      "eventIndex": 0
+    },
+    {
+      "payload": [
+        {
+          "scope": "Target",
+          "hint": "34",
+          "ttlSeconds": 1800
+        },
+        {
+          "scope": "AAM",
+          "hint": "7",
+          "ttlSeconds": 1800
+        },
+        {
+          "scope": "EdgeNetwork",
+          "hint": "va6",
+          "ttlSeconds": 1800
+        }
+      ],
+      "type": "locationHint:result"
+    },
+    {
+      "payload": [
+        {
+          "key": "kndctr_5C36123F5245AF470A490D45_AdobeOrg_cluster",
+          "value": "va6",
+          "maxAge": 1800
+        },
+        {
+          "key": "kndctr_5C36123F5245AF470A490D45_AdobeOrg_identity",
+          "value": "CiYyNjk4NTMxNDA3MDc2MzQ0NTMxMzU1NDAyMDg3NDI5ODM0ODM3M1ISCJSY6OyCMxABGAEqA1ZBNjAA8AGUmOjsgjM=",
+          "maxAge": 34128000
+        }
+      ],
+      "type": "state:store"
     }
   ]
 }
