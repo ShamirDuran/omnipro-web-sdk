@@ -41,26 +41,14 @@
     <script src="https://assets.adoberesources.net/loader.js?orgId=1C722A9A5F59DECB0A495F9F%40AdobeOrg&instanceId=omniprosvc2&env=prod&geo=va7"></script>
 
     <script type="text/javascript">
-      (function () {
-        var didInit = false;
-        function initMunchkin() {
-          if (didInit === false) {
-            didInit = true;
-            Munchkin.init('402-ALY-118');
-          }
-        }
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = '//munchkin.marketo.net/munchkin.js';
-        s.onreadystatechange = function () {
-          if (this.readyState == 'complete' || this.readyState == 'loaded') {
-            initMunchkin();
-          }
-        };
-        s.onload = initMunchkin;
-        document.getElementsByTagName('head')[0].appendChild(s);
-      })();
+      document.write(
+        unescape(
+          "%3Cscript src='//munchkin.marketo.net/munchkin.js' type='text/javascript'%3E%3C/script%3E"
+        )
+      );
+    </script>
+    <script>
+      Munchkin.init('402-ALY-118');
     </script>
   </head>
 
