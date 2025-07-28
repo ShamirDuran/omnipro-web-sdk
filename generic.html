@@ -108,7 +108,9 @@
         function initMunchkin() {
           if (didInit === false) {
             didInit = true;
-            Munchkin.init('402-ALY-118');
+            Munchkin.init('402-ALY-118', {
+              domainLevel: 2,
+            });
           }
         }
         var s = document.createElement('script');
