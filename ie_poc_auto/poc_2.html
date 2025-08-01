@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example Tipo 3 - Master - Program picklist with optional phone number</title>
+  </head>
+
+  <body>
+    <!-- Marketo form -->
+    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1205"></form>
+    <script>
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1205);
+    </script>
+    <!-- Marketo form -->
+
+    <!-- Marketo form script -->
+    <script>
+      MktoForms2.whenReady(function (form) {
+        // Obtencion de programas desde cache AEM
+        const getPrograms = () => {
+          const interestedIn = document.querySelector('#ie_interestedin');
+          const programPicklist = document.querySelector('#mkto_programoriginal');
+
+          console.log('loading programs...');
+
+          fetch(
+            'https://publish-p147864-e1510969.adobeaemcloud.com/content/dam/ieprogram/json/programas.json',
+            {
+              method: 'GET',
+              redirect: 'follow',
+            }
+          )
+            .then((response) => response.json())
+            .then(({ value: programs }) => {
+              const relationMap = {
+                'Master programs': ['1fdcc153-9ef1-df11-bc9f-005056b460d2'],
+                'Undergraduate degrees': ['2e1f814b-26ed-e011-8336-005056b42592'],
+                default: ['1fdcc153-9ef1-df11-bc9f-005056b460d2'],
+              };
+
+              // filter programs whose parentproductid.productid is included in the relationMap array for the selected value
+              const filteredPrograms = programs
+                .filter((program) =>
+                  (relationMap[interestedIn.value] || relationMap.default).includes(
+                    program.parentproductid.productid
+                  )
+                )
+                .slice(0, 10); // Limit to 10
+
+              // clear existing options in the programPicklist
+              programPicklist.innerHTML = '';
+              // agregar un option por defecto en una sola linea
+              programPicklist.appendChild(
+                Object.assign(document.createElement('option'), {
+                  value: '',
+                  textContent: 'Select a program',
+                })
+              );
+
+              console.log(filteredPrograms);
+
+              // Populate the programPicklist with the filtered programs
+              filteredPrograms.forEach((program) => {
+                const option = document.createElement('option');
+                option.value = program.productid;
+                option.textContent = program.name;
+
+                programPicklist.appendChild(option);
+              });
+            })
+            .catch((error) => console.error(error));
+        };
+
+        // Observa cambios en el DOM
+        let wasProgramPicklistPresent = false;
+
+        const observer = new MutationObserver(() => {
+          const programPicklist = document.querySelector('#mkto_programoriginal');
+          if (programPicklist && !wasProgramPicklistPresent) {
+            // Element just appeared
+            wasProgramPicklistPresent = true;
+            getPrograms();
+
+            // Agrega el event listener cuando aparece el interestedIn
+            const interestedIn = document.querySelector('#ie_interestedin');
+            if (interestedIn) {
+              interestedIn.addEventListener('change', getPrograms);
+            }
+          }
+
+          if (!programPicklist && wasProgramPicklistPresent) {
+            // Element was removed
+            wasProgramPicklistPresent = false;
+          }
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+        });
+
+        form.onSuccess(function (values, followUpUrl) {
+          console.log('Form submitted successfully:', values);
+          return false; // Prevent default form submission
+        });
+      });
+    </script>
+  </body>
+</html>

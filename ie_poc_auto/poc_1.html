@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example Tipo 2 - Bachelor - Pathway select or program picklist</title>
+  </head>
+
+  <body>
+    <!-- Marketo form -->
+    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1236"></form>
+    <script>
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1236);
+    </script>
+    <!-- Marketo form -->
+
+    <!-- Marketo form script -->
+    <script>
+      MktoForms2.whenReady(function (form) {
+        const checkSelections = document.querySelectorAll(
+          'input[type="radio"][name="mktoutilitycheck1"]'
+        );
+
+        // Obtencion de programas desde cache AEM
+        const getPrograms = () => {
+          const programPicklist = document.querySelector('#mkto_programoriginal');
+
+          fetch(
+            'https://publish-p147864-e1510969.adobeaemcloud.com/content/dam/ieprogram/json/programas.json',
+            {
+              method: 'GET',
+              redirect: 'follow',
+            }
+          )
+            .then((response) => response.json())
+            .then(({ value: programs }) => {
+              // filter programs.parentprogramid.productid for this value 1fdcc153-9ef1-df11-bc9f-005056b460d2
+              const filteredPrograms = programs
+                .filter(
+                  (program) =>
+                    program.parentproductid.productid === '1fdcc153-9ef1-df11-bc9f-005056b460d2'
+                )
+                .slice(0, 10); // Limit to 10
+
+              // clear existing options in the programPicklist
+              programPicklist.innerHTML = '';
+
+              // Populate the programPicklist with the filtered programs
+              filteredPrograms.forEach((program) => {
+                const option = document.createElement('option');
+                option.value = program.productid;
+                option.textContent = program.name;
+
+                programPicklist.appendChild(option);
+              });
+            })
+            .catch((error) => console.error(error));
+        };
+
+        // Add change event listener to the checkSelection field
+        checkSelections.forEach(function (radio) {
+          radio.addEventListener('change', function () {
+            const isSingle = this.value === 'single';
+
+            form.vals({
+              ie_pathwayid: isSingle ? '' : 'pathway-id',
+              ie_interestedin: isSingle ? '' : 'unit-id',
+            });
+
+            if (isSingle) {
+              setTimeout(() => {
+                getPrograms();
+              }, 100);
+            }
+          });
+        });
+
+        form.onSuccess(function (values, followUpUrl) {
+          console.log('Form submitted successfully:', values);
+          return false; // Prevent default form submission
+        });
+      });
+    </script>
+  </body>
+</html>

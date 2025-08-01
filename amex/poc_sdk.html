@@ -33,39 +33,9 @@
 
     <!-- Adobe Target Reference -->
     <script
-      src="https://assets.adobedtm.com/c319523f1a52/9153f5f233f1/launch-dfe12b5027e8-development.min.js"
+      src="https://assets.adobedtm.com/dcb19cbd6cbf/0a7da462a3cb/launch-d5b5108459af-development.min.js"
       async
     ></script>
-
-    <!-- Script Dynamic Chat -->
-    <script src="https://assets.adoberesources.net/loader.js?orgId=1C722A9A5F59DECB0A495F9F%40AdobeOrg&instanceId=omniprosvc2&env=prod&geo=va7"></script>
-
-    <script type="text/javascript">
-      (function () {
-        var didInit = false;
-        function initMunchkin() {
-          if (didInit === false) {
-            didInit = true;
-            Munchkin.init('402-ALY-118', {
-              domainLevel: 2,
-            });
-          }
-        }
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = '//munchkin.marketo.net/munchkin.js';
-        s.onreadystatechange = function () {
-          if (this.readyState == 'complete' || this.readyState == 'loaded') {
-            initMunchkin();
-          }
-        };
-        s.onload = initMunchkin;
-        document.getElementsByTagName('head')[0].appendChild(s);
-      })();
-    </script>
-  </head>
-
   </head>
 
   <body class="is-preload">
@@ -262,11 +232,6 @@
 
       <!-- Footer -->
       <footer id="footer">
-        <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-        <form id="mktoForm_1"></form>
-        <script>
-          MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1);
-        </script>
         <div class="inner">
           <section>
             <h2>Get in touch</h2>
@@ -336,105 +301,6 @@
         </div>
       </footer>
     </div>
-
-    <!-- Script target profile -->
-    <script>
-      const h1 = document.getElementById('titulo');
-      h1.addEventListener('click', () => {
-        const plazoSimulado = prompt('Please enter a value:');
-
-        window.alloy('sendEvent', {
-          renderDecisions: true,
-          type: 'web.webinteraction.linkClicks',
-          decisionScopes: ['__view__'],
-          xdm: {},
-          data: {
-            __adobe: {
-              target: {
-                'profile.montoPrestamoSimulado': 1150000,
-                'profile.pagoFijo': 100000,
-                'profile.plazoSimulado': plazoSimulado,
-                'profile.producto': 'Credito Express',
-              },
-            },
-          },
-        });
-      });
-    </script>
-
-    <!-- Category Affinity -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        window.alloy('sendEvent', {
-          renderDecisions: true,
-          type: 'web.webinteraction.pageViews',
-          decisionScopes: ['__view__'],
-          xdm: {},
-          data: {
-            __adobe: {
-              target: {
-                'user.categoryId': 'electronics',
-              },
-            },
-          },
-        });
-      });
-    </script>
-
-    <!-- Script target report -->
-    <script>
-      var xpath =
-        '/html/body/div[10]/div[2]/div/div/div/div[1]/section[5]/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/a';
-      var result = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      );
-      var element = result.singleNodeValue;
-
-      // Envio reporte click a Target
-      element.addEventListener('click', function () {
-        window
-          .alloy('sendEvent', {
-            xdm: {},
-            decisionScopes: ['experience-clicked'],
-          })
-          .then(function (result) {
-            var propositions = result.propositions;
-            if (propositions) {
-              for (var i = 0; i < propositions.length; i++) {
-                var proposition = propositions[i];
-
-                if (proposition.scope === 'experience-clicked') {
-                  window.alloy('sendEvent', {
-                    xdm: {
-                      eventType: 'decisioning.propositionDisplay',
-                      web: {
-                        webPageDetails: {
-                          viewName: new Date.now().toString(),
-                        },
-                      },
-                      _experience: {
-                        decisioning: {
-                          propositions: [
-                            {
-                              id: proposition.id,
-                              scope: proposition.scope,
-                              scopeDetails: proposition.scopeDetails,
-                            },
-                          ],
-                        },
-                      },
-                    },
-                  });
-                }
-              }
-            }
-          });
-      });
-    </script>
 
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>

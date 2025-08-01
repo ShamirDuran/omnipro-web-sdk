@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Example Tipo 3 - Master - Program select - Track select with optional Phone number
+    </title>
+  </head>
+
+  <body>
+    <!-- Marketo form -->
+    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1240"></form>
+    <script>
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1240);
+    </script>
+    <!-- Marketo form -->
+
+    <!-- Marketo form script -->
+    <script>
+      MktoForms2.whenReady(function (form) {
+        form.vals({
+          mkto_programoriginal: 'static-program',
+          tracks: 'static-track',
+        });
+
+        console.log('Form is ready:', form.vals());
+
+        form.onSuccess(function (values, followUpUrl) {
+          console.log('Form submitted successfully:', values);
+          return false; // Prevent default form submission
+        });
+      });
+    </script>
+  </body>
+</html>
