@@ -187,14 +187,20 @@
             >
               <button
                 style="flex: 1"
-                id="btnSegment1"
                 onclick="sendEvent('click',{
-
+                    callToAction:'Segment 1',
               })"
               >
                 Segment 1
               </button>
-              <button style="flex: 1" id="btnSegment1" onclick="">Segment 2</button>
+              <button
+                style="flex: 1"
+                onclick="sendEvent('click', {
+                callToAction: 'Segment 2',
+              })"
+              >
+                Segment 2
+              </button>
             </div>
 
             <div class="credit-card">
@@ -240,34 +246,11 @@
             visitorId: '44808086297022781604822093515461491581',
             authenticated: false,
           },
-          events: [
-            {
-              identifier: 'AMEX:Home',
-              element: 'hero-personalloans-07042025_890x500-aspen-ineligible-PZN_Cons-DF_Com-NO',
-              type: 'impression',
-              timestamp: '2025-08-01T17:29:51.083Z',
-            },
-          ],
-          components: {},
-          campaigns: {},
-          //   timestamp: '2025-08-01T17:29:50.676Z',
-          //   device: {
-          //     userAgent:
-          //       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0',
-          //     width: {
-          //       px: 1920,
-          //     },
-          //     height: {
-          //       px: 1080,
-          //     },
-          //     channel: 'desktop',
-          //   },
           view: {
             country: 'US',
             language: 'en',
             locale: 'en-US',
             location: 'https://www.americanexpress.com/',
-            // timestamp: '2025-08-01T17:29:50.676Z',
             origin: 'www.americanexpress.com',
             title: 'American Express Credit Cards, Rewards, Travel and Business Services',
             viewId: 'Homepage',
@@ -282,22 +265,6 @@
             ...eventData,
             diff: ['events'],
             version: '^1.0.0',
-            events: [
-              {
-                identifier: 'AMEX:SegmentEvent',
-                type: 'click',
-                ...eventData,
-              },
-            ],
-            view: {
-              country: 'US',
-              language: 'en',
-              locale: 'en-US',
-              location: window.location.href,
-              origin: window.location.hostname,
-              title: document.title,
-              viewId: 'SegmentEventView',
-            },
           },
         });
       }
