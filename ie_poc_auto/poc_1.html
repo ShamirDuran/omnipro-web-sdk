@@ -58,6 +58,8 @@
             .catch((error) => console.error(error));
         };
 
+        getPrograms();
+
         // Add change event listener to the checkSelection field
         checkSelections.forEach(function (radio) {
           radio.addEventListener('change', function () {
