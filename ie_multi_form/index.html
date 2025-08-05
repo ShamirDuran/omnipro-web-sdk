@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+
+  <body>
+    <form class="mktoForm" data-formId="1236" data-formInstance="one"></form>
+    <br /><br />
+    <form class="mktoForm" data-formId="1236" data-formInstance="two"></form>
+
+    <script>
+      var mktoFormConfig = {
+        podId: '//402-ALY-118.mktoweb.com',
+        munchkinId: '402-ALY-118',
+        formIds: [1236],
+      };
+
+      /* ---- NO NEED TO TOUCH ANYTHING BELOW THIS LINE! ---- */
+
+      function mktoFormChain(config) {
+        /* util */
+        var arrayify = getSelection.call.bind([].slice);
+
+        /* const */
+        var MKTOFORM_ID_ATTRNAME = 'data-formId';
+
+        /* fix inter-form label bug! */
+        MktoForms2.whenRendered(function (form) {
+          var formEl = form.getFormElem()[0],
+            rando = '_' + new Date().getTime() + Math.random();
+
+          arrayify(formEl.querySelectorAll('label[for]'))
+            .map(function (labelEl) {
+              return {
+                label: labelEl,
+                for: formEl.querySelector('[id="' + labelEl.htmlFor + '"]'),
+              };
+            })
+            .forEach(function (labelDesc) {
+              if (labelDesc.for) {
+                if (!labelDesc.for.hasAttribute('data-uniquified')) {
+                  labelDesc.for.id = labelDesc.for.id + rando;
+                  labelDesc.for.setAttribute('data-uniquified', 'true');
+                }
+                labelDesc.label.htmlFor = labelDesc.for.id;
+              }
+            });
+        });
+
+        /* chain, ensuring only one #mktoForm_nnn exists at a time */
+        arrayify(config.formIds).forEach(function (formId) {
+          var loadForm = MktoForms2.loadForm.bind(
+              MktoForms2,
+              config.podId,
+              config.munchkinId,
+              formId
+            ),
+            formEls = arrayify(
+              document.querySelectorAll('[' + MKTOFORM_ID_ATTRNAME + '="' + formId + '"]')
+            );
+
+          (function loadFormCb(formEls) {
+            var formEl = formEls.shift();
+            formEl.id = 'mktoForm_' + formId;
+
+            loadForm(function (form) {
+              formEl.id = '';
+              if (formEls.length) {
+                loadFormCb(formEls);
+              }
+            });
+          })(formEls);
+        });
+      }
+
+      mktoFormChain(mktoFormConfig);
+    </script>
+  </body>
+</html>
