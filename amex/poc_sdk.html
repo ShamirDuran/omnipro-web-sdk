@@ -238,6 +238,9 @@
       // Page View
       window.adobeDataLayer.push({
         event: 'pageLoad',
+        user: {
+          publicGuid: '44808086297022781604822093515461491581',
+        },
         data: {
           diff: ['events'],
           version: '^1.0.0',
@@ -261,6 +264,9 @@
       function sendEvent(eventName, eventData) {
         window.adobeDataLayer.push({
           event: eventName,
+          user: {
+            publicGuid: '44808086297022781604822093515461491581',
+          },
           data: {
             ...eventData,
             diff: ['events'],
@@ -272,6 +278,9 @@
       function ajoOfferImpression() {
         window.adobeDataLayer.push({
           event: 'ajoOfferImpression',
+          user: {
+            publicGuid: '44808086297022781604822093515461491581',
+          },
           data: {
             diff: ['events'],
             version: '^1.0.0',
