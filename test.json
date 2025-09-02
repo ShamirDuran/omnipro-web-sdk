@@ -1,19 +1,7 @@
 {
-  "eventType": "appVistaPantalla",
-  "_americanexpress": {
-    "identities": {
-      "publicGuid": "my-public-guid",
-      "email": "my-email@gmail.com"
-    },
-    "appParameters": {
-      "appNavroute": "my-app-route",
-      "appNavPreviousRoute": "my-previous-route",
-      "appScreenName": "my-screen-name"
-    },
-    "appEvents": {
-      "appScreenView": {
-        "value": 1
-      }
-    }
+  "evenType": "ajo.surface",
+  "data": {
+    "placement_1_bucket": "t1",
+    "placement_2_bucket": "control"
   }
 }

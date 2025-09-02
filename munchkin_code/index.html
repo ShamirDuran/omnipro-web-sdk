@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Demo AMEX SDK + Segments</title>
+    <title>Munchkin Code</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="../assets/css/main.css" />
@@ -103,6 +103,33 @@
       }
     </style>
 
+    <!-- Munchkin Code -->
+    <script type="text/javascript">
+      (function () {
+        var didInit = false;
+        function initMunchkin() {
+          if (didInit === false) {
+            didInit = true;
+            Munchkin.init('402-ALY-118', {
+              asyncOnly: false,
+              useBeaconAPI: true,
+            });
+          }
+        }
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = '//munchkin.marketo.net/munchkin.js';
+        s.onreadystatechange = function () {
+          if (this.readyState == 'complete' || this.readyState == 'loaded') {
+            initMunchkin();
+          }
+        };
+        s.onload = initMunchkin;
+        document.getElementsByTagName('head')[0].appendChild(s);
+      })();
+    </script>
+
     <!-- Adobe Prehide -->
     <script>
       !(function (e, a, n, t) {
@@ -138,7 +165,7 @@
 
     <!-- Adobe Target Reference -->
     <script
-      src="https://assets.adobedtm.com/27a87f218a28/b1089fa673c5/launch-1b1118e4394b-development.min.js"
+      src="https://assets.adobedtm.com/dcb19cbd6cbf/0a7da462a3cb/launch-d5b5108459af-development.min.js"
       async
     ></script>
   </head>
@@ -185,22 +212,8 @@
                 margin-bottom: 1.5rem;
               "
             >
-              <button
-                style="flex: 1"
-                onclick="sendEvent('click',{
-                    callToAction:'Segment 1',
-              })"
-              >
-                Segment 1
-              </button>
-              <button
-                style="flex: 1"
-                onclick="sendEvent('click', {
-                callToAction: 'Segment 2',
-              })"
-              >
-                Segment 2
-              </button>
+              <a href="www.google.com" target="_blank" style="flex: 1">Segment 1</a>
+              <a href="www.google.com" target="_blank" style="flex: 1">Segment 2</a>
             </div>
 
             <div class="credit-card">
@@ -231,78 +244,7 @@
       </div>
     </div>
 
-    <script>
-      // DataLayer for Adobe Data Collection
-      window.adobeDataLayer = window.adobeDataLayer || [];
-
-      // Page View
-      window.adobeDataLayer.push({
-        event: 'pageLoad',
-        page: {
-          publicGuid: '44808086297022781604822093515461491581',
-        },
-        user: {
-          publicGuid: '44808086297022781604822093515461491581',
-        },
-        data: {
-          diff: ['events'],
-          version: '^1.0.0',
-          charset: 'UTF-8',
-          user: {
-            visitorId: '44808086297022781604822093515461491581',
-            authenticated: false,
-          },
-          view: {
-            country: 'US',
-            language: 'en',
-            locale: 'en-US',
-            location: 'https://www.americanexpress.com/',
-            origin: 'www.americanexpress.com',
-            title: 'American Express Credit Cards, Rewards, Travel and Business Services',
-            viewId: 'Homepage',
-          },
-        },
-      });
-
-      function sendEvent(eventName, eventData) {
-        window.adobeDataLayer.push({
-          event: eventName,
-          user: {
-            publicGuid: '44808086297022781604822093515461491581',
-          },
-          data: {
-            ...eventData,
-            diff: ['events'],
-            version: '^1.0.0',
-          },
-        });
-      }
-
-      function ajoOfferImpression() {
-        window.adobeDataLayer.push({
-          event: 'ajoOfferImpression',
-          user: {
-            publicGuid: '44808086297022781604822093515461491581',
-          },
-          data: {
-            diff: ['events'],
-            version: '^1.0.0',
-            events: [
-              {
-                identifier: 'AMEX:OfferImpression',
-                type: 'impression',
-                offerDd: 'fe058db5-0fad-4ba3-897c-5303d45ed630',
-                correlationID: '03577ed4-d141-40fa-8744-19f75d507582-0',
-                strategyID: '6m8ZBt2sXUyvq7mQfJy9IU',
-                treatmentID: '7c9f34e2f8b1cfbac184',
-                activityId: 'aff8f866-a27e-43d0-803a-52afbe96d918',
-                surface: 'web://localhost#Placement_Experimentation',
-              },
-            ],
-          },
-        });
-      }
-    </script>
+    <script></script>
 
     <!-- Scripts -->
     <script src="../assets/js/jquery.min.js"></script>
