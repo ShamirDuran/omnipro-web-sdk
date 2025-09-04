@@ -1,7 +1,12 @@
 {
-  "evenType": "ajo.surface",
-  "data": {
-    "placement_1_bucket": "t1",
-    "placement_2_bucket": "control"
+  "_omniproamerps": {
+    "OTC": "string"
+  },
+  "_experience": {
+    "decisioning": {
+      "offeritem": {
+        "lifecycleStatus": "string"
+      }
+    }
   }
 }
