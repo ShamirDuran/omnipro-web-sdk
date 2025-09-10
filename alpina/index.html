@@ -7,7 +7,8 @@
   </head>
   <body>
     <a
-      href="https://alpina.com/combo-onces?utm_source=banner&utm_medium=cdp&utm_campaign=y24_cdp_combo_hub_onces
+      href="https://alpina.com/combo-onces?utm_source=banner&utm_medium=cdp&utm_campaign=y24_cdp_combo_hub_onces"
+      target="_blank"
 "
       ><img
         id="banner-at-desktop-1"
@@ -30,6 +31,7 @@
           background-repeat: no-repeat;
           background-attachment: scroll;
         }
+
         #html-body [data-pb-style='FRQSTUX'] {
           justify-content: flex-start;
           display: flex;
@@ -37,13 +39,16 @@
           padding-top: 5px;
           padding-bottom: 5px;
         }
+
         #html-body [data-pb-style='HP8JSTY'] {
           align-self: stretch;
         }
+
         #html-body [data-pb-style='BWJYDKE'] {
           display: flex;
           width: 100%;
         }
+
         #html-body [data-pb-style='CSHRTF5'] {
           justify-content: flex-start;
           display: flex;
@@ -55,49 +60,60 @@
           width: 100%;
           align-self: stretch;
         }
+
         #html-body [data-pb-style='KE5DNAE'] {
           display: none;
         }
+
         #html-body [data-pb-style='NJ1ROEJ'] {
           background-position: left top;
           background-size: cover;
           background-repeat: no-repeat;
           border-radius: 20px;
         }
+
         #html-body [data-pb-style='H8E0CE4'] {
           background-color: transparent;
         }
+
         #html-body [data-pb-style='HSVG7FL'] {
           display: none;
         }
+
         #html-body [data-pb-style='TGTBRRX'] {
           background-position: left top;
           background-size: cover;
           background-repeat: no-repeat;
           border-radius: 20px;
         }
+
         #html-body [data-pb-style='RR8P47Y'] {
           background-color: transparent;
         }
+
         #html-body [data-pb-style='OQVYR8W'] {
           background-position: left top;
           background-size: cover;
           background-repeat: no-repeat;
           border-radius: 20px;
         }
+
         #html-body [data-pb-style='OX9WWOM'] {
           background-color: transparent;
         }
+
         #html-body [data-pb-style='KUER0KL'] {
           background-position: left top;
           background-size: cover;
           background-repeat: no-repeat;
           border-radius: 20px;
         }
+
         #html-body [data-pb-style='CWDSPH9'] {
           background-color: transparent;
         }
       </style>
+
       <div
         class="botton-slider-dos cms-sliders"
         data-appearance="full-bleed"
@@ -159,15 +175,52 @@
       </div>
     </div>
 
-    <script>
-      window.adobeDataLayer = window.adobeDataLayer || [];
+   <script>
+    console.log('Tracking test');
+    const eventType = 'targetInteraction';
 
-      window.adobeDataLayer.push({
-        event: 'activityImpression',
-        targetActivity: popup.getAttribute('data-activity'),
-        targetExperience: popup.getAttribute('data-experience') || 'not-set',
-        clickUrl: redirectUrl,
-      });
+    dataLayer.push({
+        event: eventType,
+        typeEvent: 'impression',
+        typeActivity: 'banner',
+        nameActivity: '${activity.name}',
+        experience: '${campaign.recipe.name}',
+        linkRedirect: '',
+    });
+
+    const mobileContent = document.getElementById('banner-at-desktop-1');
+    const desktopContent = document.getElementById('banner-at-mobile-1');
+
+    mobileContent.parentElement.addEventListener('click', () => {
+        console.log('click mobile')
+
+    });
+
+    desktopContent.parentElement.addEventListener('click', () => {
+        console.log('click web')
+        dataLayer.push({
+            event: eventType,
+            typeEvent: 'click',
+            typeActivity: 'banner',
+            nameActivity: '${activity.name}',
+            experience: '${campaign.recipe.name}',
+            linkRedirect: `${desktopContent.parentElement.href}`,
+        });
+    });
+
+    function targetClick(href) {
+        console.log('click web')
+        dataLayer.push({
+            event: eventType,
+            typeEvent: 'click',
+            typeActivity: 'banner',
+            nameActivity: '${activity.name}',
+            experience: '${campaign.recipe.name}',
+            linkRedirect: href,
+        });
+      
+    }
+</script>
     </script>
   </body>
 </html>

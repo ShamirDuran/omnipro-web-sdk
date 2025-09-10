@@ -1,12 +1,46 @@
 {
-  "_omniproamerps": {
-    "OTC": "string"
+  "information": {
+    "Headline Text": "{{{contentFragment4889.headlineText}}}",
+    "Description": "{{{contentFragment4889.description}}}",
+    "CTA_label": "{{{contentFragment4889.ctaLabel}}}",
+    "CTA_link": "{{{contentFragment4889.ctaButton}}}",
+    "Page": "{{{contentFragment4889.page}}}",
+    "Display_Rank": "{{{contentFragment4889.displayRank}}}",
+    "Customer_Treatment_Status": "{{{contentFragment4889.customerTreatmentStatus}}}",
+    "Placement": "{{{contentFragment4889.placement}}}",
+    "Domain": "{{{contentFragment4889.domain}}}",
+    "Conversion_tracking_code": "{{{contentFragment4889.conversionTrackingCode}}}",
+    "Customer_Journey_id": "{{{contentFragment4889.customerJourneyId}}}",
+    "Show_Card_Art": "{{{contentFragment4889.showCardArt}}}",
+    "Card_art": "{{{contentFragment4889.cardArt}}}",
+    "Product_display": "{{{contentFragment4889.productDisplay}}}",
+    "Icon": "{{{contentFragment4889.icon}}}",
+    "Dynamic_Content_Metadata": {
+      "has_placeholders": true,
+      "placeholders": [
+        {
+          "key": "points",
+          "fields": ["Headline Text"],
+          "source": "AJO-D"
+        },
+        {
+          "key": "apr_rate",
+          "fields": ["Headline Text"],
+          "source": "APR"
+        }
+      ]
+    }
   },
-  "_experience": {
-    "decisioning": {
-      "offeritem": {
-        "lifecycleStatus": "string"
-      }
+  "UI_Metadata": {
+    "component_Variant": "B",
+    "component_params": {
+      "button_size": "medium",
+      "background_color": "#2809ED",
+      "icon_visibility": "none",
+      "display_mode": "compact",
+      "animation": "fade-in",
+      "border_radius": "8px",
+      "show_card_art": true
     }
   }
 }

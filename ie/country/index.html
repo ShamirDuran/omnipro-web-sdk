@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1334"></form>
+
+    <script>
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1334, function (form) {
+        const THANK_YOU_PAGE =
+          'https://publish-p147864-e1510969.adobeaemcloud.com/content/ieprogram/test/us/en/typ/masterthankyou-bus-global-online-mba.html';
+        const API_BASE =
+          'https://publish-p147864-e1510969.adobeaemcloud.com/content/dam/ieprogram/json';
+
+        var provinceRequired = false;
+
+        MktoForms2.whenReady(function () {
+          const countryPicklist = document.getElementById('ie_countryid');
+          const provincePicklist = document.getElementById('ie_provinceregionid');
+          const provinceRow = provincePicklist.closest('.mktoFormRow');
+
+          // Ocultar province picklist inicialmente
+          toggleRequiredSelect(provincePicklist, false);
+          getCountries(countryPicklist);
+
+          countryPicklist.addEventListener('change', function () {
+            const selectedCountry = this.value;
+            getProvinces(provincePicklist, selectedCountry, provinceRow);
+          });
+        });
+
+        form.onSuccess(function (values, followUpUrl) {
+          const params = {
+            country: values.ie_countryid,
+            province: values.ie_provinceregionid,
+            gender: values.ie_genderidentity,
+            interestedIn: values.ie_interestedin,
+            pathwayId: values.ie_pathwayid,
+            stakeholderRole: values.ie_stakeholdersroleid,
+          };
+
+          const queryString = Object.entries(params)
+            .filter(([_, v]) => v != null && v !== '')
+            .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+            .join('&');
+
+          window.location.href = `${THANK_YOU_PAGE}${queryString ? '?' + queryString : ''}`;
+          return false;
+        });
+
+        function toggleRequiredSelect(selectElement, isRequired) {
+          // Encuentra el div padre que contiene la fila del formulario completa
+          const formRow = selectElement.closest('.mktoFormRow');
+
+          if (isRequired) {
+            // Si isRequired es true:
+            // 1. Muestra la fila del formulario
+            formRow.style.display = 'block';
+
+            // 2. Encuentra los elementos que necesitas para marcar como requerido
+            const fieldWrap = selectElement.closest('.mktoFieldWrap');
+
+            // 3. Añade las clases y el atributo necesarios para la validación de Marketo
+            selectElement.classList.add('mktoRequired');
+            selectElement.setAttribute('aria-required', 'true');
+            fieldWrap.classList.add('mktoRequiredField');
+            provinceRequired = true;
+          } else {
+            // Si isRequired es false:
+            // 1. Oculta la fila del formulario
+            formRow.style.display = 'none';
+
+            // 2. Encuentra los elementos para desmarcar como requerido
+            const fieldWrap = selectElement.closest('.mktoFieldWrap');
+
+            // 3. Elimina las clases y el atributo de requerido
+            selectElement.classList.remove('mktoRequired');
+            selectElement.removeAttribute('aria-required');
+            fieldWrap.classList.remove('mktoRequiredField');
+
+            // Opcional: Resetea el valor del select para evitar enviar un valor no deseado
+            selectElement.value = '';
+            provinceRequired = false;
+          }
+        }
+
+        function getCountries(picklist) {
+          fetch(`${API_BASE}/Country.json`)
+            .then((response) => response.json())
+            .then(({ entities: countries }) => {
+              updatePicklist(picklist, countries);
+            })
+            .catch((error) => console.error('Error fetching countries:', error));
+        }
+
+        function getProvinces(picklist, country, picklistRow) {
+          fetch(`${API_BASE}/Province.json`)
+            .then((response) => response.json())
+            .then(({ entities: provinces }) => {
+              const filteredProvinces = provinces.filter((province) =>
+                province.attributes.some(
+                  (attr) => attr.name === 'ie_countryid' && attr.value === country
+                )
+              );
+
+              toggleRequiredSelect(picklist, filteredProvinces.length > 0);
+
+              if (filteredProvinces.length > 0) {
+                updatePicklist(picklist, filteredProvinces);
+              }
+            })
+            .catch((error) => console.error('Error fetching provinces:', error));
+        }
+
+        function updatePicklist(picklist, items) {
+          picklist.innerHTML = '<option value="">Select...</option>';
+
+          items.forEach((item) => {
+            const id = item.id.replace(/[{}]/g, '');
+            const name =
+              item.attributes.find((attr) => attr.name === 'ie_name')?.value || 'Unknown';
+
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = name;
+            picklist.appendChild(option);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
