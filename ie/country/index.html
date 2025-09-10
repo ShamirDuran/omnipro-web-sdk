@@ -18,22 +18,30 @@
 
         var provinceRequired = false;
 
+        const countryPicklist = document.getElementById('ie_countryid');
+        const provincePicklist = document.getElementById('ie_provinceregionid');
+
         MktoForms2.whenReady(function () {
-          const countryPicklist = document.getElementById('ie_countryid');
-          const provincePicklist = document.getElementById('ie_provinceregionid');
+          // Fila contenedora del select de provincia
           const provinceRow = provincePicklist.closest('.mktoFormRow');
 
-          // Ocultar province picklist inicialmente
+          // Guardamos el HTML del provinceRow para reutilizarlo
+          provinceHTML = provinceRow.outerHTML;
+
+          // Ocultar (remover del DOM) province picklist inicialmente
           toggleRequiredSelect(provincePicklist, false);
+
           getCountries(countryPicklist);
 
           countryPicklist.addEventListener('change', function () {
             const selectedCountry = this.value;
-            getProvinces(provincePicklist, selectedCountry, provinceRow);
+            getProvinces(provincePicklist, selectedCountry);
           });
         });
 
         form.onSuccess(function (values, followUpUrl) {
+          console.log('success');
+
           const params = {
             country: values.ie_countryid,
             province: values.ie_provinceregionid,
@@ -49,9 +57,10 @@
             .join('&');
 
           window.location.href = `${THANK_YOU_PAGE}${queryString ? '?' + queryString : ''}`;
-          return false;
+          return true;
         });
 
+        // Elimina del DOM o reinserta el provinceElement según corresponda
         function toggleRequiredSelect(selectElement, isRequired) {
           // Encuentra el div padre que contiene la fila del formulario completa
           const formRow = selectElement.closest('.mktoFormRow');
@@ -91,17 +100,17 @@
         function getCountries(picklist) {
           fetch(`${API_BASE}/Country.json`)
             .then((response) => response.json())
-            .then(({ entities: countries }) => {
-              updatePicklist(picklist, countries);
+            .then(({ entities: allCountries }) => {
+              updatePicklist(picklist, allCountries);
             })
             .catch((error) => console.error('Error fetching countries:', error));
         }
 
-        function getProvinces(picklist, country, picklistRow) {
+        function getProvinces(picklist, country) {
           fetch(`${API_BASE}/Province.json`)
             .then((response) => response.json())
-            .then(({ entities: provinces }) => {
-              const filteredProvinces = provinces.filter((province) =>
+            .then(({ entities: allProvinces }) => {
+              const filteredProvinces = allProvinces.filter((province) =>
                 province.attributes.some(
                   (attr) => attr.name === 'ie_countryid' && attr.value === country
                 )
@@ -109,8 +118,12 @@
 
               toggleRequiredSelect(picklist, filteredProvinces.length > 0);
 
+              // Luego, si hay provincias, actualizamos el picklist (ya visible)
               if (filteredProvinces.length > 0) {
                 updatePicklist(picklist, filteredProvinces);
+              } else {
+                // Si no hay provincias, limpiamos el select por consistencia
+                picklist.innerHTML = '<option value="000">000</option>';
               }
             })
             .catch((error) => console.error('Error fetching provinces:', error));

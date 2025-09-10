@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1349"></form>
+    <script>
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1349, function (form) {
+        MktoForms2.whenReady(function (form) {
+          const pathwaysList = [
+            {
+              id: 'guid',
+              name: 'name',
+            },
+            // ...
+          ];
+
+          loadPathways(pathwaysList);
+        });
+
+        /**
+         * Fetch and populate pathways into the pathway picklist.
+         * @param {Array} pathways - An array of pathway objects to populate the picklist.
+         */
+        function loadPathways(pathways = []) {
+          const picklist = document.querySelector('#ie_pathwayid');
+
+          picklist.innerHTML = '<option value="">Select...</option>';
+
+          pathways.forEach((pathway) => {
+            const id = pathway.id;
+            const name = pathway.name;
+
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = name;
+            picklist.appendChild(option);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -18,47 +18,76 @@
     <!-- Marketo form script -->
     <script>
       MktoForms2.whenReady(function (form) {
+        const API_BASE =
+          'https://publish-p147864-e1510969.adobeaemcloud.com/content/dam/ieprogram/json';
+
         const checkSelections = document.querySelectorAll(
           'input[type="radio"][name="mktoutilitycheck1"]'
         );
 
-        // Obtencion de programas desde cache AEM
-        const getPrograms = () => {
+        /**
+         * Fetch and populate programs into the program picklist based on the selected pathway.
+         * @param {string} pathway - The selected pathway ID to filter programs.
+         */
+        const getProgramsByPathway = (pathway) => {
           const programPicklist = document.querySelector('#mkto_programoriginal');
 
-          fetch(
-            'https://publish-p147864-e1510969.adobeaemcloud.com/content/dam/ieprogram/json/programas.json',
-            {
-              method: 'GET',
-              redirect: 'follow',
-            }
-          )
+          fetch(`${API_BASE}/programas.json`)
             .then((response) => response.json())
             .then(({ value: programs }) => {
-              // filter programs.parentprogramid.productid for this value 1fdcc153-9ef1-df11-bc9f-005056b460d2
-              const filteredPrograms = programs
-                .filter(
-                  (program) =>
-                    program.parentproductid.productid === '1fdcc153-9ef1-df11-bc9f-005056b460d2'
-                )
-                .slice(0, 10); // Limit to 10
+              const filteredPrograms = programs.filter(
+                (program) => program.parentproductid.productid === pathway
+              );
 
-              // clear existing options in the programPicklist
-              programPicklist.innerHTML = '';
-
-              // Populate the programPicklist with the filtered programs
-              filteredPrograms.forEach((program) => {
-                const option = document.createElement('option');
-                option.value = program.productid;
-                option.textContent = program.name;
-
-                programPicklist.appendChild(option);
-              });
+              if (filteredPrograms.length > 0) {
+                updatePicklist(programPicklist, filteredPrograms);
+              } else {
+                programPicklist.innerHTML = '<option value="">Select...</option>';
+              }
             })
             .catch((error) => console.error(error));
         };
 
-        getPrograms();
+        /**
+         * Fetch and populate programs into the program picklist based on an array of program IDs.
+         * @param {Array} programs - An array of program IDs to filter programs.
+         */
+        const getProgramsById = (programs = []) => {
+          const programPicklist = document.querySelector('#mkto_programoriginal');
+
+          fetch(`${API_BASE}/programas.json`)
+            .then((response) => response.json())
+            .then(({ value: allPrograms }) => {
+              // Filtra los programas que están en el array 'programs'
+              const filteredPrograms = allPrograms.filter((program) =>
+                programs.includes(program.productid)
+              );
+
+              if (filteredPrograms.length > 0) {
+                updatePicklist(programPicklist, filteredPrograms);
+              } else {
+                programPicklist.innerHTML = '<option value="">Select...</option>';
+              }
+            })
+            .catch((error) => console.error(error));
+        };
+
+        getProgramsByPathway();
+
+        function updatePicklist(picklist, items) {
+          picklist.innerHTML = '<option value="">Select...</option>';
+
+          items.forEach((item) => {
+            const id = item.id.replace(/[{}]/g, '');
+            const name =
+              item.attributes.find((attr) => attr.name === 'ie_name')?.value || 'Unknown';
+
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = name;
+            picklist.appendChild(option);
+          });
+        }
 
         // Add change event listener to the checkSelection field
         checkSelections.forEach(function (radio) {
