@@ -118,7 +118,7 @@
          * @param {string} country - The selected country ID.
          */
         function getProvinces() {
-          const provincePicklist = document.getElementById('ie_provinceregionid');
+          const picklist = document.getElementById('ie_provinceregionid');
           const selectedCountry = document.getElementById('ie_countryid').value;
 
           fetch(`${API_BASE}/Province.json`)
