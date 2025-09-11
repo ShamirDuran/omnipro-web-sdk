@@ -38,6 +38,28 @@
           });
         });
 
+        form.onSuccess(function (values, _) {
+          // Saca los datos del submit del form
+          const params = {
+            country: values.ie_countryid,
+            province: values.ie_provinceregionid,
+            gender: values.ie_genderidentity,
+            interestedIn: values.ie_interestedin,
+            pathwayId: values.ie_pathwayid,
+            stakeholderRole: values.ie_stakeholdersroleid,
+          };
+
+          // Agrega dinamicamente los query params validando si estan vacios o no
+          const queryString = Object.entries(params)
+            .filter(([_, v]) => v != null && v !== '')
+            .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+            .join('&');
+
+          // Redirecciona al usuario a la thank you page
+          window.location.href = `${THANK_YOU_PAGE}${queryString ? '?' + queryString : ''}`;
+          return false;
+        });
+
         /**
          * Filtra las opciones de un 'select' para mostrar solo aquellas cuyos valores
          * coinciden con los IDs proporcionados en el listado.
