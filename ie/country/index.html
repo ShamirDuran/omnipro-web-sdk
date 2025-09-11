@@ -39,6 +39,8 @@
         });
 
         form.onSuccess(function (values, _) {
+          console.log('success');
+
           // Saca los datos del submit del form
           const params = {
             country: values.ie_countryid,
@@ -57,7 +59,7 @@
 
           // Redirecciona al usuario a la thank you page
           window.location.href = `${THANK_YOU_PAGE}${queryString ? '?' + queryString : ''}`;
-          return false;
+          return true;
         });
 
         /**
