@@ -7,128 +7,150 @@
   </head>
   <body>
     <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-    <form id="mktoForm_1334"></form>
-
+    <form id="mktoForm_1308"></form>
     <script>
-      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1334, function (form) {
-        const THANK_YOU_PAGE =
-          'https://publish-p147864-e1510969.adobeaemcloud.com/content/ieprogram/test/us/en/typ/masterthankyou-bus-global-online-mba.html';
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1308, function (form) {
+        // Se usa para obtener programas, countries, provinces
         const API_BASE =
           'https://publish-p147864-e1510969.adobeaemcloud.com/content/dam/ieprogram/json';
-
-        var provinceRequired = false;
 
         const countryPicklist = document.getElementById('ie_countryid');
         const provincePicklist = document.getElementById('ie_provinceregionid');
 
-        MktoForms2.whenReady(function () {
-          // Fila contenedora del select de provincia
-          const provinceRow = provincePicklist.closest('.mktoFormRow');
-
-          // Guardamos el HTML del provinceRow para reutilizarlo
-          provinceHTML = provinceRow.outerHTML;
-
-          // Ocultar (remover del DOM) province picklist inicialmente
-          toggleRequiredSelect(provincePicklist, false);
-
+        MktoForms2.whenReady(function (form) {
           getCountries(countryPicklist);
+          toggleVisibility(provincePicklist, false);
 
+          filterPathways([
+            '9cfdcfe7-e324-eb11-a813-000d3a2cbc56',
+            '90e2dcf3-e324-eb11-a813-000d3a2cbc56',
+          ]);
+
+          // Listener para cuando se cambia el país
           countryPicklist.addEventListener('change', function () {
             const selectedCountry = this.value;
-            getProvinces(provincePicklist, selectedCountry);
+
+            if (selectedCountry) {
+              getProvinces(provincePicklist, selectedCountry);
+            } else {
+              toggleVisibility(provincePicklist, false);
+            }
           });
         });
 
-        form.onSuccess(function (values, followUpUrl) {
-          console.log('success');
+        /**
+         * Filtra las opciones de un 'select' para mostrar solo aquellas cuyos valores
+         * coinciden con los IDs proporcionados en el listado.
+         * @param {Array<string>} allowedPathwayIds - Un array con los IDs de las opciones que se deben mostrar.
+         * Si el array está vacío, se mostrarán todas las opciones.
+         */
+        function filterPathways(allowedPathwayIds = []) {
+          // Obtiene el elemento select del DOM.
+          const pathwayPicklist = document.getElementById('ie_pathwayid');
 
-          const params = {
-            country: values.ie_countryid,
-            province: values.ie_provinceregionid,
-            gender: values.ie_genderidentity,
-            interestedIn: values.ie_interestedin,
-            pathwayId: values.ie_pathwayid,
-            stakeholderRole: values.ie_stakeholdersroleid,
-          };
-
-          const queryString = Object.entries(params)
-            .filter(([_, v]) => v != null && v !== '')
-            .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
-            .join('&');
-
-          window.location.href = `${THANK_YOU_PAGE}${queryString ? '?' + queryString : ''}`;
-          return true;
-        });
-
-        // Elimina del DOM o reinserta el provinceElement según corresponda
-        function toggleRequiredSelect(selectElement, isRequired) {
-          // Encuentra el div padre que contiene la fila del formulario completa
-          const formRow = selectElement.closest('.mktoFormRow');
-
-          if (isRequired) {
-            // Si isRequired es true:
-            // 1. Muestra la fila del formulario
-            formRow.style.display = 'block';
-
-            // 2. Encuentra los elementos que necesitas para marcar como requerido
-            const fieldWrap = selectElement.closest('.mktoFieldWrap');
-
-            // 3. Añade las clases y el atributo necesarios para la validación de Marketo
-            selectElement.classList.add('mktoRequired');
-            selectElement.setAttribute('aria-required', 'true');
-            fieldWrap.classList.add('mktoRequiredField');
-            provinceRequired = true;
-          } else {
-            // Si isRequired es false:
-            // 1. Oculta la fila del formulario
-            formRow.style.display = 'none';
-
-            // 2. Encuentra los elementos para desmarcar como requerido
-            const fieldWrap = selectElement.closest('.mktoFieldWrap');
-
-            // 3. Elimina las clases y el atributo de requerido
-            selectElement.classList.remove('mktoRequired');
-            selectElement.removeAttribute('aria-required');
-            fieldWrap.classList.remove('mktoRequiredField');
-
-            // Opcional: Resetea el valor del select para evitar enviar un valor no deseado
-            selectElement.value = '';
-            provinceRequired = false;
+          // Si el elemento no existe, termina la ejecución para evitar errores.
+          if (!pathwayPicklist) {
+            return;
           }
+
+          // Itera sobre cada <option> que ya existe dentro del select.
+          for (const option of pathwayPicklist.options) {
+            // Determina si la opción debe ser visible.
+            // Una opción es visible si:
+            // 1. El listado de IDs permitidos está vacío (mostrar todo).
+            // 2. El valor de la opción está incluido en el listado de IDs permitidos.
+            // 3. La opción no tiene valor (ej. el "Select..." inicial).
+            const shouldBeVisible =
+              allowedPathwayIds.length === 0 ||
+              allowedPathwayIds.includes(option.value) ||
+              option.value === '';
+
+            // Modifica el estilo 'display' para mostrar u ocultar la opción.
+            // Asignar '' restaura el display por defecto del navegador.
+            option.style.display = shouldBeVisible ? '' : 'none';
+          }
+
+          // Restablece la selección al valor por defecto para evitar
+          // que una opción oculta permanezca seleccionada.
+          pathwayPicklist.value = '';
         }
 
-        function getCountries(picklist) {
+        /**
+         * Fetch and populate countries into the country picklist.
+         * @param {HTMLSelectElement} picklist - The country select element. Not the Id, the element itself.
+         */
+        function getCountries() {
+          const picklist = document.getElementById('ie_countryid');
+
           fetch(`${API_BASE}/Country.json`)
             .then((response) => response.json())
-            .then(({ entities: allCountries }) => {
-              updatePicklist(picklist, allCountries);
+            .then(({ entities: countries }) => {
+              updatePicklist(picklist, countries);
             })
             .catch((error) => console.error('Error fetching countries:', error));
         }
 
-        function getProvinces(picklist, country) {
+        /**
+         * Fetch and populate provinces based on the selected country.
+         * @param {HTMLSelectElement} picklist - The province select element.
+         * @param {string} country - The selected country ID.
+         */
+        function getProvinces() {
+          const provincePicklist = document.getElementById('ie_provinceregionid');
+          const selectedCountry = document.getElementById('ie_countryid').value;
+
           fetch(`${API_BASE}/Province.json`)
             .then((response) => response.json())
             .then(({ entities: allProvinces }) => {
               const filteredProvinces = allProvinces.filter((province) =>
                 province.attributes.some(
-                  (attr) => attr.name === 'ie_countryid' && attr.value === country
+                  (attr) => attr.name === 'ie_countryid' && attr.value === selectedCountry
                 )
               );
 
-              toggleRequiredSelect(picklist, filteredProvinces.length > 0);
+              // Controlamos la visibilidad del picklist
+              toggleVisibility(picklist, filteredProvinces.length > 0);
 
-              // Luego, si hay provincias, actualizamos el picklist (ya visible)
               if (filteredProvinces.length > 0) {
                 updatePicklist(picklist, filteredProvinces);
-              } else {
-                // Si no hay provincias, limpiamos el select por consistencia
-                picklist.innerHTML = '<option value="000">000</option>';
               }
             })
-            .catch((error) => console.error('Error fetching provinces:', error));
+            .catch((error) => {
+              console.error('Error fetching provinces:', error);
+              toggleVisibility(picklist, false);
+            });
         }
 
+        /**
+         * Muestra u oculta el campo según si es requerido o no.
+         * @param {HTMLSelectElement} selectElement - El elemento select.
+         * @param {boolean} isRequired - Indica si el campo debe ser visible (requerido) o no.
+         */
+        function toggleVisibility(element, isRequired) {
+          // Encuentra el div padre que contiene la fila del formulario completa
+          const formRow = element.closest('.mktoFormRow');
+
+          if (isRequired) {
+            formRow.style.display = 'block';
+          } else {
+            formRow.style.display = 'none';
+
+            // Si el element es de tipo select, se limpian las opciones y se deja por defect una con value 000
+            // Para evitar el error de campo requerido. Si es de otro tipo, se limpia su valor.
+            if (element.tagName.toLowerCase() === 'select') {
+              element.innerHTML = '<option value="000"></option>';
+              element.value = '';
+            } else {
+              element.value = '';
+            }
+          }
+        }
+
+        /**
+         * Update a picklist with new options.
+         * @param {HTMLSelectElement} picklist - The select element to update.
+         * @param {Array} items - The items to populate the picklist with.
+         */
         function updatePicklist(picklist, items) {
           picklist.innerHTML = '<option value="">Select...</option>';
 
