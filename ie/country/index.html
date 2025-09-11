@@ -163,7 +163,7 @@
             // Para evitar el error de campo requerido. Si es de otro tipo, se limpia su valor.
             if (element.tagName.toLowerCase() === 'select') {
               element.innerHTML = '<option value="000"></option>';
-              element.value = '';
+              element.value = '000';
             } else {
               element.value = '';
             }
