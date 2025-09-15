@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1346"></form>
+
+    <script>
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1346, function (form) {
+        const THANK_YOU_PAGE =
+          'https://aem-publish.dev.ie.edu/content/ieprogram/us/en/corporate/typ/stage1/interested-in.html';
+
+        function loadScript(url) {
+          return new Promise(function (resolve, reject) {
+            const script = document.createElement('script');
+            script.src = url;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error(`Error al cargar el script: ${url}`));
+            document.head.appendChild(script);
+          });
+        }
+
+        const mktoFunctionsURL =
+          'https://aem-publish.dev.ie.edu/content/dam/ieprogram/js-marketo/mktoFormFunctions.js?repositoryVersion=3';
+
+        loadScript(mktoFunctionsURL)
+          .then(() => {
+            const countryPicklist = document.getElementById('ie_countryid');
+            const provincePicklist = document.getElementById('ie_provinceregionid');
+            let wasProgramPicklistPresent = false;
+
+            MktoForms2.whenReady(function (form) {
+              getProvinces();
+
+              // p1, p2, h2
+              picklistObserver(wasProgramPicklistPresent, 'ie_programmarketoid', getProgramsV2);
+            });
+
+            function getProgramsV2() {
+              const programPicklist = document.querySelector('#ie_programmarketoid');
+
+              fetch(`${API_BASE}/programas.json`)
+                .then((response) => response.json())
+                .then(({ value: programs }) => {
+                  // Filtra los programas que están en el array 'programs'
+                  const filteredPrograms = programs.filter((program) =>
+                    programs.includes(program.productid)
+                  );
+
+                  if (filteredPrograms.length > 0) {
+                    updatePicklist(programPicklist, filteredPrograms);
+                  } else {
+                    programPicklist.innerHTML = '<option value="">Select...</option>';
+                  }
+                })
+                .catch((error) => console.error(error));
+            }
+
+            function picklistObserver(flag, fieldId, callback) {
+              const observer = new MutationObserver(() => {
+                const picklist = document.getElementById(fieldId);
+
+                if (picklist && !wasProgramPicklistPresent) {
+                  // Element just appeared
+                  flag = true;
+                  callback();
+                }
+
+                if (!picklist && flag) {
+                  // Element was removed
+                  flag = false;
+                }
+              });
+
+              observer.observe(form.getFormElem()[0], {
+                childList: true,
+                subtree: true,
+              });
+            }
+
+            function getProvinces() {
+              const countryPicklist = document.getElementById('ie_countryid');
+              const provincePicklist = document.getElementById('ie_provinceregionid');
+
+              getCountries();
+              toggleVisibility(provincePicklist, false);
+
+              countryPicklist.addEventListener('change', function () {
+                const selectedCountry = this.value;
+                if (selectedCountry) {
+                  fetch(`${API_BASE}/Province.json`)
+                    .then((response) => response.json())
+                    .then(({ entities: allProvinces }) => {
+                      const filteredProvinces = allProvinces.filter((province) =>
+                        province.attributes.some(
+                          (attr) => attr.name === 'ie_countryid' && attr.value === selectedCountry
+                        )
+                      );
+
+                      // Controlamos la visibilidad del picklist
+                      toggleVisibility(provincePicklist, filteredProvinces.length > 0);
+
+                      if (filteredProvinces.length > 0) {
+                        updatePicklist(provincePicklist, filteredProvinces);
+                      }
+                    })
+                    .catch((error) => {
+                      console.error('Error fetching provinces:', error);
+                      toggleVisibility(provincePicklist, false);
+                    });
+                } else {
+                  toggleVisibility(provincePicklist, false);
+                }
+              });
+            }
+          })
+          .catch((error) => {
+            console.error('Hubo un error al cargar el script de funciones:', error);
+          });
+      });
+    </script>
+  </body>
+</html>

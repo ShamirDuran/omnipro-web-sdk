@@ -1,10 +1,6 @@
 // Se usa para obtener programas, countries, provinces
 const API_BASE = 'https://publish-p147864-e1510969.adobeaemcloud.com/content/dam/ieprogram/json';
 
-// Landing a donde se redirecciona al usuario en el onSuccess del form (se le deben agregar los queryParams
-const THANK_YOU_PAGE =
-  'https://publish-p147864-e1510969.adobeaemcloud.com/content/ieprogram/test/us/en/typ/masterthankyou-bus-global-online-mba.html';
-
 /**
  * Filtra las opciones de un 'select' para mostrar solo aquellas cuyos valores
  * coinciden con los IDs proporcionados en el listado.
@@ -44,16 +40,16 @@ function filterPathways(allowedPathwayIds = []) {
 
 /**
  * Fetch and populate programs into the program picklist based on the selected pathway.
- * @param {string} pathway - The selected pathway ID to filter programs.
  */
-const getProgramsByPathway = (pathway) => {
-  const programPicklist = document.querySelector('#ie_pathwayid');
+const getProgramsByPathway = () => {
+  const programPicklist = document.getElementById('ie_programmarketoidmkto');
+  const selectedPathway = document.getElementById('ie_pathwayid');
 
   fetch(`${API_BASE}/programas.json`)
     .then((response) => response.json())
     .then(({ value: programs }) => {
       const filteredPrograms = programs.filter(
-        (program) => program.parentproductid.productid === pathway
+        (program) => program.parentproductid.productid === selectedPathway
       );
 
       if (filteredPrograms.length > 0) {
@@ -70,7 +66,7 @@ const getProgramsByPathway = (pathway) => {
  * @param {Array} programs - An array of program IDs to filter programs.
  */
 const getProgramsById = (programs = []) => {
-  const programPicklist = document.querySelector('#mkto_programoriginal');
+  const programPicklist = document.getElementById('ie_programmarketoidmkto');
 
   fetch(`${API_BASE}/programas.json`)
     .then((response) => response.json())
@@ -110,29 +106,39 @@ function getCountries() {
  * @param {string} country - The selected country ID.
  */
 function getProvinces() {
-  const picklist = document.getElementById('ie_provinceregionid');
-  const selectedCountry = document.getElementById('ie_countryid').value;
+  const countryPicklist = document.getElementById('ie_countryid');
+  const provincePicklist = document.getElementById('ie_provinceregionid');
 
-  fetch(`${API_BASE}/Province.json`)
-    .then((response) => response.json())
-    .then(({ entities: allProvinces }) => {
-      const filteredProvinces = allProvinces.filter((province) =>
-        province.attributes.some(
-          (attr) => attr.name === 'ie_countryid' && attr.value === selectedCountry
-        )
-      );
+  getCountries();
+  toggleVisibility(provincePicklist, false);
 
-      // Controlamos la visibilidad del picklist
-      toggleVisibility(picklist, filteredProvinces.length > 0);
+  countryPicklist.addEventListener('change', function () {
+    const selectedCountry = this.value;
+    if (selectedCountry) {
+      fetch(`${API_BASE}/Province.json`)
+        .then((response) => response.json())
+        .then(({ entities: allProvinces }) => {
+          const filteredProvinces = allProvinces.filter((province) =>
+            province.attributes.some(
+              (attr) => attr.name === 'ie_countryid' && attr.value === selectedCountry
+            )
+          );
 
-      if (filteredProvinces.length > 0) {
-        updatePicklist(picklist, filteredProvinces);
-      }
-    })
-    .catch((error) => {
-      console.error('Error fetching provinces:', error);
-      toggleVisibility(picklist, false);
-    });
+          // Controlamos la visibilidad del picklist
+          toggleVisibility(provincePicklist, filteredProvinces.length > 0);
+
+          if (filteredProvinces.length > 0) {
+            updatePicklist(provincePicklist, filteredProvinces);
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching provinces:', error);
+          toggleVisibility(provincePicklist, false);
+        });
+    } else {
+      toggleVisibility(provincePicklist, false);
+    }
+  });
 }
 
 /**
@@ -202,9 +208,6 @@ const redirectToThankYouPage = (params, thankYouPage) => {
   // 4. Construye la URL final y realiza la redirección.
   // La variable global THANK_YOU_PAGE debe estar definida en tu script.
   const redirectUrl = `${thankYouPage}${queryString ? '?' + queryString : ''}`;
-
-  console.log('params', params);
-  console.log('redirectUrl', redirectUrl);
 
   window.location.href = redirectUrl;
 };
