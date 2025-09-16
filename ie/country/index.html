@@ -7,10 +7,13 @@
   </head>
   <body>
     <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-    <form id="mktoForm_1349"></form>
+    <form id="mktoForm_1286"></form>
 
     <script>
-      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1349, function (form) {
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1286, function (form) {
+        const THANK_YOU_PAGE =
+          'https://aem-publish.dev.ie.edu/content/ieprogram/us/en/corporate/typ/stage1/interested-in.html';
+
         function loadScript(url) {
           return new Promise(function (resolve, reject) {
             const script = document.createElement('script');
@@ -25,40 +28,7 @@
           'https://aem-publish.dev.ie.edu/content/dam/ieprogram/js-marketo/mktoFormFunctions.js?version=2';
 
         loadScript(mktoFunctionsURL)
-          .then(() => {
-            // codigo dinamismos
-            const countryPicklist = document.getElementById('ie_countryid');
-            const provincePicklist = document.getElementById('ie_provinceregionid');
-
-            MktoForms2.whenReady(function (form) {
-              getCountries();
-              toggleVisibility(provincePicklist, false);
-
-              countryPicklist.addEventListener('change', function () {
-                const selectedCountry = this.value;
-                if (selectedCountry) {
-                  getProvinces(provincePicklist, selectedCountry);
-                } else {
-                  toggleVisibility(provincePicklist, false);
-                }
-              });
-            });
-
-            form.onSuccess(function (values, followUpUrl) {
-              // Saca los datos del submit del form
-              const params = {
-                country: values.ie_countryid,
-                province: values.ie_provinceregionid,
-                gender: values.ie_genderidentity,
-                interestedIn: values.ie_interestedin,
-                pathwayId: values.ie_pathwayid,
-                stakeholderRole: values.ie_stakeholdersroleid,
-              };
-
-              redirectToThankYouPage(params, followUpUrl);
-              return false;
-            });
-          })
+          .then(() => {})
           .catch((error) => {
             console.error('Hubo un error al cargar el script de funciones:', error);
           });

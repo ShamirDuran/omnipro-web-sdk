@@ -1,5 +1,7 @@
 // Se usa para obtener programas, countries, provinces
-const API_BASE = 'https://publish-p147864-e1510969.adobeaemcloud.com/content/dam/ieprogram/json';
+// const API_BASE = `${window.location.origin}/content/dam/ieprogram/json`;
+const API_BASE = `https://aem-publish.dev.ie.edu/graphql/execute.json/ieprogram`;
+const timestamp = new Date().getTime();
 
 /**
  * Filtra las opciones de un 'select' para mostrar solo aquellas cuyos valores
@@ -39,50 +41,67 @@ function filterPathways(allowedPathwayIds = []) {
 }
 
 /**
- * Fetch and populate programs into the program picklist based on the selected pathway.
+ * Fetches and populates programs based on the selected pathway.
  */
 const getProgramsByPathway = () => {
   const programPicklist = document.getElementById('ie_programmarketoidmkto');
-  const selectedPathway = document.getElementById('ie_pathwayid');
+  const selectedPathway = document.getElementById('ie_pathwayid').value;
 
-  fetch(`${API_BASE}/programas.json`)
+  fetch(`${API_BASE}/getAllPrograms?timestamp=${timestamp}`)
     .then((response) => response.json())
-    .then(({ value: programs }) => {
-      const filteredPrograms = programs.filter(
-        (program) => program.parentproductid.productid === selectedPathway
+    .then((apiResponse) => {
+      const allPrograms = apiResponse.data.ieProgramList.items;
+
+      // 1. Filtra programas que tengan un ID válido y pertenezcan al pathway
+      const filteredPrograms = allPrograms.filter(
+        (program) => program.programId && program.programPathwayId === selectedPathway
       );
 
-      if (filteredPrograms.length > 0) {
-        updatePicklist(programPicklist, filteredPrograms);
-      } else {
-        programPicklist.innerHTML = '<option value="">Select...</option>';
-      }
+      // 2. Transforma al formato estándar { id, name }
+      const formattedPrograms = filteredPrograms.map((program) => ({
+        id: program.programId,
+        name: program.programTitle,
+      }));
+
+      // 3. Actualiza el picklist con los datos formateados
+      updatePicklist(programPicklist, formattedPrograms);
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error('Error fetching programs by pathway:', error);
+      updatePicklist(programPicklist, []); // Limpia la lista en caso de error
+    });
 };
 
 /**
- * Fetch and populate programs into the program picklist based on an array of program IDs.
- * @param {Array} programs - An array of program IDs to filter programs.
+ * Fetches and populates programs based on an array of program IDs.
+ * @param {string[]} programIds - An array of program IDs to show.
  */
-const getProgramsById = (programs = []) => {
+const getProgramsById = (programIds = []) => {
   const programPicklist = document.getElementById('ie_programmarketoidmkto');
 
-  fetch(`${API_BASE}/programas.json`)
+  fetch(`${API_BASE}/getAllPrograms?timestamp=${timestamp}`)
     .then((response) => response.json())
-    .then(({ value: allPrograms }) => {
-      // Filtra los programas que están en el array 'programs'
-      const filteredPrograms = allPrograms.filter((program) =>
-        programs.includes(program.productid)
+    .then((apiResponse) => {
+      const allPrograms = apiResponse.data.ieProgramList.items;
+
+      // 1. Filtra programas que tengan un ID y que esté incluido en el array
+      const filteredPrograms = allPrograms.filter(
+        (program) => program.programId && programIds.includes(program.programId)
       );
 
-      if (filteredPrograms.length > 0) {
-        updatePicklist(programPicklist, filteredPrograms);
-      } else {
-        programPicklist.innerHTML = '<option value="">Select...</option>';
-      }
+      // 2. Transforma al formato estándar { id, name }
+      const formattedPrograms = filteredPrograms.map((program) => ({
+        id: program.programId,
+        name: program.programTitle,
+      }));
+
+      // 3. Actualiza el picklist con los datos formateados
+      updatePicklist(programPicklist, formattedPrograms);
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error('Error fetching programs by ID:', error);
+      updatePicklist(programPicklist, []); // Limpia la lista en caso de error
+    });
 };
 
 /**
@@ -92,52 +111,73 @@ const getProgramsById = (programs = []) => {
 function getCountries() {
   const picklist = document.getElementById('ie_countryid');
 
-  fetch(`${API_BASE}/Country.json`)
+  fetch(`${API_BASE}/getAllCountries?timestamp=${timestamp}`)
     .then((response) => response.json())
-    .then(({ entities: countries }) => {
-      updatePicklist(picklist, countries);
+    .then((apiResponse) => {
+      const countries = apiResponse.data.ieCountryList.items;
+
+      const formattedCountries = countries.map((country) => {
+        return {
+          id: country.countryId,
+          name: country.countryName,
+        };
+      });
+
+      updatePicklist(picklist, formattedCountries);
     })
     .catch((error) => console.error('Error fetching countries:', error));
 }
 
 /**
- * Fetch and populate provinces based on the selected country.
- * @param {HTMLSelectElement} picklist - The province select element.
- * @param {string} country - The selected country ID.
+ * Sets up the province picklist to be populated based on the selected country.
  */
 function getProvinces() {
   const countryPicklist = document.getElementById('ie_countryid');
   const provincePicklist = document.getElementById('ie_provinceregionid');
 
   getCountries();
-  toggleVisibility(provincePicklist, false);
+  toggleVisibility(provincePicklist, false); // Oculta las provincias al inicio
 
   countryPicklist.addEventListener('change', function () {
     const selectedCountry = this.value;
-    if (selectedCountry) {
-      fetch(`${API_BASE}/Province.json`)
-        .then((response) => response.json())
-        .then(({ entities: allProvinces }) => {
-          const filteredProvinces = allProvinces.filter((province) =>
-            province.attributes.some(
-              (attr) => attr.name === 'ie_countryid' && attr.value === selectedCountry
-            )
-          );
 
-          // Controlamos la visibilidad del picklist
-          toggleVisibility(provincePicklist, filteredProvinces.length > 0);
-
-          if (filteredProvinces.length > 0) {
-            updatePicklist(provincePicklist, filteredProvinces);
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching provinces:', error);
-          toggleVisibility(provincePicklist, false);
-        });
-    } else {
+    // Si no se selecciona ningún país, oculta y limpia la lista de provincias
+    if (!selectedCountry) {
       toggleVisibility(provincePicklist, false);
+      updatePicklist(provincePicklist, []); // Limpia las opciones
+      return;
     }
+
+    // Si se selecciona un país, busca las provincias
+    fetch(`${API_BASE}/getAllProvinces?timestamp=${timestamp}`)
+      .then((response) => response.json())
+      .then((apiResponse) => {
+        // 1. Accede a la lista completa de provincias desde la nueva ruta
+        const allProvinces = apiResponse.data.ieProvinceList.items;
+
+        // 2. Filtra las provincias de forma más simple y directa
+        const filteredProvinces = allProvinces.filter(
+          (province) => province.provinceCountryId === selectedCountry
+        );
+
+        // Muestra u oculta el campo si se encontraron provincias
+        toggleVisibility(provincePicklist, filteredProvinces.length > 0);
+
+        if (filteredProvinces.length > 0) {
+          // 3. Transforma el resultado al formato estándar { id, name }
+          const formattedProvinces = filteredProvinces.map((province) => ({
+            id: province.provinceId,
+            name: province.provinceName,
+          }));
+
+          // 4. Llama a la función estándar para actualizar la lista
+          updatePicklist(provincePicklist, formattedProvinces);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching provinces:', error);
+        toggleVisibility(provincePicklist, false);
+      });
   });
 }
 
@@ -167,21 +207,18 @@ function toggleVisibility(element, isRequired) {
 }
 
 /**
- * Update a picklist with new options.
- * @param {HTMLSelectElement} picklist - The select element to update.
- * @param {Array} items - The items to populate the picklist with.
+ * Populates a picklist from a standardized array of objects.
+ * Expects each object to have an 'id' and a 'name' property.
+ * @param {HTMLSelectElement} picklist - The <select> element to update.
+ * @param {Array<{id: string, name: string}>} items - The standardized array.
  */
 function updatePicklist(picklist, items) {
   picklist.innerHTML = '<option value="">Select...</option>';
 
   items.forEach((item) => {
-    // Se limpian algunos caracteres que vienen en las respuestas de la API de AEM
-    const id = item.id.replace(/[{}]/g, '');
-    const name = item.attributes.find((attr) => attr.name === 'ie_name')?.value || 'Unknown';
-
     const option = document.createElement('option');
-    option.value = id;
-    option.textContent = name;
+    option.value = item.id;
+    option.textContent = item.name;
     picklist.appendChild(option);
   });
 }
@@ -211,3 +248,31 @@ const redirectToThankYouPage = (params, thankYouPage) => {
 
   window.location.href = redirectUrl;
 };
+
+/**
+ * Asigna valores a campos ocultos basados en la selección de un radio button.
+ * @param {*} form Rferencia al objeto de Marketo. Es proporcionado en el on load o ready.
+ * @param {*} interestedIn Valor que se asigna al campo ie_interestedin.
+ * @param {*} pathwayId Valor que se asigna al campo ie_pathwayid.
+ */
+function conditionalHiddenFields(form, interestedIn, pathwayId) {
+  const radios = document.querySelectorAll('input[name="mktoRadioButtonsProgram"]');
+
+  radios.forEach((radio) => {
+    radio.addEventListener('change', function () {
+      const selectedValue = event.target.value;
+
+      if (selectedValue == 'I want information about one specific program') {
+        form.setValues({
+          ie_pathwayid: '',
+          ie_interestedin: '',
+        });
+      } else {
+        form.setValues({
+          ie_pathwayid: pathwayId,
+          ie_interestedin: interestedIn,
+        });
+      }
+    });
+  });
+}
