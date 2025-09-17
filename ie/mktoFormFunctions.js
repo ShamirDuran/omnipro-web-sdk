@@ -1,6 +1,6 @@
 // Se usa para obtener programas, countries, provinces
 // const API_BASE = `${window.location.origin}/content/dam/ieprogram/json`;
-const API_BASE = `https://aem-publish.dev.ie.edu/graphql/execute.json/ieprogram`;
+const API_BASE = `${window.location.origin}/graphql/execute.json/ieprogram`;
 const timestamp = new Date().getTime();
 
 /**
@@ -275,4 +275,12 @@ function conditionalHiddenFields(form, interestedIn, pathwayId) {
       }
     });
   });
+}
+
+/**
+ * Guarda los valores del formulario en el localStorage del navegador.
+ * @param {Object} values  - Un objeto con los valores del formulario.
+ */
+function saveValuesIntoLocalStorage(values) {
+  localStorage.setItem('formValues', JSON.stringify(values));
 }

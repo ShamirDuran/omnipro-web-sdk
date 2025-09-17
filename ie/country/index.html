@@ -7,32 +7,54 @@
   </head>
   <body>
     <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-    <form id="mktoForm_1286"></form>
+    <form id="mktoForm_1343"></form>
 
     <script>
-      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1286, function (form) {
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1343, function (form) {
         const THANK_YOU_PAGE =
           'https://aem-publish.dev.ie.edu/content/ieprogram/us/en/corporate/typ/stage1/interested-in.html';
 
-        function loadScript(url) {
-          return new Promise(function (resolve, reject) {
-            const script = document.createElement('script');
-            script.src = url;
-            script.onload = () => resolve();
-            script.onerror = () => reject(new Error(`Error al cargar el script: ${url}`));
-            document.head.appendChild(script);
-          });
-        }
+        form.onSuccess(function (values, _) {
+          // De acuerdo al tipo de form y landing (tipo 0,1,2,2-3,3) se envian diferentes params
+          const params = {
+            country: values.ie_countryid,
+            province: values.ie_provinceregionid,
+            gender: values.ie_genderidentity,
+            interestedIn: values.ie_interestedin,
+            pathwayId: values.ie_pathwayid,
+            stakeholderRole: values.ie_stakeholdersroleid,
+          };
 
-        const mktoFunctionsURL =
-          'https://aem-publish.dev.ie.edu/content/dam/ieprogram/js-marketo/mktoFormFunctions.js?version=2';
-
-        loadScript(mktoFunctionsURL)
-          .then(() => {})
-          .catch((error) => {
-            console.error('Hubo un error al cargar el script de funciones:', error);
-          });
+          redirectToThankYouPage(params, THANK_YOU_PAGE);
+          return false;
+        });
       });
+
+      /**
+       * Construye una URL con query params y redirige a esa URL.
+       * @param {Object} params - Un objeto con los parámetros clave-valor a incluir en la URL.
+       * @param {string} thankYouPage - La URL base a la que se redirigirá.
+       */
+      const redirectToThankYouPage = (params, thankYouPage) => {
+        // 1. Crea un objeto URLSearchParams para construir la cadena de consulta.
+        const searchParams = new URLSearchParams();
+
+        // 2. Agrega cada parámetro solo si tiene un valor válido (no es nulo ni vacío).
+        Object.entries(params).forEach(([key, value]) => {
+          if (value != null && value !== '') {
+            searchParams.append(key, value);
+          }
+        });
+
+        // 3. Convierte los parámetros a una cadena de texto (ej: "country=CO&gender=male").
+        const queryString = searchParams.toString();
+
+        // 4. Construye la URL final y realiza la redirección.
+        // La variable global THANK_YOU_PAGE debe estar definida en tu script.
+        const redirectUrl = `${thankYouPage}${queryString ? '?' + queryString : ''}`;
+
+        window.location.href = redirectUrl;
+      };
     </script>
   </body>
 </html>
