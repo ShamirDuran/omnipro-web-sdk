@@ -50,7 +50,9 @@
           const picklist = document.getElementById('ie_countryid');
 
           // Use a public CORS proxy for development only. Replace with your own backend proxy for production.
-          fetch(`https://aem-publish.dev.ie.edu/graphql/execute.json/global/getAllCountries`)
+          fetch(
+            `https://corsproxy.io/?https://aem-publish.dev.ie.edu/graphql/execute.json/global/getAllCountries`
+          )
             .then((response) => response.json())
             .then((apiResponse) => {
               const countries = apiResponse.data.ieCountryList.items;
