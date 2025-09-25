@@ -1,6 +1,6 @@
 // Se usa para obtener programas, countries, provinces
 // const API_BASE = `${window.location.origin}/content/dam/ieprogram/json`;
-const API_BASE = `${window.location.origin}/graphql/execute.json/ieprogram`;
+const API_BASE = `${window.location.origin}/graphql/execute.json/global`;
 const timestamp = new Date().getTime();
 
 /**
@@ -44,7 +44,7 @@ function filterPathways(allowedPathwayIds = []) {
  * Fetches and populates programs based on the selected pathway.
  */
 const getProgramsByPathway = () => {
-  const programPicklist = document.getElementById('ie_programmarketoidmkto');
+  const programPicklist = document.getElementById('ie_programmarketoid');
   const selectedPathway = document.getElementById('ie_pathwayid').value;
 
   fetch(`${API_BASE}/getAllPrograms?timestamp=${timestamp}`)
@@ -77,7 +77,7 @@ const getProgramsByPathway = () => {
  * @param {string[]} programIds - An array of program IDs to show.
  */
 const getProgramsById = (programIds = []) => {
-  const programPicklist = document.getElementById('ie_programmarketoidmkto');
+  const programPicklist = document.getElementById('ie_programmarketoid');
 
   fetch(`${API_BASE}/getAllPrograms?timestamp=${timestamp}`)
     .then((response) => response.json())
@@ -282,5 +282,45 @@ function conditionalHiddenFields(form, interestedIn, pathwayId) {
  * @param {Object} values  - Un objeto con los valores del formulario.
  */
 function saveValuesIntoLocalStorage(values) {
+  values.cta = true;
   localStorage.setItem('formValues', JSON.stringify(values));
+}
+
+/**
+ * Recupera los valores del formulario desde el localStorage del navegador.
+ */
+function waitForElement(selector, { root = document, mustBeVisible = false } = {}) {
+  return new Promise((resolve) => {
+    const immediate = root.querySelector(selector);
+    if (immediate && (!mustBeVisible || immediate.offsetParent !== null)) {
+      return resolve(immediate);
+    }
+    const obs = new MutationObserver(() => {
+      const el = root.querySelector(selector);
+      if (!el) return;
+      if (mustBeVisible && el.offsetParent === null) return;
+      obs.disconnect();
+      resolve(el);
+    });
+    obs.observe(root === document ? document.documentElement : root, {
+      childList: true,
+      subtree: true,
+      attributes: mustBeVisible,
+      attributeFilter: mustBeVisible ? ['style', 'class', 'hidden', 'aria-hidden'] : undefined,
+    });
+  });
+}
+
+/**
+ * Espera a que el formulario esté listo y luego obtiene los programas por IDs.
+ * @param {*} programIds
+ */
+async function asyncGetProgramsByIds(form, programIds = []) {
+  try {
+    const root = form.getFormElem()[0] || document;
+    await waitForElement('#ie_programmarketoid', { root, mustBeVisible: false });
+    getProgramsById(programIds);
+  } catch (e) {
+    console.error('asyncGetProgramsByIds ->', e);
+  }
 }

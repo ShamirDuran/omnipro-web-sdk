@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- Marketo form -->
+    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1308"></form>
+    <script>
+      const API_BASE = `https://aem-publish.dev.ie.edu//graphql/execute.json/ieprogram`;
+
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1308, function (form) {
+        getProvinces();
+      });
+
+      /**
+       * Fetch and populate countries into the country picklist.
+       * @param {HTMLSelectElement} picklist - The country select element. Not the Id, the element itself.
+       */
+      function getCountries() {
+        const picklist = document.getElementById('ie_countryid');
+        const timestamp = new Date().getTime();
+
+        fetch(`${API_BASE}/getAllCountries?timestamp=${timestamp}`)
+          .then((response) => response.json())
+          .then((apiResponse) => {
+            const countries = apiResponse.data.ieCountryList.items;
+
+            const formattedCountries = countries.map((country) => {
+              return {
+                id: country.countryId,
+                name: country.countryName,
+              };
+            });
+
+            updatePicklist(picklist, formattedCountries);
+          })
+          .catch((error) => console.error('Error fetching countries:', error));
+      }
+
+      /**
+       * Sets up the province picklist to be populated based on the selected country.
+       */
+      function getProvinces() {
+        const countryPicklist = document.getElementById('ie_countryid');
+        const provincePicklist = document.getElementById('ie_provinceregionid');
+        const timestamp = new Date().getTime();
+
+        getCountries();
+        toggleVisibility(provincePicklist, false); // Oculta las provincias al inicio
+
+        countryPicklist.addEventListener('change', function () {
+          const selectedCountry = this.value;
+
+          // Si no se selecciona ningún país, oculta y limpia la lista de provincias
+          if (!selectedCountry) {
+            toggleVisibility(provincePicklist, false);
+            updatePicklist(provincePicklist, []); // Limpia las opciones
+            return;
+          }
+
+          // Si se selecciona un país, busca las provincias
+          fetch(`${API_BASE}/getAllProvinces?timestamp=${timestamp}`)
+            .then((response) => response.json())
+            .then((apiResponse) => {
+              // 1. Accede a la lista completa de provincias desde la nueva ruta
+              const allProvinces = apiResponse.data.ieProvinceList.items;
+
+              // 2. Filtra las provincias de forma más simple y directa
+              const filteredProvinces = allProvinces.filter(
+                (province) => province.provinceCountryId === selectedCountry
+              );
+
+              // Muestra u oculta el campo si se encontraron provincias
+              toggleVisibility(provincePicklist, filteredProvinces.length > 0);
+
+              if (filteredProvinces.length > 0) {
+                // 3. Transforma el resultado al formato estándar { id, name }
+                const formattedProvinces = filteredProvinces.map((province) => ({
+                  id: province.provinceId,
+                  name: province.provinceName,
+                }));
+
+                // 4. Llama a la función estándar para actualizar la lista
+                updatePicklist(provincePicklist, formattedProvinces);
+              }
+            })
+            .catch((error) => {
+              console.error('Error fetching provinces:', error);
+              toggleVisibility(provincePicklist, false);
+            });
+        });
+      }
+
+      /**
+       * Muestra u oculta el campo según si es requerido o no.
+       * @param {HTMLSelectElement} selectElement - El elemento select.
+       * @param {boolean} isRequired - Indica si el campo debe ser visible (requerido) o no.
+       */
+      function toggleVisibility(element, isRequired) {
+        // Encuentra el div padre que contiene la fila del formulario completa
+        const formRow = element.closest('.mktoFormRow');
+
+        if (isRequired) {
+          formRow.style.display = 'block';
+        } else {
+          formRow.style.display = 'none';
+
+          // Si el element es de tipo select, se limpian las opciones y se deja por defect una con value 000
+          // Para evitar el error de campo requerido. Si es de otro tipo, se limpia su valor.
+          if (element.tagName.toLowerCase() === 'select') {
+            element.innerHTML = '<option value="000"></option>';
+            element.value = '000';
+          } else {
+            element.value = '';
+          }
+        }
+      }
+
+      /**
+       * Populates a picklist from a standardized array of objects.
+       * Expects each object to have an 'id' and a 'name' property.
+       * @param {HTMLSelectElement} picklist - The <select> element to update.
+       * @param {Array<{id: string, name: string}>} items - The standardized array.
+       */
+      function updatePicklist(picklist, items) {
+        picklist.innerHTML = '<option value="">Select...</option>';
+
+        items.forEach((item) => {
+          const option = document.createElement('option');
+          option.value = item.id;
+          option.textContent = item.name;
+          picklist.appendChild(option);
+        });
+      }
+    </script>
+  </body>
+</html>
