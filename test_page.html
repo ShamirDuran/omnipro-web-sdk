@@ -1,81 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-
-    <style></style>
-  </head>
-
-  <body>
-    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-    <form id="mktoForm_1121"></form>
-
-    <script>
-      MktoForms2.loadForm(
-        "//402-ALY-118.mktoweb.com",
-        "402-ALY-118",
-        1121,
-        function (form) {
-          const programsPL = {
-            1: ["Program A", "Program B", "Program C"],
-            2: ["Program D", "Program E", "Program F"],
-            3: ["Program G", "Program H", "Program I"],
-            4: ["Program J", "Program K", "Program L"],
-            5: ["Program M", "Program N", "Program O"],
-          };
-
-          document
-            .getElementById("ie_interestedin")
-            .addEventListener("change", function (event) {
-              const interestedIn = event.target.value;
-
-              const programSelect = document.getElementById(
-                "mkto_programoriginal"
-              );
-
-              if (programSelect && programsPL[interestedIn]) {
-                // Remove existing options
-                programSelect.innerHTML = "";
-                // Add new options
-                programsPL[interestedIn].forEach(function (program) {
-                  const option = document.createElement("option");
-                  option.value = program;
-                  option.textContent = program;
-                  programSelect.appendChild(option);
-                });
-              }
-            });
-
-          form.onSuccess(function (values, followUpUrl) {
-            const interestedInValue = values.ie_interestedin;
-
-            /// Se utiliza el valor del picklist deseado para configurar una redirección a una TY en base a condiciones
-            switch (parseInt(interestedInValue, 10)) {
-              case 1:
-                window.location.href = `http://localhost/pathway/thank-you-page-marketing`;
-                break;
-              case 2:
-                window.location.href = `http://localhost/pathway/thank-you-page-sales`;
-                break;
-              case 3:
-                window.location.href = `http://localhost/pathway/thank-you-page-operations`;
-                break;
-              case 4:
-                window.location.href = `http://localhost/pathway/thank-you-page-finance`;
-                break;
-              case 5:
-                window.location.href = `http://localhost/pathway/thank-you-page-hr`;
-                break;
-              default:
-                break;
-            }
-
-            return false; // Prevent default form submission
-          });
-        }
-      );
-    </script>
-  </body>
-</html>
+<div
+  class="botton-slider-dos cms-sliders"
+  data-appearance="full-bleed"
+  data-background-images="{}"
+  data-background-type="image"
+  data-content-type="row"
+  data-element="main"
+  data-enable-parallax="0"
+  data-parallax-speed="0.7"
+  data-pb-style="FRQSTUX"
+  data-video-fallback-src=""
+  data-video-lazy-load="true"
+  data-video-loop="true"
+  data-video-play-only-visible="true"
+>
+  <div class="responsive-banner" style="display: block">
+    <a
+      href="https://alpina.com/quesos/quesos-maduros?utm_source=Web+Adobe+Target&amp;utm_medium=clic+banner+1&amp;utm_campaign=Segmento+Quesos+Maduros&amp;utm_id=Caso+uso+%231+CDP&amp;utm_term=Quesos%2BArequipe&amp;utm_content=Venta"
+      onclick="targetClick(this.href)"
+      ><img
+        id="banner-at-desktop-${campaign.id}"
+        src="https://s7d1.scene7.com/is/image/Targetalpina/banner1_dsktp_1920x200-cdp-productos-sopo-y-holandes"
+        style="border-radius: 20px"
+      />
+      <img
+        id="banner-at-mobile-${campaign.id}"
+        src="https://s7d1.scene7.com/is/image/Targetalpina/banner1_mobile_768x200-cdp-productos-sopo-y-holandes"
+        style="border-radius: 20px"
+      />
+    </a>
+  </div>
+</div>

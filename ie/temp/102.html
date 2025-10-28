@@ -7,175 +7,33 @@
   </head>
   <body>
     <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-    <form id="mktoForm_1346"></form>
-
-    <button id="button">Select Bachelor in Applied Mathematics</button>
+    <form id="mktoForm_1348"></form>
 
     <script>
-      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1346, function (form) {
-        asyncGetProgramsByIds(form); // Carga todos los programas inicialmente
-        getCountries(); // Carga países
+      const API_BASE = 'https://aem-publish.dev.ie.edu/graphql/execute.json/global';
+      const timestamp = new Date().getTime();
 
-        document.getElementById('button').addEventListener('click', function () {
-          selectProgram('edacc7fc-8b17-eb11-a813-000d3a2cbe51');
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1348, function (form) {
+        const THANK_YOU_PAGE = `/content/ieprogram/us/en/corporate/typ/stage1/interested-in.html`;
+
+        MktoForms2.whenReady(function (form) {
+          getProvinces(); // Fetch and load countries and provinces and control visibility of provinces field
         });
 
-        /**
-         * Preselecciona una opción de un <select> en base al value proporcionado.
-         * @param {string} selectedValue - El valor de la opción que se debe seleccionar.
-         */
-        function selectProgram(programId) {
-          const programPicklist = document.getElementById('ie_programmarketoid');
+        form.onSuccess(function (values, _) {
+          // Data mapping for URL parameters according to form type.
+          const params = {
+            country: values.ie_countryid,
+            province: values.ie_provinceregionid,
+            gender: values.ie_genderidentity,
+            interestedIn: values.ie_interestedin,
+            pathwayId: values.ie_pathwayid,
+            stakeholderRole: values.ie_stakeholdersroleid,
+          };
 
-          if (!programPicklist) {
-            return;
-          }
-
-          // Busca si existe una opción con el value indicado
-          const optionExists = Array.from(programPicklist.options).some(
-            (option) => option.value === programId
-          );
-
-          // Si existe, asigna el valor al select
-          if (optionExists) {
-            programPicklist.value = programId;
-          }
-        }
-
-        /**
-         * Fetch and populate countries into the country picklist.
-         * @param {HTMLSelectElement} picklist - The country select element. Not the Id, the element itself.
-         */
-        function getCountries() {
-          const picklist = document.getElementById('ie_countryid');
-
-          // Use a public CORS proxy for development only. Replace with your own backend proxy for production.
-          fetch(
-            `https://corsproxy.io/?https://aem-publish.dev.ie.edu/graphql/execute.json/global/getAllCountries`
-          )
-            .then((response) => response.json())
-            .then((apiResponse) => {
-              const countries = apiResponse.data.ieCountryList.items;
-
-              const formattedCountries = countries.map((country) => {
-                return {
-                  id: country.countryId,
-                  name: country.countryName,
-                };
-              });
-
-              updatePicklist(picklist, formattedCountries);
-            })
-            .catch((error) => console.error('Error fetching countries:', error));
-        }
-
-        // Fuente estática en vez de API
-        const STATIC_PROGRAMS = [
-          {
-            programId: 'edacc7fc-8b17-eb11-a813-000d3a2cbe51',
-            programTitle: 'Bachelor in Applied Mathematics',
-            programPathwayId: '868ceb00-e424-eb11-a813-000d3a2cbc56',
-          },
-          {
-            programId: '5ca8bf02-194b-ef11-bfe2-6045bd9c5d2d',
-            programTitle: 'Bachelor in Applied Mathematics Madrid Campus',
-            programPathwayId: '868ceb00-e424-eb11-a813-000d3a2cbc56',
-          },
-          {
-            programId: 'f22bb741-ec37-e811-8137-70106faad7c1',
-            programTitle: 'Bachelor in Architectural Studies',
-            programPathwayId: 'a103e80c-e424-eb11-a813-000d3a2cbc56',
-          },
-          {
-            programId: 'c6effb38-175c-ec11-8f8f-000d3abd86be',
-            programTitle: 'Bachelor in Behavior and Social Sciences Madrid Campus',
-            programPathwayId: '90e2dcf3-e324-eb11-a813-000d3a2cbc56',
-          },
-        ];
-
-        /**
-         * Carga y popula programas desde la fuente estática (sin llamar a la API).
-         * Si programIds está vacío, muestra todos.
-         * @param {string[]} programIds
-         */
-        const getProgramsById = (programIds = []) => {
-          const programPicklist = document.getElementById('ie_programmarketoid');
-          if (!programPicklist) return;
-
-          const source = STATIC_PROGRAMS;
-
-          // Filtra por IDs (si se proporcionan) y valida campos mínimos
-          const filtered = (
-            programIds.length ? source.filter((p) => programIds.includes(p.programId)) : source
-          ).filter((p) => p?.programId && p?.programTitle);
-
-          // Dedup por id y orden alfabético
-          const uniqueById = Array.from(
-            new Map(filtered.map((p) => [p.programId, p])).values()
-          ).sort((a, b) => a.programTitle.localeCompare(b.programTitle));
-
-          const formatted = uniqueById.map((p) => ({ id: p.programId, name: p.programTitle }));
-
-          updatePicklist(programPicklist, formatted);
-        };
-
-        /**
-         * Recupera los valores del formulario desde el localStorage del navegador.
-         */
-        function waitForElement(selector, { root = document, mustBeVisible = false } = {}) {
-          return new Promise((resolve) => {
-            const immediate = root.querySelector(selector);
-            if (immediate && (!mustBeVisible || immediate.offsetParent !== null)) {
-              return resolve(immediate);
-            }
-            const obs = new MutationObserver(() => {
-              const el = root.querySelector(selector);
-              if (!el) return;
-              if (mustBeVisible && el.offsetParent === null) return;
-              obs.disconnect();
-              resolve(el);
-            });
-            obs.observe(root === document ? document.documentElement : root, {
-              childList: true,
-              subtree: true,
-              attributes: mustBeVisible,
-              attributeFilter: mustBeVisible
-                ? ['style', 'class', 'hidden', 'aria-hidden']
-                : undefined,
-            });
-          });
-        }
-
-        /**
-         * Espera a que el formulario esté listo y luego obtiene los programas por IDs.
-         * @param {*} programIds
-         */
-        async function asyncGetProgramsByIds(form, programIds = []) {
-          try {
-            const root = form.getFormElem()[0] || document;
-            await waitForElement('#ie_programmarketoid', { root, mustBeVisible: false });
-            getProgramsById(programIds);
-          } catch (e) {
-            console.error('asyncGetProgramsByIds ->', e);
-          }
-        }
-
-        /**
-         * Populates a picklist from a standardized array of objects.
-         * Expects each object to have an 'id' and a 'name' property.
-         * @param {HTMLSelectElement} picklist - The <select> element to update.
-         * @param {Array<{id: string, name: string}>} items - The standardized array.
-         */
-        function updatePicklist(picklist, items) {
-          picklist.innerHTML = '<option value="">Select...</option>';
-
-          items.forEach((item) => {
-            const option = document.createElement('option');
-            option.value = item.id;
-            option.textContent = item.name;
-            picklist.appendChild(option);
-          });
-        }
+          redirectToThankYouPage(params, THANK_YOU_PAGE);
+          return false;
+        });
       });
     </script>
   </body>

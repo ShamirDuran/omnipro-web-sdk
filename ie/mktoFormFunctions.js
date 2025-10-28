@@ -213,7 +213,7 @@ function toggleVisibility(element, isRequired) {
  * @param {Array<{id: string, name: string}>} items - The standardized array.
  */
 function updatePicklist(picklist, items) {
-  picklist.innerHTML = '<option value="">Select...</option>';
+  picklist.innerHTML = '<option value="" disabled selected>Select...</option>';
 
   items.forEach((item) => {
     const option = document.createElement('option');
@@ -322,5 +322,27 @@ async function asyncGetProgramsByIds(form, programIds = []) {
     getProgramsById(programIds);
   } catch (e) {
     console.error('asyncGetProgramsByIds ->', e);
+  }
+}
+
+/**
+ * Preselecciona una opción de un <select> en base al value proporcionado.
+ * @param {string} selectedValue - El valor de la opción que se debe seleccionar.
+ */
+function selectProgram(programId) {
+  const programPicklist = document.getElementById('ie_programmarketoid');
+
+  if (!programPicklist) {
+    return;
+  }
+
+  // Busca si existe una opción con el value indicado
+  const optionExists = Array.from(programPicklist.options).some(
+    (option) => option.value === programId
+  );
+
+  // Si existe, asigna el valor al select
+  if (optionExists) {
+    programPicklist.value = programId;
   }
 }

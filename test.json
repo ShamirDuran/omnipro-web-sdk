@@ -1,46 +1,130 @@
 {
-  "information": {
-    "Headline Text": "{{{contentFragment4889.headlineText}}}",
-    "Description": "{{{contentFragment4889.description}}}",
-    "CTA_label": "{{{contentFragment4889.ctaLabel}}}",
-    "CTA_link": "{{{contentFragment4889.ctaButton}}}",
-    "Page": "{{{contentFragment4889.page}}}",
-    "Display_Rank": "{{{contentFragment4889.displayRank}}}",
-    "Customer_Treatment_Status": "{{{contentFragment4889.customerTreatmentStatus}}}",
-    "Placement": "{{{contentFragment4889.placement}}}",
-    "Domain": "{{{contentFragment4889.domain}}}",
-    "Conversion_tracking_code": "{{{contentFragment4889.conversionTrackingCode}}}",
-    "Customer_Journey_id": "{{{contentFragment4889.customerJourneyId}}}",
-    "Show_Card_Art": "{{{contentFragment4889.showCardArt}}}",
-    "Card_art": "{{{contentFragment4889.cardArt}}}",
-    "Product_display": "{{{contentFragment4889.productDisplay}}}",
-    "Icon": "{{{contentFragment4889.icon}}}",
-    "Dynamic_Content_Metadata": {
-      "has_placeholders": true,
-      "placeholders": [
-        {
-          "key": "points",
-          "fields": ["Headline Text"],
-          "source": "AJO-D"
+  "event": {
+    //change it to "userProfile"
+    "xdm": {
+      // we don't need this wrapping object. Remove it
+      "_id": "{{$uuid}}", // Let's move it to header with name correlation-id. This is not driving the business logic.
+      "timestamp": "{{$isoTimestamp}}", // Let's move it to header. This is not driving the business logic.
+      "eventType": "decisioning.propositionFetch", //can this be part of URI?
+      "identityMap": {
+        // Identities- Remove the keyword Map as json depicting collection.
+        "ECID": [
+          //make it lower case : ecid. If it's for a single user. Do we need collection?
+          {
+            "id": "{{ECID}}",
+            "primary": false
+          }
+        ],
+        "PublicGUID": [
+          // make it camelCase : publicGuid. If it's for a single user. Do we need collection?
+          {
+            "id": "{{PUBLIC_GUID}}",
+            "primary": true // provider should be treating appropriate user digital id as primary. Consumer shouldn't pass primary or secondary flag.
+          }
+        ],
+        "prodProfileID": [
+          // can this be changed to productProfileID
+          {
+            "id": "{{PUBLIC_GUID}}",
+            "primary": true // provider should be treating appropriate user digital id as primary. Consumer shouldn't pass primary or secondary flag.
+          }
+        ],
+        "custXRefId": [
+          //If it's for a single user. Do we need collection?
+          {
+            "id": "{{XREF}}",
+            "primary": false // provider should be treating appropriate user digital id as primary. Consumer shouldn't pass primary or secondary flag.
+          }
+        ]
+      },
+      "_americanexpress": {
+        // remove underscore.
+        "identities": {
+          //can it be changed to "products"
+          "ecid": "{{ECID}}" //If it's for a single user. Do we need collection?
         },
-        {
-          "key": "apr_rate",
-          "fields": ["Headline Text"],
-          "source": "APR"
-        }
-      ]
+        "amexCardProducts": [
+          // card
+          {
+            "cm13Tokenized": "FHCX1AO2QHV73RZ" // can this be changed to productProfileID.
+          },
+          {
+            "cm13Tokenized": "XYCX1AO2QHV73AB" // can this be changed to productProfileID.
+          },
+          {
+            "cm13Tokenized": "UVWAO2QHV73RZIU" // can this be changed to productProfileID.
+          }
+        ],
+        "amexBankProducts": [
+          //bank
+          {
+            "accountNumberTokenized": "W9owjkiQb8Mvfqg58AbCov90Rg2GpDFshd8I4u-lbw0"
+          },
+          {
+            "accountNumberTokenized": "W9owjkiQb8Mvfqg58AbCov90Rg2GpDFshd8I4u-lbw0"
+          },
+          {
+            "accountNumberTokenized": "W9owjkiQb8Mvfqg58AbCov90Rg2GpDFshd8I4u-lbw0"
+          }
+        ]
+      }
     }
   },
-  "UI_Metadata": {
-    "component_Variant": "B",
-    "component_params": {
-      "button_size": "medium",
-      "background_color": "#2809ED",
-      "icon_visibility": "none",
-      "display_mode": "compact",
-      "animation": "fade-in",
-      "border_radius": "8px",
-      "show_card_art": true
+  "query": {
+    "personalization": {
+      "schemas": [
+        "https://ns.adobe.com/personalization/default-content-item",
+        "https://ns.adobe.com/personalization/html-content-item",
+        "https://ns.adobe.com/personalization/json-content-item",
+        "https://ns.adobe.com/personalization/redirect-item",
+        "https://ns.adobe.com/personalization/dom-action"
+      ],
+      "surfaces": ["web://americanexpress.com/overview#revenuetile"]
+    }
+  },
+  "eligibility": {
+    "rde": {
+      "identifier_type": "CM15",
+      "customer_identifier": "012343",
+      "customer_fcra_eligible_indicator": true,
+      "customer_total_annual_income": 200.5,
+      "customer_nontaxable_income": 500.5,
+      "customer_total_financial_assets": 500.5,
+      "liability_level": "COMM",
+      "plan_response": [
+        {
+          "identifier": "37XXXXXXXXXXX01",
+          "product_details": [
+            {
+              "product_type_code": "PLAN",
+              "product_business_unit_code": "OPEN",
+              "product_details_code": "DAY",
+              "product_name": "PLAN_CPS_DAY",
+              "segment_type": "NPSL",
+              "plan_assessment_amount": 200.99,
+              "payment_directive": "UPFRONT",
+              "eligibility_assessment": {
+                "decision": "APR",
+                "decision_reason_code": "AA"
+              },
+              "plan_assessment": [
+                {
+                  "term_factor": 12,
+                  "number_of_payments": 24,
+                  "apr_factor": 3.99,
+                  "rate_factor": 2.99,
+                  "lowest_term": true,
+                  "highest_term": false,
+                  "payment_reference_identifier": "P45",
+                  "instant_loan_amount": 3000.0,
+                  "loan_reason_code": "OPT",
+                  "pricing_variable": "2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   }
 }

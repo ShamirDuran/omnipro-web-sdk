@@ -1,128 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script src="https://aem-publish.dev.ie.edu/content/dam/ieprogram/js-marketo/mktoFormFunctions.js?currentDay=${currentDay}"></script>
+  </head>
   <body>
     <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-    <form id="mktoForm_1349"></form>
-    <script>
-      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1349);
-    </script>
+    <form id="mktoForm_1348"></form>
 
     <script>
-      const API_BASE =
-        'https://publish-p147864-e1510969.adobeaemcloud.com/content/dam/ieprogram/json';
-      MktoForms2.whenReady(function (form) {
-        /**
-         * Fetch and populate programs into the program picklist based on the selected pathway.
-         * @param {string} pathway - The selected pathway ID to filter programs.
-         */
+      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1348, function (form) {
+        // Landing a donde se redirecciona al usuario en el onSuccess del form (se le deben agregar los queryParams
+        const THANK_YOU_PAGE = `${window.location.origin}/content/ieprogram/us/en/corporate/typ/stage1/interested-in.html`;
 
-        const IDS = [
-          '6aea88a2-fa00-e811-8129-e0071b6c3f51',
-          'eee7dfe1-7c8c-e211-b8b8-02bf0a09015e',
-          'b5da0fc4-03a4-e111-92a3-005056b460d2',
-          '95d1d63e-edd9-e011-b5b0-005056b42592',
-          'CCF4ED44-7D5B-E911-A95E-000D3A454977',
-          '21b5ad3e-8fb3-e011-b3b5-02bf0a09015e',
-          'f1465a8b-29f2-df11-aa1b-005056b42592',
-          '66b72225-5a4e-ef11-bfe2-00224887c931',
-          'b27a9e1a-0e4f-ef11-bfe2-00224887c931',
-          '225a0729-b4e4-e711-8124-e0071b6c3f51',
-          'c4975b97-29f2-df11-aa1b-005056b42592',
-          '8bfe9dc4-406f-ea11-a811-000d3a2cbe51',
-          '25e7539d-29f2-df11-aa1b-005056b42592',
-          'f6b50ca0-a3be-ee11-9079-000d3aaba351',
-          '604e7ad4-a724-ee11-9cbd-000d3aaf2e13',
-        ];
-
-        asyncGetProgramsByIds(form, IDS);
-      });
-
-      const getProgramsByPathway = (pathway) => {
-        const programPicklist = document.querySelector('#ie_pathwayid');
-
-        fetch(`${API_BASE}/programas.json`)
-          .then((response) => response.json())
-          .then(({ value: programs }) => {
-            const filteredPrograms = programs.filter(
-              (program) => program.parentproductid.productid === pathway
-            );
-
-            if (filteredPrograms.length > 0) {
-              updatePicklist(programPicklist, filteredPrograms);
-            } else {
-              programPicklist.innerHTML = '<option value="">Select...</option>';
-            }
-          })
-          .catch((error) => console.error(error));
-      };
-
-      const updatePicklist = (picklist, items) => {
-        picklist.innerHTML = '<option value="">Select...</option>';
-
-        items.forEach((item) => {
-          const option = document.createElement('option');
-          option.value = item.id;
-          option.textContent = item.name;
-          picklist.appendChild(option);
-        });
-      };
-      /**
-       * Fetch and populate programs into the program picklist based on an array of program IDs.
-       * @param {Array} programs - An array of program IDs to filter programs.
-       */
-      const getProgramsById = (programs = []) => {
-        const programPicklist = document.querySelector('#ie_programmarketoid');
-
-        fetch(`${API_BASE}/programas.json`)
-          .then((response) => response.json())
-          .then(({ value: allPrograms }) => {
-            // Filtra los programas que están en el array 'programs'
-            const filteredPrograms = allPrograms.filter((program) =>
-              programs.includes(program.productid)
-            );
-
-            if (filteredPrograms.length > 0) {
-              updatePicklist(programPicklist, filteredPrograms);
-            } else {
-              programPicklist.innerHTML = '<option value="">Select...</option>';
-            }
-          })
-          .catch((error) => console.error(error));
-      };
-
-      function waitForElement(selector, { root = document, mustBeVisible = false } = {}) {
-        return new Promise((resolve) => {
-          const immediate = root.querySelector(selector);
-          if (immediate && (!mustBeVisible || immediate.offsetParent !== null)) {
-            return resolve(immediate);
-          }
-          const obs = new MutationObserver(() => {
-            const el = root.querySelector(selector);
-            if (!el) return;
-            if (mustBeVisible && el.offsetParent === null) return;
-            obs.disconnect();
-            resolve(el);
+        function loadScript(url) {
+          return new Promise(function (resolve, reject) {
+            const script = document.createElement('script');
+            script.src = url;
+            script.onload = () => resolve();
+            script.onerror = () => reject(new Error(`Error al cargar el script: ${url}`));
+            document.head.appendChild(script);
           });
-          obs.observe(root === document ? document.documentElement : root, {
-            childList: true,
-            subtree: true,
-            attributes: mustBeVisible,
-            attributeFilter: mustBeVisible
-              ? ['style', 'class', 'hidden', 'aria-hidden']
-              : undefined,
-          });
-        });
-      }
-
-      async function asyncGetProgramsByIds(form, programIds = []) {
-        try {
-          const root = form.getFormElem()[0] || document;
-          await waitForElement('#ie_programmarketoid', { root, mustBeVisible: false });
-          getProgramsById(programIds);
-        } catch (e) {
-          console.error('asyncGetProgramsByIds ->', e);
         }
-      }
+
+        const currentDay = new Date().getDate();
+        const mktoFunctionsURL = `https://aem-publish.dev.ie.edu/content/dam/ieprogram/js-marketo/mktoFormFunctions.js?currentDay=${currentDay}`;
+
+        loadScript(mktoFunctionsURL)
+          .then(() => {
+            MktoForms2.whenReady(function (form) {
+              form.setValues({
+                ie_pathwayid: '3bace212-e424-eb11-a813-000d3a2cbc56',
+              });
+
+              getProvinces();
+            });
+
+            form.onSuccess(function (values, _) {
+              const params = {
+                country: values.ie_countryid,
+                province: values.ie_provinceregionid,
+                gender: values.ie_genderidentity,
+                interestedIn: values.ie_interestedin,
+                pathwayId: values.ie_pathwayid,
+                stakeholderRole: values.ie_stakeholdersroleid,
+              };
+
+              redirectToThankYouPage(params, THANK_YOU_PAGE);
+              return false;
+            });
+          })
+          .catch((error) => {
+            console.error('Hubo un error al cargar el script de funciones:', error);
+          });
+      });
     </script>
   </body>
 </html>
