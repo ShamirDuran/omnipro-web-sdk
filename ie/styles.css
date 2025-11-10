@@ -1,0 +1,208 @@
+/* Add your custom CSS below */
+/* Set the overall form container to 100% width */
+.mktoForm,
+.mktoFormRow,
+.mktoFormCol,
+.mktoField,
+.mktoFieldWrap,
+.mktoForm input,
+.mktoForm select,
+.mktoForm textarea {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Optional: remove any default max-widths or margins */
+.mktoForm {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.mktoForm .mktoLabel {
+  display: none !important;
+}
+
+/* CSS Provided by client ↓ */
+.mktoForm * {
+  font-family: PT Serif, serif !important;
+}
+.mktoForm .mktoFormRow {
+  width: 100% !important;
+}
+.mktoForm .mktoFieldDescriptor.mktoFormCol .mktoOffset {
+  width: 0 !important;
+  display: none !important;
+}
+.mktoForm .mktoFieldDescriptor.mktoFormCol .mktoFieldWrap .mktoGutter.mktoHasWidth {
+  width: 0 !important;
+  display: none !important;
+}
+.mktoForm
+  .mktoFieldDescriptor.mktoFormCol
+  .mktoFieldWrap.mktoRequiredField
+  .mktoGutter.mktoHasWidth {
+  width: 0 !important;
+  display: none !important;
+}
+.mktoForm .mktoFormRow.mktoFormRow-1 .mktoFieldDescriptor.mktoFormCol {
+  margin-top: 10px !important;
+}
+.mktoForm .mktoFormRow.mktoFormRow-1 .mktoFieldDescriptor.mktoFormCol {
+  width: 100% !important;
+  margin-bottom: 15px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+.mktoForm .mktoFormRow.mktoFormRow-2 {
+  margin-top: 10px !important;
+}
+.mktoForm .mktoFormRow.mktoFormRow-2 .mktoFieldDescriptor.mktoFormCol {
+  width: 50% !important;
+  margin-bottom: 15px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+/* Áreas del formulario excepto el selector */
+.mktoForm input[type='text'],
+.mktoForm input[type='url'],
+.mktoForm input[type='email'],
+.mktoForm input[type='tel'],
+.mktoForm input[type='number'],
+.mktoForm input[type='date'],
+.mktoForm select.mktoField,
+.mktoForm textarea.mktoField {
+  font-family: PT Serif, serif !important;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  border: 0px solid blue;
+  box-shadow: none !important;
+  border-bottom: 1px solid #c4c4c4;
+  border-radius: 0;
+  margin: -0px;
+  padding: 0px 0px 0px 8px !important;
+}
+.mktoForm input[type='checkbox'],
+.mktoForm input[type='radio'] {
+  width: auto !important;
+  display: inline-block !important;
+  vertical-align: middle;
+  margin: 2px 8px 0 0;
+  box-sizing: content-box;
+}
+/* Normalize alignment when labels/gutters are hidden */
+.mktoForm .mktoFieldWrap {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* If Marketo injected an inline margin-left, force it to 0 */
+.mktoForm .mktoFieldWrap[style*='margin-left'] {
+  margin-left: 0 !important;
+}
+
+/* Make sure columns aren’t floating with old offsets */
+.mktoForm .mktoFormRow .mktoFormCol {
+  float: none !important;
+}
+
+/* Optional but recommended: use consistent spacing on the column, not the wrap */
+.mktoForm .mktoFormRow .mktoFormCol {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+/* Selector */
+.mktoForm .mktoFieldWrap:has(select.mktoField) {
+  position: relative;
+}
+.mktoForm select.mktoField {
+  color: #888a8c !important;
+  height: 25px !important;
+  background-color: transparent !important;
+  padding-right: 30px !important;
+  appearance: none !important;
+  cursor: pointer !important;
+}
+/* Flechita como vértice */
+.mktoForm .mktoFieldWrap:has(select.mktoField)::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-right: 1px solid #888a8c;
+  border-bottom: 1px solid #888a8c;
+  transform: translateY(-50%) rotate(45deg);
+  pointer-events: none;
+}
+.mktoForm select.mktoField option {
+  color: #0f0f0f;
+}
+
+/* --- NUEVO: estilos para links dentro del formulario --- */
+.mktoForm a {
+  color: #0066cc !important; /* Azul clásico de link */
+  text-decoration: underline !important; /* Subrayado */
+  cursor: pointer !important;
+}
+
+.mktoForm a:hover {
+  color: #004999 !important; /* Azul más oscuro al pasar el mouse */
+  text-decoration: underline !important;
+}
+
+/* ====== GDPR (mkto_gdprc22) auto-ajustable ====== */
+
+/* 1) Contenedor del campo: usa flex para alinear checkbox + texto */
+.mktoForm .mktoFieldWrap:has(#mkto_gdprc22),
+.mktoForm .mktoFieldWrap:has(input[name='mkto_gdprc22']) {
+  display: flex !important;
+  align-items: flex-start; /* el texto arranca arriba */
+  gap: 0.6em; /* separa checkbox y texto en función del font-size */
+  width: 100% !important;
+  white-space: normal !important; /* permite varias líneas */
+  line-height: 1.4; /* legibilidad */
+}
+
+/* 2) Checkbox escalable según el font-size del sitio */
+.mktoForm #mkto_gdprc22,
+.mktoForm input[name='mkto_gdprc22'] {
+  width: 1.15em !important;
+  height: 1.15em !important;
+  flex: 0 0 auto;
+  margin: 0.15em 0 0 0;
+}
+
+/* 3) Texto/label ocupa todo el ancho disponible y hace wrap */
+.mktoForm #mkto_gdprc22 + label,
+.mktoForm input[name='mkto_gdprc22'] + label {
+  display: block !important;
+  flex: 1 1 auto !important;
+  margin: 0;
+  font: inherit !important;
+  color: inherit !important;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* 4) Asegura que este campo no herede restricciones de otros inputs */
+.mktoForm .mktoFieldWrap:has(#mkto_gdprc22) .mktoGutter {
+  display: none !important;
+  width: 0 !important;
+}
+.mktoForm .mktoFieldWrap:has(#mkto_gdprc22) input.mktoField {
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+/* 5) Mejora táctil en móviles */
+@media (pointer: coarse) {
+  .mktoForm #mkto_gdprc22,
+  .mktoForm input[name='mkto_gdprc22'] {
+    width: 1.3em !important;
+    height: 1.3em !important;
+  }
+}

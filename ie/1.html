@@ -4,57 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-
-    <script src="https://aem-publish.dev.ie.edu/content/dam/ieprogram/js-marketo/mktoFormFunctions.js?currentDay=${currentDay}"></script>
   </head>
   <body>
-    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-    <form id="mktoForm_1348"></form>
+    <script src="//928-JRO-529.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <form id="mktoForm_1660"></form>
 
     <script>
-      MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1348, function (form) {
-        // Landing a donde se redirecciona al usuario en el onSuccess del form (se le deben agregar los queryParams
-        const THANK_YOU_PAGE = `${window.location.origin}/content/ieprogram/us/en/corporate/typ/stage1/interested-in.html`;
+      MktoForms2.loadForm('//928-JRO-529.mktoweb.com', '928-JRO-529', 1660, function (form) {
+        const THANK_YOU_PAGE = ``;
 
         function loadScript(url) {
           return new Promise(function (resolve, reject) {
             const script = document.createElement('script');
             script.src = url;
             script.onload = () => resolve();
-            script.onerror = () => reject(new Error(`Error al cargar el script: ${url}`));
+            script.onerror = () => reject(new Error('Error al cargar el script: ' + url));
             document.head.appendChild(script);
           });
         }
 
-        const currentDay = new Date().getDate();
-        const mktoFunctionsURL = `https://aem-publish.dev.ie.edu/content/dam/ieprogram/js-marketo/mktoFormFunctions.js?currentDay=${currentDay}`;
+        const currentDateTime = new Date().getTime();
+        const mktoFunctionsURL = `https://aem-crm-pro-8657c78e-22b7-8f2a-8ff3-95c8a03da37c.s3.eu-west-1.amazonaws.com/mktoFormFunctions.js`;
 
         loadScript(mktoFunctionsURL)
           .then(() => {
-            MktoForms2.whenReady(function (form) {
-              form.setValues({
-                ie_pathwayid: '3bace212-e424-eb11-a813-000d3a2cbc56',
-              });
-
-              getProvinces();
-            });
-
-            form.onSuccess(function (values, _) {
-              const params = {
-                country: values.ie_countryid,
-                province: values.ie_provinceregionid,
-                gender: values.ie_genderidentity,
-                interestedIn: values.ie_interestedin,
-                pathwayId: values.ie_pathwayid,
-                stakeholderRole: values.ie_stakeholdersroleid,
-              };
-
-              redirectToThankYouPage(params, THANK_YOU_PAGE);
-              return false;
-            });
+            getProvinces();
           })
           .catch((error) => {
-            console.error('Hubo un error al cargar el script de funciones:', error);
+            console.error(error);
           });
       });
     </script>
