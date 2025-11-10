@@ -126,46 +126,80 @@ const getProgramsById = (programIds = []) => {
     });
 };
 
+/* ------------------------------------------------------------------------- */
+/* ------------------------ BLOQUE OPTIMIZADO START ------------------------ */
+/* ------------------------------------------------------------------------- */
+
+// Caches internos para evitar llamadas redundantes
+let _countriesCache = null;
+let _provincesCache = null;
+
+// Fetch genérico con cache
+async function fetchWithCache(url, cacheRef) {
+  if (cacheRef.value) return cacheRef.value;
+  const response = await fetch(url);
+  const json = await response.json();
+  cacheRef.value = json;
+  return json;
+}
+
+// Fetch de países
+async function fetchCountries() {
+  dbg('fetchCountries: init (cached?)', { hasCache: !!_countriesCache });
+  return fetchWithCache(`${API_BASE}/getAllCountries?timestamp=${timestamp}`, {
+    value: _countriesCache,
+  });
+}
+
+// Fetch de provincias
+async function fetchProvinces() {
+  dbg('fetchProvinces: init (cached?)', { hasCache: !!_provincesCache });
+  return fetchWithCache(`${API_BASE}/getAllProvinces?timestamp=${timestamp}`, {
+    value: _provincesCache,
+  });
+}
+
 /**
- * Fetch and populate countries into the country picklist.
+ * Pobla el picklist de países
  */
 function getCountries() {
   const picklist = document.getElementById('ie_countryid');
+  if (!picklist) {
+    dbg('getCountries: picklist NOT found → return');
+    return;
+  }
 
-  fetch(`${API_BASE}/getAllCountries?timestamp=${timestamp}`)
-    .then((response) => {
-      dbg('getCountries: fetch response received');
-      return response.json();
-    })
+  fetchCountries()
     .then((apiResponse) => {
       dbg('getCountries: apiResponse OK');
-      const countries = apiResponse.data.ieCountryList.items;
-
-      const formattedCountries = countries.map((country) => {
-        const item = { id: country.countryId, name: country.countryName };
-        return item;
-      });
-
-      updatePicklist(picklist, formattedCountries);
+      const countries = apiResponse?.data?.ieCountryList?.items || [];
+      const formatted = countries.map((c) => ({ id: c.countryId, name: c.countryName }));
+      updatePicklist(picklist, formatted);
     })
-    .catch((error) => {
-      console.error('Error fetching countries:', error);
+    .catch((err) => {
+      console.error('Error fetching countries:', err);
       dbg('getCountries: error');
     });
 }
 
 /**
- * Sets up the province picklist to be populated based on the selected country.
+ * Provincias dependientes del país seleccionado
  */
 function getProvinces() {
   const countryPicklist = document.getElementById('ie_countryid');
   const provincePicklist = document.getElementById('ie_provinceregionid');
 
+  if (!countryPicklist || !provincePicklist) {
+    dbg('getProvinces: picklists NOT found → return');
+    return;
+  }
+
+  // Poblar países siempre
   getCountries();
 
-  // Solo ocultar la PRIMERA vez que se llame
+  // Primera ejecución → ocultar provincias y setear placeholder 000
   if (!PROVINCES_INIT_VISIBILITY_DONE) {
-    dbg('getProvinces: first call → hide provinces');
+    dbg('getProvinces: first call → hide provinces & reset');
     toggleVisibility(provincePicklist, false);
     resetDefaultOption(provincePicklist);
     PROVINCES_INIT_VISIBILITY_DONE = true;
@@ -173,65 +207,53 @@ function getProvinces() {
     dbg('getProvinces: not first call → skip initial hide');
   }
 
-  // evitar listeners duplicados si se invoca múltiples veces
+  // Evitar listeners duplicados
   if (countryPicklist.dataset.provincesListenerAttached === '1') {
     dbg('getProvinces: listener already attached → return');
     return;
   }
   countryPicklist.dataset.provincesListenerAttached = '1';
 
-  countryPicklist.addEventListener('change', function () {
+  countryPicklist.addEventListener('change', async function () {
     const selectedCountry = this.value;
     dbg('getProvinces: country changed', selectedCountry);
 
     if (!selectedCountry) {
       dbg('getProvinces: no country selected → hide & clear provinces');
-      toggleVisibility(provincePicklist, false);
       updatePicklist(provincePicklist, []);
+      toggleVisibility(provincePicklist, false);
       return;
-    } else {
-      dbg('getProvinces: country selected → fetch provinces');
     }
 
-    fetch(`${API_BASE}/getAllProvinces?timestamp=${timestamp}`)
-      .then((response) => {
-        dbg('getProvinces: provinces fetch response received');
-        return response.json();
-      })
-      .then((apiResponse) => {
-        dbg('getProvinces: apiResponse OK');
-        const allProvinces = apiResponse.data.ieProvinceList.items;
+    try {
+      const apiResponse = await fetchProvinces();
+      dbg('getProvinces: apiResponse OK');
+      const allProvinces = apiResponse?.data?.ieProvinceList?.items || [];
 
-        const filteredProvinces = allProvinces.filter(
-          (province) => province.provinceCountryId === selectedCountry
-        );
+      const filtered = allProvinces.filter((p) => p.provinceCountryId === selectedCountry);
 
-        if (filteredProvinces.length > 0) {
-          dbg('getProvinces: provinces found → show');
-
-          const formattedProvinces = filteredProvinces.map((province) => ({
-            id: province.provinceId,
-            name: province.provinceName,
-          }));
-          dbg('getProvinces: formattedProvinces count', formattedProvinces.length);
-          updatePicklist(provincePicklist, formattedProvinces);
-          toggleVisibility(provincePicklist, true);
-        } else {
-          updatePicklist(provincePicklist, []);
-          toggleVisibility(provincePicklist, false);
-          dbg('getProvinces: no provinces found → hide');
-        }
-      })
-      .catch((error) => {
-        dbg('getProvinces: error → hide provinces');
-        console.error('Error fetching provinces:', error);
+      if (filtered.length === 0) {
+        dbg('getProvinces: no provinces found → hide');
+        updatePicklist(provincePicklist, []);
         toggleVisibility(provincePicklist, false);
-      });
+        return;
+      }
+
+      const formatted = filtered.map((p) => ({ id: p.provinceId, name: p.provinceName }));
+      dbg('getProvinces: formattedProvinces count', formatted.length);
+      updatePicklist(provincePicklist, formatted);
+      toggleVisibility(provincePicklist, true);
+    } catch (error) {
+      console.error('Error fetching provinces:', error);
+      dbg('getProvinces: error → hide provinces');
+      toggleVisibility(provincePicklist, false);
+    }
   });
 }
 
 /**
  * Resetea el <select> a su opción por defecto con value "000".
+ * Conserva y reutiliza el placeholder desde data-label o dataset.placeholder.
  */
 function resetDefaultOption(element) {
   dbg('resetDefaultOption: init', { id: element?.id });
@@ -245,16 +267,22 @@ function resetDefaultOption(element) {
   }
 
   const originalLabel =
-    element.getAttribute('data-label') || element.options[0]?.textContent || 'Select...';
+    element.getAttribute('data-label') ||
+    element.dataset.placeholder ||
+    element.options[0]?.textContent ||
+    'Select...';
 
-  element.innerHTML = `<option value="000">${originalLabel}</option>`;
+  // Guardamos el label para futuros updates
+  element.dataset.placeholder = originalLabel;
+
+  element.innerHTML = `<option value="000" selected>${originalLabel}</option>`;
   element.value = '000';
   dbg('resetDefaultOption: select reset to 000 with placeholder', originalLabel);
 }
 
 /**
  * Muestra u oculta el campo según si es requerido o no.
- * Delegará al resetDefaultOption para limpiar selects cuando se oculte.
+ * Si se oculta un select, siempre lo resetea a "000".
  */
 function toggleVisibility(element, isRequired) {
   dbg('toggleVisibility: init', { id: element?.id, isRequired });
@@ -267,20 +295,16 @@ function toggleVisibility(element, isRequired) {
 
   if (isRequired) {
     dbg('toggleVisibility: show');
-    if (formRow) {
-      formRow.style.display = 'block';
-    }
+    if (formRow) formRow.style.display = 'block';
   } else {
     dbg('toggleVisibility: hide');
-    if (formRow) {
-      formRow.style.display = 'none';
-    }
+    if (formRow) formRow.style.display = 'none';
 
     if (element.tagName && element.tagName.toLowerCase() === 'select') {
-      dbg('toggleVisibility: select cleanup branch → delegating to resetDefaultOption');
+      dbg('toggleVisibility: select cleanup → resetDefaultOption');
       resetDefaultOption(element);
     } else {
-      dbg('toggleVisibility: non-select cleanup branch');
+      dbg('toggleVisibility: non-select cleanup');
       try {
         element.value = '';
       } catch (e) {
@@ -291,7 +315,8 @@ function toggleVisibility(element, isRequired) {
 }
 
 /**
- * Populates a picklist from a standardized array of objects.
+ * Popula un picklist con items, siempre con placeholder "000" controlado.
+ * Restablece el value a "000" para estado consistente.
  */
 function updatePicklist(picklist, items) {
   dbg('updatePicklist: init', { id: picklist?.id, itemsCount: items?.length });
@@ -302,28 +327,30 @@ function updatePicklist(picklist, items) {
     dbg('updatePicklist: picklist found');
   }
 
-  const originalLabel =
-    picklist.getAttribute('data-label') || picklist.options[0]?.textContent || 'Select...';
+  const placeholder =
+    picklist.dataset.placeholder ||
+    picklist.getAttribute('data-label') ||
+    picklist.options[0]?.textContent ||
+    'Select...';
 
-  const previousValue = picklist.value;
-  dbg('updatePicklist: previousValue', previousValue);
+  // Limpiar y poner placeholder con "000"
+  picklist.innerHTML = `<option value="000">${placeholder}</option>`;
 
-  picklist.innerHTML = `<option value="" disabled selected>${originalLabel}</option>`;
-
-  items.forEach((item) => {
+  (items || []).forEach((item) => {
     const option = document.createElement('option');
     option.value = item.id;
     option.textContent = item.name;
     picklist.appendChild(option);
   });
 
-  if (previousValue && [...picklist.options].some((opt) => opt.value === previousValue)) {
-    dbg('updatePicklist: restore previousValue');
-    picklist.value = previousValue;
-  } else {
-    dbg('updatePicklist: cannot restore previousValue');
-  }
+  // Estado consistente: sin selección válida → "000"
+  picklist.value = '000';
+  dbg('updatePicklist: set value to 000 and placeholder ensured');
 }
+
+/* ------------------------------------------------------------------------- */
+/* ------------------------- BLOQUE OPTIMIZADO END ------------------------- */
+/* ------------------------------------------------------------------------- */
 
 /**
  * Asigna valores a campos ocultos basados en la selección de un radio button.
