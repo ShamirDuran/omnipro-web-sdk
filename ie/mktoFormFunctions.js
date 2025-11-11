@@ -1,8 +1,12 @@
 // Se usa para obtener programas, countries, provinces (con debug en cada función y rama)
 const DEBUG_NS = 'IE:FORMS';
 let PROVINCES_INIT_VISIBILITY_DONE = false;
+let DEBUG_ENABLED = false; // cambiar a false para desactivar debug
 
-const dbg = (...args) => console.debug(`[${DEBUG_NS}]`, ...args);
+const dbg = (...args) => {
+  if (!DEBUG_ENABLED) return;
+  console.debug(`[${DEBUG_NS}]`, ...args);
+};
 
 const AEM_DOMAIN = 'https://discover.ie.edu';
 const API_BASE = `${AEM_DOMAIN}/graphql/execute.json/global`;
