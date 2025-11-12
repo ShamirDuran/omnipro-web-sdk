@@ -5,7 +5,7 @@ let DEBUG_ENABLED = false; // cambiar a false para desactivar debug
 
 const dbg = (...args) => {
   if (!DEBUG_ENABLED) return;
-  console.debug(`[${DEBUG_NS}]`, ...args);
+  console.log(`[${DEBUG_NS}]`, ...args);
 };
 
 const AEM_DOMAIN = 'https://discover.ie.edu';
@@ -553,6 +553,13 @@ const INTERESTED_IN_MASTER = 'Master programs';
 const INTERESTED_IN_BACHELOR = 'Undergraduate degrees';
 const INTERESTED_IN_EXECUTIVE = 'Executive Education';
 
+/** ID Programs. */
+const PRE_UNIVERSITY_SUMMER_PROGRAM =
+  'cHzSoE9fPwCfWGp+o6Sr3wdfh+S2JQU8N625PIsIBqAxgNneOP9qfXifssk9+qpmbAm/RCCLK1nwrNbEL0Aujg==';
+const UNIVERSITY_SUMMER_PROGRAM =
+  'BHnB4JJwp2F+XCLVAPocVeDYiP0t9DOi1lnRP82N0kxRBi/981o94pzr9qnUpguhzSl3fVTp7QMzrry3gjKYLA==';
+
+/** Allowed pathway IDs for Stage 2 routing. */
 const STAGE2_PATHWAYS = new Set([
   BUSINESS_PATHWAY,
   DESIGN_PATHWAY,
@@ -578,7 +585,9 @@ const norm = (s) => String(s || '');
 // Mantiene la compatibilidad con thankYouPage personalizado o con lógica de stage
 function redirectToThankYouPageLogic(config, values, thankYouPage) {
   dbg('redirectToThankYouPageLogic: init', { configType: config?.type, thankYouPage });
-  const { params } = config;
+
+  let { params } = config;
+  params.stakeholderRole = values.mktoStakeholder || '';
 
   if (thankYouPage) {
     dbg('redirectToThankYouPageLogic: thankYouPage provided → direct redirect');
@@ -729,7 +738,7 @@ function chooseTYPStage(config, values) {
     thankYouPage = chooseTYPStage2(values);
   } else if (type == '3') {
     dbg('chooseTYPStage: branch type 3');
-    thankYouPage = chooseTYPStage3(config, values);
+    thankYouPage = chooseTYPStage3(values);
   } else {
     dbg('chooseTYPStage: unknown type → default others');
     thankYouPage = ROUTES.others_default;
@@ -771,11 +780,14 @@ function chooseTYPStage1(values) {
     dbg('chooseTYPStage1: not Bachelor');
   }
 
-  if (/^summer\s*program$/i.test(interestedIn) || /^doctorate$/i.test(interestedIn)) {
+  if (programId == UNIVERSITY_SUMMER_PROGRAM) {
     dbg('chooseTYPStage1: Summer/Doctorate → stage1_interestedIn');
     return abs(ROUTES.stage1_interestedIn);
   } else {
     dbg('chooseTYPStage1: not Summer/Doctorate');
+  }
+  if (INTERESTED_IN_EXECUTIVE == interestedIn) {
+    return abs(ROUTES.stage1_executive_interestedIn);
   }
 
   dbg('chooseTYPStage1: default others');
@@ -826,56 +838,64 @@ function chooseTYPStage2(values) {
       dbg('chooseTYPStage2: Exec invalid pathway → others_executive_default');
       return abs(ROUTES.others_executive_default);
     }
-  } else {
-    dbg('chooseTYPStage2: not Executive');
   }
-
   dbg('chooseTYPStage2: default others');
   return abs(ROUTES.others_default);
 }
 
 /**
- * Stage 3 rules
+ * Stage 3 rules: maps Interested In, Stakeholder, and Pathway to a TYP route.
  */
-function chooseTYPStage3(config, values) {
-  dbg('chooseTYPStage3: init', { subtype: config?.subtype, values });
-  const { subtype } = config;
+function chooseTYPStage3(values) {
+  dbg('chooseTYPStage3: init', values);
+  const interestedIn = norm(values.ie_interestedin);
   const stakeholder = norm(values.mktoStakeholder);
+  const programId = norm(values.ie_programmarketoid);
 
-  if (subtype == 'Master') {
-    dbg('chooseTYPStage3: subtype Master → stage3_master_program');
+  // Master
+  if (interestedIn == INTERESTED_IN_MASTER) {
+    dbg('chooseTYPStage3: Master → stage3_master_program');
     return abs(ROUTES.stage3_master_program);
-  } else {
-    dbg('chooseTYPStage3: subtype not Master');
   }
 
-  if (subtype == 'University Summer Program') {
-    dbg('chooseTYPStage3: subtype University Summer → stage3_summer_program');
-    return abs(ROUTES.stage3_summer_program);
-  } else {
-    dbg('chooseTYPStage3: subtype not University Summer');
-  }
-
-  if (stakeholder === PARENT_VALUE) {
-    dbg('chooseTYPStage3: stakeholder Parent → others_bachelor_parent');
-    return abs(ROUTES.others_bachelor_parent);
-  } else if (stakeholder === PROFESSOR_VALUE) {
-    dbg('chooseTYPStage3: stakeholder Professor → others_bachelor_counselor');
-    return abs(ROUTES.others_bachelor_counselor);
-  } else if (stakeholder === STUDENT_VALUE_CLOUD) {
-    dbg('chooseTYPStage3: stakeholder Student branch');
-    if (subtype == 'Bachelor') {
-      dbg('chooseTYPStage3: Student + Bachelor → stage2_bachelor_pathway');
-      return abs(ROUTES.stage2_bachelor_pathway);
-    } else if (subtype == 'Pre-University Summer Program') {
-      dbg('chooseTYPStage3: Student + Pre-University Summer → stage3_summer_program');
-      return abs(ROUTES.stage3_summer_program);
-    } else {
-      dbg('chooseTYPStage3: Student + other subtype → others_bachelor_counselor');
+  // Bachelor
+  if (interestedIn == INTERESTED_IN_BACHELOR) {
+    dbg('chooseTYPStage3: Bachelor');
+    if (stakeholder === PARENT_VALUE) {
+      dbg('chooseTYPStage3: Bachelor + Parent');
+      return abs(ROUTES.others_bachelor_parent);
+    } else if (stakeholder === PROFESSOR_VALUE) {
+      dbg('chooseTYPStage3: Bachelor + Professor');
       return abs(ROUTES.others_bachelor_counselor);
+    } else if (stakeholder === STAKEHOLDER_STUDENT_VALUE) {
+      dbg('chooseTYPStage3: Bachelor + Student');
+      return abs(ROUTES.stage2_bachelor_pathway);
     }
-  } else {
-    dbg('chooseTYPStage3: stakeholder unexpected → default others');
+  }
+
+  // Pre Univesity
+  if (programId == PRE_UNIVERSITY_SUMMER_PROGRAM) {
+    dbg('chooseTYPStage3: Pre Univesity');
+    if (stakeholder === PARENT_VALUE) {
+      dbg('chooseTYPStage3: Pre Univesity + Parent');
+      return abs(ROUTES.others_bachelor_parent);
+    } else if (stakeholder === PROFESSOR_VALUE) {
+      dbg('chooseTYPStage3: Pre Univesity + Profesor');
+      return abs(ROUTES.others_bachelor_counselor);
+    } else if (stakeholder === STAKEHOLDER_STUDENT_VALUE) {
+      dbg('chooseTYPStage3: Pre Univesity + Student');
+      return abs(ROUTES.stage3_summer_program);
+    }
+  }
+
+  if (programId == UNIVERSITY_SUMMER_PROGRAM) {
+    dbg('chooseTYPStage3:  Univesity Summer');
+    return abs(ROUTES.stage3_summer_program);
+  }
+  //Executive
+  if (INTERESTED_IN_EXECUTIVE == interestedIn) {
+    dbg('chooseTYPStage3:  Executive');
+    return abs(ROUTES.stage3_executive_program);
   }
 
   return abs(ROUTES.others_default);
