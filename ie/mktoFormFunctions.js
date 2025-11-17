@@ -548,6 +548,7 @@ const SCIENCE_PATHWAY = '868ceb00-e424-eb11-a813-000d3a2cbc56';
 const PARENT_VALUE = 'cf8feddc-1107-eb11-a813-000d3a2cbc56';
 const PROFESSOR_VALUE = '34122eb2-1107-eb11-a813-000d3a2cbc56';
 const STUDENT_VALUE_CLOUD = 'Student';
+const STUDENT_VALUE_CLOUD_SPANISH = 'Alumno';
 
 const INTERESTED_IN_MASTER = 'Master programs';
 const INTERESTED_IN_BACHELOR = 'Undergraduate degrees';
@@ -770,7 +771,7 @@ function chooseTYPStage1(values) {
     } else if (stakeholder === PROFESSOR_VALUE) {
       dbg('chooseTYPStage1: stakeholder Professor');
       return abs(ROUTES.others_bachelor_counselor);
-    } else if (stakeholder === STUDENT_VALUE_CLOUD) {
+    } else if (stakeholder === STUDENT_VALUE_CLOUD || stakeholder === STUDENT_VALUE_CLOUD_SPANISH) {
       dbg('chooseTYPStage1: stakeholder Student');
       return abs(ROUTES.stage1_interestedIn);
     } else {
@@ -818,7 +819,7 @@ function chooseTYPStage2(values) {
     } else if (stakeholder === PROFESSOR_VALUE) {
       dbg('chooseTYPStage2: Professor → others_bachelor_counselor');
       return abs(ROUTES.others_bachelor_counselor);
-    } else if (stakeholder === STUDENT_VALUE_CLOUD) {
+    } else if (stakeholder === STUDENT_VALUE_CLOUD || stakeholder === STUDENT_VALUE_CLOUD_SPANISH) {
       dbg('chooseTYPStage2: Student → stage2_bachelor_pathway');
       return abs(ROUTES.stage2_bachelor_pathway);
     } else {

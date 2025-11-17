@@ -1,0 +1,30 @@
+{
+    "event": {
+        "xdm": {
+            "_id": "string",
+            "timestamp": "string",
+            "eventType": "string",
+            "identityMap": {
+                "ECID": [
+                    {
+                        "id": "{{ECID}}",
+                        "primary": false
+                    }
+                ],
+            },
+            "_americanexpress": {
+                ...
+            }
+        }
+    },
+    "query": {
+        "personalization": {
+            "schemas": [
+                ...
+            ],
+            "surfaces": [
+                ...
+            ]
+        }
+    }
+}
