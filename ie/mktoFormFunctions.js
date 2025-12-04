@@ -193,7 +193,24 @@ function getProvinces() {
   const countryPicklist = document.getElementById('ie_countryid');
   const provincePicklist = document.getElementById('ie_provinceregionid');
 
-  if (!countryPicklist || !provincePicklist) {
+  if (!countryPicklist) {
+    dbg('getProvinces: country picklist NOT found → return');
+
+    // try to remove provinces from DOM if country picklist is missing
+    if (provincePicklist) {
+      dbg('getProvinces: removing province picklist from DOM');
+      const formRow = provincePicklist.closest('.mktoFormRow');
+      if (formRow) {
+        formRow.remove();
+      } else {
+        provincePicklist.remove();
+      }
+    }
+
+    return;
+  }
+
+  if (!provincePicklist) {
     dbg('getProvinces: picklists NOT found → return');
     return;
   }
@@ -234,6 +251,7 @@ function getProvinces() {
       dbg('getProvinces: apiResponse OK');
       const allProvinces = apiResponse?.data?.ieProvinceList?.items || [];
 
+      // Filtrar provincias por país seleccionado
       const filtered = allProvinces.filter((p) => p.provinceCountryId === selectedCountry);
 
       if (filtered.length === 0) {
@@ -246,6 +264,8 @@ function getProvinces() {
       const formatted = filtered.map((p) => ({ id: p.provinceId, name: p.provinceName }));
       dbg('getProvinces: formattedProvinces count', formatted.length);
       updatePicklist(provincePicklist, formatted);
+
+      dbg('getProvinces: show provinces', allProvinces.length);
       toggleVisibility(provincePicklist, true);
     } catch (error) {
       console.error('Error fetching provinces:', error);
@@ -338,7 +358,7 @@ function updatePicklist(picklist, items) {
     'Select...';
 
   // Limpiar y poner placeholder con "000"
-  picklist.innerHTML = `<option value="000">${placeholder}</option>`;
+  picklist.innerHTML = `<option value="">${placeholder}</option>`;
 
   (items || []).forEach((item) => {
     const option = document.createElement('option');
@@ -348,7 +368,7 @@ function updatePicklist(picklist, items) {
   });
 
   // Estado consistente: sin selección válida → "000"
-  picklist.value = '000';
+  picklist.value = '';
   dbg('updatePicklist: set value to 000 and placeholder ensured');
 }
 

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Capping test</title>
+
+    <script
+      src="https://assets.adobedtm.com/dcb19cbd6cbf/0a7da462a3cb/launch-d5b5108459af-development.min.js"
+      async
+    ></script>
+  </head>
+  <body>
+    <button onclick="getSurface()">Send request</button>
+    <button onclick="sendImpressions()">Send Impressions</button>
+
+    <script>
+      // on page load
+      window.onload = () => {
+        console.log('Page loaded');
+
+        let ecid = '69746950276683044038191108951084155569'; // Replace with actual ECID if needed
+        let surface = 'web://localhost#cappingTest';
+        let offerId = 'dps:c03eb4695e382ccb3e3f87ca2940a4003ab72a68251f640c:1bb48b72cc7558e1';
+        let activityId = 'your-activity-id';
+        let trackingToken = 'GNdVrR1ZZkz9nlQI/N9VnA';
+        let eventToken =
+          'eyJtZXNzYWdlRXhlY3V0aW9uIjp7Im1lc3NhZ2VFeGVjdXRpb25JRCI6IlVFOkluYm91bmQiLCJtZXNzYWdlSUQiOiIzZTMyNjU0YS0xZmNiLTRiNWMtYmYxNy1hZjU3Mjk4Y2M1YzYiLCJtZXNzYWdlUHVibGljYXRpb25JRCI6ImIwYmU5MTEyLWY0MjItNDk1OC1iZTMzLTQ2NDNmZDNlZjc3NyIsIm1lc3NhZ2VUeXBlIjoibWFya2V0aW5nIiwiY2FtcGFpZ25JRCI6IjZjMmIyYjgwLThlZTItNDc3YS05ZmE5LWIyNDY0NTk2ZmE5ZSIsImNhbXBhaWduVmVyc2lvbklEIjoiN2YxYWE3MTUtMjJjMy00MzFkLWFiMzctNTlkNTRmMzNjMWJjIiwiY2FtcGFpZ25BY3Rpb25JRCI6IjBjMjcxZTE0LWQ4MDYtNDQwMC05NmVmLTQ0N2JkNTA3MzMyZCJ9LCJtZXNzYWdlUHJvZmlsZSI6eyJtZXNzYWdlUHJvZmlsZUlEIjoiMmUwNTkzOTktOTg3MC00MzJlLWIwMTEtNTRhNjg4Mzk5NjQ5IiwiY2hhbm5lbCI6eyJfaWQiOiJodHRwczovL25zLmFkb2JlLmNvbS94ZG0vY2hhbm5lbHMvY29kZSIsIl90eXBlIjoiaHR0cHM6Ly9ucy5hZG9iZS5jb20veGRtL2NoYW5uZWwtdHlwZXMvY29kZSJ9fX0=';
+        let correlationId = 'b0be9112-f422-4958-be33-4643fd3ef777-0';
+      };
+
+      const getSurface = () => {
+        const myHeaders = new Headers();
+        myHeaders.append('x-gw-ims-org-id', '5C36123F5245AF470A490D45@AdobeOrg');
+        myHeaders.append('x-api-key', '22f5891fe35f426e946e5a35fa71a8ca');
+        myHeaders.append('Content-Type', 'application/json');
+
+        const raw = JSON.stringify({
+          event: {
+            xdm: {
+              _id: 'af8039cb-e15e-4cae-a4ac-f0ec31ac557f',
+              timestamp: '2025-12-04T00:59:05.072Z',
+              identityMap: {
+                ECID: [
+                  {
+                    id: '69746950276683044038191108951084155569',
+                    primary: true,
+                  },
+                ],
+              },
+              eventType: 'decisioning.propositionFetch',
+            },
+          },
+          query: {
+            personalization: {
+              schemas: [
+                'https://ns.adobe.com/personalization/default-content-item',
+                'https://ns.adobe.com/personalization/html-content-item',
+                'https://ns.adobe.com/personalization/json-content-item',
+                'https://ns.adobe.com/personalization/redirect-item',
+                'https://ns.adobe.com/personalization/dom-action',
+              ],
+              surfaces: ['web://localhost#cappingTest'],
+            },
+          },
+        });
+
+        const requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow',
+        };
+
+        fetch(
+          'https://edge.adobedc.net/ee/v2/interact?datastreamId=15fdfe3d-17b7-4133-a832-01fd7a5c2112',
+          requestOptions
+        )
+          .then((response) => response.text())
+          .then((result) => console.log(result))
+          .catch((error) => console.error(error));
+      };
+
+      const generateUUID = () => {
+        // Simple UUID generator
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+          const r = (Math.random() * 16) | 0,
+            v = c === 'x' ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      };
+
+      const sendImpressions = () => {
+        alloy('sendEvent', {
+          edgeConfigOverrides: { datastreamId: '15fdfe3d-17b7-4133-a832-01fd7a5c2112' },
+          xdm: {
+            _id: generateUUID(),
+            timestamp: new Date().toISOString(),
+            eventType: 'decisioning.propositionDisplay',
+            identityMap: {
+              ECID: [
+                {
+                  id: ecid,
+                  authenticatedState: 'authenticated',
+                  primary: true,
+                },
+              ],
+            },
+            _experience: {
+              decisioning: {
+                propositionEventType: {
+                  display: 1,
+                },
+                propositionAction: {
+                  id: offerId,
+                  tokens: [trackingToken],
+                },
+                propositions: [
+                  {
+                    id: offerId,
+                    scope: surface,
+                    scopeDetails: {
+                      characteristics: {
+                        eventToken: eventToken, // Attribution token
+                      },
+                      activity: {
+                        id: activityId, // Activity ID
+                        matchedSurfaces: [surface], // Surfaces where the offer was shown
+                      },
+                      correlationID: correlationId, // Links to previous events
+                      decisionProvider: 'AJO', // Indicates AJO made the decision
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        });
+      };
+    </script>
+  </body>
+</html>
