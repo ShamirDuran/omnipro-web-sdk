@@ -103,6 +103,8 @@
           headers: myHeaders,
           body: raw,
           redirect: 'follow',
+          mode: 'cors',
+          credentials: 'include',
         };
 
         fetch(
