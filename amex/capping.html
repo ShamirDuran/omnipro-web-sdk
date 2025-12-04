@@ -26,12 +26,15 @@
         let trackingToken = '';
         let eventToken = '';
         let correlationId = '';
+
+        const clientId = '22f5891fe35f426e946e5a35fa71a8ca';
+        const orgId = '5C36123F5245AF470A490D45@AdobeOrg';
       };
 
       const getSurface = () => {
         const myHeaders = new Headers();
-        myHeaders.append('x-gw-ims-org-id', '5C36123F5245AF470A490D45@AdobeOrg');
-        myHeaders.append('x-api-key', '22f5891fe35f426e946e5a35fa71a8ca');
+        myHeaders.append('x-gw-ims-org-id', orgId);
+        myHeaders.append('x-api-key', clientId);
         myHeaders.append('Content-Type', 'application/json');
 
         const raw = JSON.stringify({
