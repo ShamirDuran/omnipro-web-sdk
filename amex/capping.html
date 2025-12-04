@@ -15,17 +15,50 @@
     <button onclick="sendImpressions()">Send Impressions</button>
 
     <script>
+      let ecid = ''; // Replace with actual ECID if needed
+      let surface = '';
+      let offerId = '';
+      let activityId = '';
+      let trackingToken = '';
+      let eventToken = '';
+      let correlationId = '';
+
+      let bearerToken = '';
+
       // on page load
       window.onload = () => {
         console.log('Page loaded');
+      };
 
-        let ecid = ''; // Replace with actual ECID if needed
-        let surface = '';
-        let offerId = '';
-        let activityId = '';
-        let trackingToken = '';
-        let eventToken = '';
-        let correlationId = '';
+      const getBearerToken = () => {
+        const myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+        myHeaders.append('Cookie', 'ftrset=858; relay=6074a057-7f1d-4cd9-bb1c-aaea1f515c72');
+
+        const urlencoded = new URLSearchParams();
+        urlencoded.append('grant_type', 'client_credentials');
+        urlencoded.append('client_id', '22f5891fe35f426e946e5a35fa71a8ca');
+        urlencoded.append('client_secret', 'p8e-d7ItxRX1tzcd3AfgaODA2AEHDST5Lm6X');
+        urlencoded.append(
+          'scope',
+          'cjm.suppression_service.client.delete,cjm.suppression_service.client.all,openid,session,AdobeID,read_organizations,additional_info.projectedProductContext'
+        );
+
+        const requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: urlencoded,
+          redirect: 'follow',
+        };
+
+        fetch('https://ims-na1.adobelogin.com/ims/token/v3', requestOptions)
+          .then((response) => response.text())
+          .then((result) => {
+            const obj = JSON.parse(result);
+            bearerToken = obj.access_token;
+            console.log('Bearer Token:', bearerToken);
+          })
+          .catch((error) => console.error(error));
       };
 
       const getSurface = () => {
@@ -33,12 +66,13 @@
         myHeaders.append('x-gw-ims-org-id', '5C36123F5245AF470A490D45@AdobeOrg');
         myHeaders.append('x-api-key', '22f5891fe35f426e946e5a35fa71a8ca');
         myHeaders.append('Content-Type', 'application/json');
+        myHeaders.append('Authorization', 'Bearer ' + bearerToken);
 
         const raw = JSON.stringify({
           event: {
             xdm: {
-              _id: 'af8039cb-e15e-4cae-a4ac-f0ec31ac557f',
-              timestamp: '2025-12-04T00:59:05.072Z',
+              _id: '4668d917-550f-4b9d-b046-b0326b392b20',
+              timestamp: '2025-12-04T01:14:24.984Z',
               identityMap: {
                 ECID: [
                   {
@@ -72,7 +106,7 @@
         };
 
         fetch(
-          'https://edge.adobedc.net/ee/v2/interact?datastreamId=15fdfe3d-17b7-4133-a832-01fd7a5c2112',
+          'https://server.adobedc.net/ee/v2/interact?datastreamId=15fdfe3d-17b7-4133-a832-01fd7a5c2112',
           requestOptions
         )
           .then((response) => response.text())
