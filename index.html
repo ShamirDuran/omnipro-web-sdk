@@ -1,452 +1,296 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Página de prueba</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <noscript>
-      <link rel="stylesheet" href="assets/css/noscript.css" />
-    </noscript>
 
-    <!-- Adobe Prehide -->
-    <script>
-      !(function (e, a, n, t) {
-        var i = e.head;
-        if (i) {
-          if (a) return;
-          var o = e.createElement('style');
-          (o.id = 'alloy-prehiding'),
-            (o.innerText = n),
-            i.appendChild(o),
-            setTimeout(function () {
-              o.parentNode && o.parentNode.removeChild(o);
-            }, t);
-        }
-      })(
-        document,
-        document.location.href.indexOf('mboxEdit') !== -1,
-        'body { opacity: 0 !important }',
-        3000
-      );
-    </script>
+<head>
+  <title>Página de prueba</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <noscript>
+    <link rel="stylesheet" href="assets/css/noscript.css" />
+  </noscript>
 
-    <!-- Adobe Target Reference -->
-    <script
-      src="https://assets.adobedtm.com/c319523f1a52/9153f5f233f1/launch-dfe12b5027e8-development.min.js"
-      async
-    ></script>
+  <script data-gatsby-head="true">
+    !function (e, a, n, t) {
+      var i = e.head; if (i) {
+        if (a) return;
+        var o = e.createElement("style");
+        o.id = "alloy-prehiding", o.innerText = n, i.appendChild(o), setTimeout(function () { o.parentNode && o.parentNode.removeChild(o) }, t)
+      }
+    }
+      (document, document.location.href.indexOf("mboxEdit") !== -1, "body { opacity: 0 !important }", 3000);
+  </script>
 
-    <!-- Script Dynamic Chat -->
-    <script src="https://assets.adoberesources.net/loader.js?orgId=1C722A9A5F59DECB0A495F9F%40AdobeOrg&instanceId=omniprosvc2&env=prod&geo=va7"></script>
+  <script
+    src="https://assets.adobedtm.com/c319523f1a52/ab7bad6f65a9/launch-c2d685c4153e-development.min.js"
+    async></script>
+</head>
+</head>
 
-    <script type="text/javascript">
-      (function () {
-        var didInit = false;
-        function initMunchkin() {
-          if (didInit === false) {
-            didInit = true;
-            Munchkin.init('402-ALY-118', {
-              domainLevel: 2,
-            });
-          }
-        }
-        var s = document.createElement('script');
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = '//munchkin.marketo.net/munchkin.js';
-        s.onreadystatechange = function () {
-          if (this.readyState == 'complete' || this.readyState == 'loaded') {
-            initMunchkin();
-          }
-        };
-        s.onload = initMunchkin;
-        document.getElementsByTagName('head')[0].appendChild(s);
-      })();
-    </script>
-  </head>
+<body class="is-preload">
+  <!-- Wrapper -->
+  <div id="wrapper">
+    <!-- Header -->
+    <header id="header">
+      <div class="inner">
+        <!-- Logo -->
+        <a href="index.html" class="logo">
+          <span class="symbol"><img src="images/logo.svg" alt="" /></span><span
+            class="title">Phantom</span>
+        </a>
 
-  </head>
-
-  <body class="is-preload">
-    <!-- Wrapper -->
-    <div id="wrapper">
-      <!-- Header -->
-      <header id="header">
-        <div class="inner">
-          <!-- Logo -->
-          <a href="index.html" class="logo">
-            <span class="symbol"><img src="images/logo.svg" alt="" /></span
-            ><span class="title">Phantom</span>
-          </a>
-
-          <!-- Nav -->
-          <nav>
-            <ul>
-              <li><a href="#menu">Menu</a></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-
-      <!-- Menu -->
-      <nav id="menu">
-        <h2>Menu</h2>
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="generic.html">Ipsum veroeros</a></li>
-          <li><a href="poc_target.html">PoC Target Profiles</a></li>
-          <li><a href="marketo_form.html">PoC Marketo Form</a></li>
-          <li><a href="ie_development.html">IE Dev</a></li>
-          <li><a href="ie_staging.html">IE Staging</a></li>
-          <li><a href="ie_production.html">IE Production</a></li>
-          <li><a href="elements.html">Elements</a></li>
-        </ul>
-      </nav>
-
-      <!-- Main -->
-      <div id="main">
-        <div class="inner">
-          <header>
-            <h1 id="titulo">
-              This is Phantom, a free, fully responsive site<br />
-              template designed by HTML5 UP.
-            </h1>
-            <h3 id="adobe_ecid"></h3>
-            <p>
-              Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod sit amet nisi euismod
-              sed cursus arcu elementum ipsum arcu vivamus quis venenatis orci lorem ipsum et magna
-              feugiat veroeros aliquam. Lorem ipsum dolor sit amet nullam dolore.
-            </p>
-          </header>
-
-          <section class="tiles">
-            <article class="style1">
-              <span class="image">
-                <img
-                  src="https://bestfriends.org/sites/default/files/styles/hero_mobile/public/hero-dash/Asana3808_Dashboard_Standard.jpg?h=ebad9ecf&itok=cWevo33k"
-                  alt=""
-                />
-              </span>
-              <a href="generic.html">
-                <h2>Magna</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style2">
-              <span class="image">
-                <img src="images/pic02.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Lorem</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style3">
-              <span class="image">
-                <img src="images/pic03.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Feugiat</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style4">
-              <span class="image">
-                <img src="images/pic04.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Tempus</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style5">
-              <span class="image">
-                <img src="images/pic05.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Aliquam</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style6">
-              <span class="image">
-                <img src="images/pic06.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Veroeros</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style2">
-              <span class="image">
-                <img src="images/pic07.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Ipsum</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style3">
-              <span class="image">
-                <img src="images/pic08.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Dolor</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style1">
-              <span class="image">
-                <img src="images/pic09.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Nullam</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style5">
-              <span class="image">
-                <img src="images/pic10.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Ultricies</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style6">
-              <span class="image">
-                <img src="images/pic11.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Dictum</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-            <article class="style4">
-              <span class="image">
-                <img src="images/pic12.jpg" alt="" />
-              </span>
-              <a href="generic.html">
-                <h2>Pretium</h2>
-                <div class="content">
-                  <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
-                </div>
-              </a>
-            </article>
-          </section>
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <footer id="footer">
-        <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
-        <form id="mktoForm_1"></form>
-        <script>
-          MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1);
-        </script>
-        <div class="inner">
-          <section>
-            <h2>Get in touch</h2>
-            <form method="post" action="#">
-              <div class="fields">
-                <div class="field half">
-                  <input type="text" name="name" id="name" placeholder="Name" />
-                </div>
-                <div class="field half">
-                  <input type="email" name="email" id="email" placeholder="Email" />
-                </div>
-                <div class="field">
-                  <textarea name="message" id="message" placeholder="Message"></textarea>
-                </div>
-              </div>
-              <ul class="actions">
-                <li><input type="submit" value="Send" class="primary" /></li>
-              </ul>
-            </form>
-          </section>
-          <section>
-            <h2>Follow</h2>
-
-            <ul class="icons">
-              <li>
-                <a href="#" class="icon brands style2 fa-twitter"
-                  ><span class="label">Twitter</span></a
-                >
-              </li>
-              <li>
-                <a href="#" class="icon brands style2 fa-facebook-f"
-                  ><span class="label">Facebook</span></a
-                >
-              </li>
-              <li>
-                <a href="#" class="icon brands style2 fa-instagram"
-                  ><span class="label">Instagram</span></a
-                >
-              </li>
-              <li>
-                <a href="#" class="icon brands style2 fa-dribbble"
-                  ><span class="label">Dribbble</span></a
-                >
-              </li>
-              <li>
-                <a href="#" class="icon brands style2 fa-github"
-                  ><span class="label">GitHub</span></a
-                >
-              </li>
-              <li>
-                <a href="#" class="icon brands style2 fa-500px"><span class="label">500px</span></a>
-              </li>
-              <li>
-                <a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a>
-              </li>
-              <li>
-                <a href="#" class="icon solid style2 fa-envelope"
-                  ><span class="label">Email</span></a
-                >
-              </li>
-            </ul>
-          </section>
-          <ul class="copyright">
-            <li>&copy; Untitled. All rights reserved</li>
-            <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+        <!-- Nav -->
+        <nav>
+          <ul>
+            <li><a href="#menu">Menu</a></li>
           </ul>
-        </div>
-      </footer>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Menu -->
+    <nav id="menu">
+      <h2>Menu</h2>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="generic.html">Ipsum veroeros</a></li>
+        <li><a href="poc_target.html">PoC Target Profiles</a></li>
+        <li><a href="marketo_form.html">PoC Marketo Form</a></li>
+        <li><a href="ie_development.html">IE Dev</a></li>
+        <li><a href="ie_staging.html">IE Staging</a></li>
+        <li><a href="ie_production.html">IE Production</a></li>
+        <li><a href="elements.html">Elements</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main -->
+    <div id="main">
+      <div class="inner">
+        <header>
+          <h1 id="titulo">
+            This is Phantom, a free, fully responsive site<br />
+            template designed by HTML5 UP.
+          </h1>
+          <h3 id="adobe_ecid"></h3>
+          <p>
+            Etiam quis viverra lorem, in semper lorem. Sed nisl arcu euismod sit amet nisi euismod
+            sed cursus arcu elementum ipsum arcu vivamus quis venenatis orci lorem ipsum et magna
+            feugiat veroeros aliquam. Lorem ipsum dolor sit amet nullam dolore.
+          </p>
+        </header>
+
+        <section class="tiles">
+          <article class="style1">
+            <span class="image">
+              <img
+                src="https://bestfriends.org/sites/default/files/styles/hero_mobile/public/hero-dash/Asana3808_Dashboard_Standard.jpg?h=ebad9ecf&itok=cWevo33k"
+                alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Magna</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style2">
+            <span class="image">
+              <img src="images/pic02.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Lorem</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style3">
+            <span class="image">
+              <img src="images/pic03.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Feugiat</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style4">
+            <span class="image">
+              <img src="images/pic04.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Tempus</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style5">
+            <span class="image">
+              <img src="images/pic05.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Aliquam</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style6">
+            <span class="image">
+              <img src="images/pic06.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Veroeros</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style2">
+            <span class="image">
+              <img src="images/pic07.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Ipsum</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style3">
+            <span class="image">
+              <img src="images/pic08.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Dolor</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style1">
+            <span class="image">
+              <img src="images/pic09.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Nullam</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style5">
+            <span class="image">
+              <img src="images/pic10.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Ultricies</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style6">
+            <span class="image">
+              <img src="images/pic11.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Dictum</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+          <article class="style4">
+            <span class="image">
+              <img src="images/pic12.jpg" alt="" />
+            </span>
+            <a href="generic.html">
+              <h2>Pretium</h2>
+              <div class="content">
+                <p>Sed nisl arcu euismod sit amet nisi lorem etiam dolor veroeros et feugiat.</p>
+              </div>
+            </a>
+          </article>
+        </section>
+      </div>
     </div>
 
-    <!-- Script target profile -->
-    <script>
-      const h1 = document.getElementById('titulo');
-      h1.addEventListener('click', () => {
-        const plazoSimulado = prompt('Please enter a value:');
-
-        window.alloy('sendEvent', {
-          renderDecisions: true,
-          type: 'web.webinteraction.linkClicks',
-          decisionScopes: ['__view__'],
-          xdm: {},
-          data: {
-            __adobe: {
-              target: {
-                'profile.montoPrestamoSimulado': 1150000,
-                'profile.pagoFijo': 100000,
-                'profile.plazoSimulado': plazoSimulado,
-                'profile.producto': 'Credito Express',
-              },
-            },
-          },
-        });
-      });
-    </script>
-
-    <script>
-
-Edge.sendEvent(experienceEvent, null);
-
+    <!-- Footer -->
+    <footer id="footer">
+      <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+      <form id="mktoForm_1"></form>
+      <script>
+        MktoForms2.loadForm('//402-ALY-118.mktoweb.com', '402-ALY-118', 1);
       </script>
+      <div class="inner">
+        <section>
+          <h2>Get in touch</h2>
+          <form method="post" action="#">
+            <div class="fields">
+              <div class="field half">
+                <input type="text" name="name" id="name" placeholder="Name" />
+              </div>
+              <div class="field half">
+                <input type="email" name="email" id="email" placeholder="Email" />
+              </div>
+              <div class="field">
+                <textarea name="message" id="message" placeholder="Message"></textarea>
+              </div>
+            </div>
+            <ul class="actions">
+              <li><input type="submit" value="Send" class="primary" /></li>
+            </ul>
+          </form>
+        </section>
+        <section>
+          <h2>Follow</h2>
 
-    <!-- Category Affinity -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        window.alloy('sendEvent', {
-          renderDecisions: true,
-          type: 'web.webinteraction.pageViews',
-          decisionScopes: ['__view__'],
-          xdm: {},
-          data: {
-            __adobe: {
-              target: {
-                'user.categoryId': 'electronics',
-              },
-            },
-          },
-        });
-      });
-    </script>
+          <ul class="icons">
+            <li>
+              <a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a>
+            </li>
+            <li>
+              <a href="#" class="icon brands style2 fa-facebook-f"><span
+                  class="label">Facebook</span></a>
+            </li>
+            <li>
+              <a href="#" class="icon brands style2 fa-instagram"><span
+                  class="label">Instagram</span></a>
+            </li>
+            <li>
+              <a href="#" class="icon brands style2 fa-dribbble"><span class="label">Dribbble</span></a>
+            </li>
+            <li>
+              <a href="#" class="icon brands style2 fa-github"><span class="label">GitHub</span></a>
+            </li>
+            <li>
+              <a href="#" class="icon brands style2 fa-500px"><span class="label">500px</span></a>
+            </li>
+            <li>
+              <a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a>
+            </li>
+            <li>
+              <a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a>
+            </li>
+          </ul>
+        </section>
+        <ul class="copyright">
+          <li>&copy; Untitled. All rights reserved</li>
+          <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
 
-    <!-- Script target report -->
-    <script>
-      var xpath =
-        '/html/body/div[10]/div[2]/div/div/div/div[1]/section[5]/div/div[2]/div/div/div/div[2]/div/div/div[2]/div/a';
-      var result = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.FIRST_ORDERED_NODE_TYPE,
-        null
-      );
-      var element = result.singleNodeValue;
+  <!-- Scripts -->
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/browser.min.js"></script>
+  <script src="assets/js/breakpoints.min.js"></script>
+  <script src="assets/js/util.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
 
-      // Envio reporte click a Target
-      element.addEventListener('click', function () {
-        window
-          .alloy('sendEvent', {
-            xdm: {},
-            decisionScopes: ['experience-clicked'],
-          })
-          .then(function (result) {
-            var propositions = result.propositions;
-            if (propositions) {
-              for (var i = 0; i < propositions.length; i++) {
-                var proposition = propositions[i];
-
-                if (proposition.scope === 'experience-clicked') {
-                  window.alloy('sendEvent', {
-                    xdm: {
-                      eventType: 'decisioning.propositionDisplay',
-                      web: {
-                        webPageDetails: {
-                          viewName: new Date.now().toString(),
-                        },
-                      },
-                      _experience: {
-                        decisioning: {
-                          propositions: [
-                            {
-                              id: proposition.id,
-                              scope: proposition.scope,
-                              scopeDetails: proposition.scopeDetails,
-                            },
-                          ],
-                        },
-                      },
-                    },
-                  });
-                }
-              }
-            }
-          });
-      });
-    </script>
-
-    <!-- Scripts -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/browser.min.js"></script>
-    <script src="assets/js/breakpoints.min.js"></script>
-    <script src="assets/js/util.js"></script>
-    <script src="assets/js/main.js"></script>
-  </body>
 </html>

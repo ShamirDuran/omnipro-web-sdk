@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <script src="//928-JRO-529.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+  <form id="mktoForm_1046"></form>
+  <br><br><br>
+  <form id="mktoForm_3216"></form>
+  <script>
+    MktoForms2.loadForm('//928-JRO-529.mktoweb.com', '928-JRO-529', 1046);
+    MktoForms2.loadForm('//928-JRO-529.mktoweb.com', '928-JRO-529', 3216);
+  </script>
+
+  <script>
+    MktoForms2.whenReady(function (form) {
+      form.setValues({
+        ie_countryid: 'a84032be-a5f1-df11-af0a-02bf0a09015e',
+        ie_provinceregionid: '59b035e9-43ec-e011-a5f5-005056b460d2',
+      });
+
+      const forms = MktoForms2.allForms();
+
+      // For all forms, add and select an option to ie_provinceregionid and ie_countryid
+      forms.forEach(f => {
+        const countryField = f.getFormElem().find('select[name="ie_countryid"]');
+        if (countryField.length > 0 && countryField.find('option[value="a84032be-a5f1-df11-af0a-02bf0a09015e"]').length === 0) {
+          countryField.append('<option value="a84032be-a5f1-df11-af0a-02bf0a09015e">Spain</option>');
+        }
+        countryField.val('a84032be-a5f1-df11-af0a-02bf0a09015e');
+
+        const regionField = f.getFormElem().find('select[name="ie_provinceregionid"]');
+        if (regionField.length > 0 && regionField.find('option[value="59b035e9-43ec-e011-a5f5-005056b460d2"]').length === 0) {
+          regionField.append('<option value="59b035e9-43ec-e011-a5f5-005056b460d2">Madrid</option>');
+        }
+        regionField.val('59b035e9-43ec-e011-a5f5-005056b460d2');
+      });
+    });
+  </script>
+
+  <script>
+    MktoForms2.whenReady(function (form) {
+      form.onSubmit(function () {
+        var values = {
+          consentgroup: getCookie('cbgr'),
+          consentId: getCookie('cbcid'),
+          ie_hashuserid: getCookie('ie_user_userId'),
+          uTMTracking: getCookie('ie_msc')
+        };
+        form.setValues(values);
+      });
+    });
+  </script>
+
+  <script>
+    (function waitForEmailField() {
+      // 1. Buscamos TODOS los inputs que tengan name="Email"
+      // Usamos querySelectorAll para obtener una lista
+      var emailInputs = document.querySelectorAll('input[name="Email"]');
+
+      // Variable para saber si encontramos alguno en esta vuelta
+      var foundAny = emailInputs.length > 0;
+
+      if (foundAny) {
+        // 2. Iteramos sobre cada input encontrado
+        emailInputs.forEach(function (emailInput) {
+
+          // 3. Verificamos individualmente si este input ya tiene el listener
+          if (!emailInput.dataset.ieUserIdListenerAttached) {
+
+            // Marcamos este input específico como "listo"
+            emailInput.dataset.ieUserIdListenerAttached = "true";
+
+            // Agregamos el evento
+            emailInput.addEventListener('change', function (event) {
+              var value = event && event.target ? event.target.value : '';
+              if (!value) return;
+
+              // Validación funciones
+              if (typeof MD5 === 'function' && typeof setCookie === 'function') {
+                setCookie('ie_user_userId', MD5(value));
+              }
+            });
+          }
+        });
+      }
+
+      // 4. Lógica de reintento
+      // Si NO encontramos inputs, reintentamos rápido (cada 200ms) esperando a Marketo.
+      if (!foundAny) {
+        setTimeout(waitForEmailField, 200);
+      }
+
+    })();
+  </script>
+</body>
+
+</html>

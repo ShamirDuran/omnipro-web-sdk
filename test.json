@@ -1,128 +1,38 @@
 {
-  "event": {
-    //change it to "userProfile"
-    "xdm": {
-      // we don't need this wrapping object. Remove it
-      "_id": "{{$uuid}}", // Let's move it to header with name correlation-id. This is not driving the business logic.
-      "timestamp": "{{$isoTimestamp}}", // Let's move it to header. This is not driving the business logic.
-      "eventType": "decisioning.propositionFetch", //can this be part of URI?
-      "identityMap": {
-        // Identities- Remove the keyword Map as json depicting collection.
-        "ECID": [
-          //make it lower case : ecid. If it's for a single user. Do we need collection?
-          {
-            "id": "{{ECID}}",
-            "primary": false
-          }
-        ],
-        "PublicGUID": [
-          // make it camelCase : publicGuid. If it's for a single user. Do we need collection?
-          {
-            "id": "{{PUBLIC_GUID}}",
-            "primary": true // provider should be treating appropriate user digital id as primary. Consumer shouldn't pass primary or secondary flag.
-          }
-        ],
-        "prodProfileID": [
-          // can this be changed to productProfileID
-          {
-            "id": "{{PUBLIC_GUID}}",
-            "primary": true // provider should be treating appropriate user digital id as primary. Consumer shouldn't pass primary or secondary flag.
-          }
-        ],
-        "custXRefId": [
-          //If it's for a single user. Do we need collection?
-          {
-            "id": "{{XREF}}",
-            "primary": false // provider should be treating appropriate user digital id as primary. Consumer shouldn't pass primary or secondary flag.
-          }
-        ]
+  "event": "decisioning.propositionDisplay",
+  "experience": {
+    "decisioning": {
+      "propositionEventType": {
+        "display": 1
       },
-      "_americanexpress": {
-        // remove underscore.
-        "identities": {
-          //can it be changed to "products"
-          "ecid": "{{ECID}}" //If it's for a single user. Do we need collection?
-        },
-        "amexCardProducts": [
-          // card
-          {
-            "cm13Tokenized": "FHCX1AO2QHV73RZ" // can this be changed to productProfileID.
-          },
-          {
-            "cm13Tokenized": "XYCX1AO2QHV73AB" // can this be changed to productProfileID.
-          },
-          {
-            "cm13Tokenized": "UVWAO2QHV73RZIU" // can this be changed to productProfileID.
-          }
-        ],
-        "amexBankProducts": [
-          //bank
-          {
-            "accountNumberTokenized": "W9owjkiQb8Mvfqg58AbCov90Rg2GpDFshd8I4u-lbw0"
-          },
-          {
-            "accountNumberTokenized": "W9owjkiQb8Mvfqg58AbCov90Rg2GpDFshd8I4u-lbw0"
-          },
-          {
-            "accountNumberTokenized": "W9owjkiQb8Mvfqg58AbCov90Rg2GpDFshd8I4u-lbw0"
-          }
-        ]
-      }
-    }
-  },
-  "query": {
-    "personalization": {
-      "schemas": [
-        "https://ns.adobe.com/personalization/default-content-item",
-        "https://ns.adobe.com/personalization/html-content-item",
-        "https://ns.adobe.com/personalization/json-content-item",
-        "https://ns.adobe.com/personalization/redirect-item",
-        "https://ns.adobe.com/personalization/dom-action"
-      ],
-      "surfaces": ["web://americanexpress.com/overview#revenuetile"]
-    }
-  },
-  "eligibility": {
-    "rde": {
-      "identifier_type": "CM15",
-      "customer_identifier": "012343",
-      "customer_fcra_eligible_indicator": true,
-      "customer_total_annual_income": 200.5,
-      "customer_nontaxable_income": 500.5,
-      "customer_total_financial_assets": 500.5,
-      "liability_level": "COMM",
-      "plan_response": [
+      "propositionAction": {
+        "id": "dps:9386428443c61650e03faa17894a0885f15a84c986597202:1bac51e8d5fa758a",
+        "tokens": ["ur0wyWn73pfIuyR0kNrFPA"]
+      },
+      "propositions": [
         {
-          "identifier": "37XXXXXXXXXXX01",
-          "product_details": [
+          "items": [
             {
-              "product_type_code": "PLAN",
-              "product_business_unit_code": "OPEN",
-              "product_details_code": "DAY",
-              "product_name": "PLAN_CPS_DAY",
-              "segment_type": "NPSL",
-              "plan_assessment_amount": 200.99,
-              "payment_directive": "UPFRONT",
-              "eligibility_assessment": {
-                "decision": "APR",
-                "decision_reason_code": "AA"
-              },
-              "plan_assessment": [
-                {
-                  "term_factor": 12,
-                  "number_of_payments": 24,
-                  "apr_factor": 3.99,
-                  "rate_factor": 2.99,
-                  "lowest_term": true,
-                  "highest_term": false,
-                  "payment_reference_identifier": "P45",
-                  "instant_loan_amount": 3000.0,
-                  "loan_reason_code": "OPT",
-                  "pricing_variable": "2"
-                }
-              ]
+              "name": "MGM CM PZN 20K_Platinum_Widget_2024_0523",
+              "id": "dps:9386428443c61650e03faa17894a0885f15a84c986597202:1bac51e8d5fa758a"
             }
-          ]
+          ],
+          "scopeDetails": {
+            "activity": {
+              "id": "278c1130-be0c-449a-bcc9-42a5a03bac3e#3e525ec7-ec84-4440-9f67-98ce823b4fdf",
+              "matchedSurfaces": ["web://americanexpress.com/mgm#mgm_widget"]
+            },
+            "characteristics": {
+              "eventToken": "eyJtZXNzYWdlRXhlY3V0aW9uIjp7Im1lc3NhZ2VFeGVjdXRpb25JRCI6IlVFOkluYm91bmQiLCJtZXNzYWdlSUQiOiI1NmM3NWRlNi1hYmUxLTQyZmYtYmEwMC0yNTdhMDMwMjk4NGIiLCJtZXNzYWdlUHVibGljYXRpb25JRCI6ImQ5ZTlmNWE3LWViYTAtNGE1ZC1iOTEzLWRiN2MxMmZmMmI2NCIsIm1lc3NhZ2VUeXBlIjoibWFya2V0aW5nIiwiY2FtcGFpZ25JRCI6IjI3OGMxMTMwLWJlMGMtNDQ5YS1iY2M5LTQyYTVhMDNiYWMzZSIsImNhbXBhaWduVmVyc2lvbklEIjoiNDU5YTQzNmEtNTMwOS00ZWQ3LTg3YjQtYTkyNDc4ODU2NmU2IiwiY2FtcGFpZ25BY3Rpb25JRCI6IjNlNTI1ZWM3LWVjODQtNDQ0MC05ZjY3LTk4Y2U4MjNiNGZkZiJ9LCJtZXNzYWdlUHJvZmlsZSI6eyJtZXNzYWdlUHJvZmlsZUlEIjoiMjNmNGI1MzEtY2MyMy00ODk1LTlmODgtMmJlZTQ2NjhkMWRmIiwiY2hhbm5lbCI6eyJfaWQiOiJodHRwczovL25zLmFkb2JlLmNvbS94ZG0vY2hhbm5lbHMvY29kZSIsIl90eXBlIjoiaHR0cHM6Ly9ucy5hZG9iZS5jb20veGRtL2NoYW5uZWwtdHlwZXMvY29kZSJ9fX0="
+            },
+            "placement": {
+              "id": "web://americanexpress.com/mgm#mgm_widget"
+            },
+            "correlationID": "d9e9f5a7-eba0-4a5d-b913-db7c12ff2b64-0",
+            "decisionProvider": "AJO"
+          },
+          "scope": "web://localhost#mixedCappingText",
+          "id": "60cc6691-d964-4a98-bf87-99ecb455418f"
         }
       ]
     }

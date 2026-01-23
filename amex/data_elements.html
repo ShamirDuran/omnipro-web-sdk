@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script
+        src="https://assets.adobedtm.com/27a87f218a28/63bc264ebc7c/launch-fef61a7fa0c9-development.min.js"
+        async></script>
+</head>
+
+<body>
+    <h1>Data Elements</h1>
+    <p>This page demonstrates the use of Adobe Launch Data Elements.</p>
+
+    <button onclick="sendEvent()">Send Event</button>
+
+    <script>
+        window.adobeDataLayer = window.adobeDataLayer || [];
+
+        const sendEvent = () => {
+            window.adobeDataLayer.push({
+                event: 'offerImpression',
+                experience: {
+                    decisioning: {
+                        'propositionAction': {
+                            'id': 'dps:c03eb4695e382ccb3e3f87ca2940a4003ab72a68251f640c:1bc3938dfe1c1d09',
+                            'tokens': ['ur0wyWn73pfIuyR0kNrFPA'],
+                        },
+                        'propositions': [
+                            {
+                                'items': [
+                                    {
+                                        'name': 'Capping_all_level_v1.2',
+                                        'id': 'dps:c03eb4695e382ccb3e3f87ca2940a4003ab72a68251f640c:1bc3938dfe1c1d09',
+                                    },
+                                ],
+                                'scopeDetails': {
+                                    'activity': {
+                                        'id': '278c1130-be0c-449a-bcc9-42a5a03bac3e#3e525ec7-ec84-4440-9f67-98ce823b4fdf',
+                                        'matchedSurfaces': ['web://localhost/#mixedCappingText'],
+                                    },
+                                    'characteristics': {
+                                        'eventToken':
+                                            'eyJtZXNzYWdlRXhlY3V0aW9uIjp7Im1lc3NhZ2VFeGVjdXRpb25JRCI6IlVFOkluYm91bmQiLCJtZXNzYWdlSUQiOiI1NmM3NWRlNi1hYmUxLTQyZmYtYmEwMC0yNTdhMDMwMjk4NGIiLCJtZXNzYWdlUHVibGljYXRpb25JRCI6ImQ5ZTlmNWE3LWViYTAtNGE1ZC1iOTEzLWRiN2MxMmZmMmI2NCIsIm1lc3NhZ2VUeXBlIjoibWFya2V0aW5nIiwiY2FtcGFpZ25JRCI6IjI3OGMxMTMwLWJlMGMtNDQ5YS1iY2M5LTQyYTVhMDNiYWMzZSIsImNhbXBhaWduVmVyc2lvbklEIjoiNDU5YTQzNmEtNTMwOS00ZWQ3LTg3YjQtYTkyNDc4ODU2NmU2IiwiY2FtcGFpZ25BY3Rpb25JRCI6IjNlNTI1ZWM3LWVjODQtNDQ0MC05ZjY3LTk4Y2U4MjNiNGZkZiJ9LCJtZXNzYWdlUHJvZmlsZSI6eyJtZXNzYWdlUHJvZmlsZUlEIjoiMjNmNGI1MzEtY2MyMy00ODk1LTlmODgtMmJlZTQ2NjhkMWRmIiwiY2hhbm5lbCI6eyJfaWQiOiJodHRwczovL25zLmFkb2JlLmNvbS94ZG0vY2hhbm5lbHMvY29kZSIsIl90eXBlIjoiaHR0cHM6Ly9ucy5hZG9iZS5jb20veGRtL2NoYW5uZWwtdHlwZXMvY29kZSJ9fX0=',
+                                    },
+                                    'placement': {
+                                        'id': 'web://localhost#mixedCappingText',
+                                    },
+                                    'correlationID': 'd9e9f5a7-eba0-4a5d-b913-db7c12ff2b64-0',
+                                    'decisionProvider': 'AJO',
+                                },
+                                'scope': 'web://localhost#mixedCappingText',
+                                'id': '60cc6691-d964-4a98-bf87-99ecb455418f',
+                            },
+                        ],
+                    },
+                },
+            });
+
+            console.log('Event sent to dataLayer');
+        };
+    </script>
+</body>
+
+</html>
