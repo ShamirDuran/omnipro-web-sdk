@@ -4,20 +4,55 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <script src="//928-JRO-529.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <style>
+      /* Simple modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: auto;
+        background: rgba(0, 0, 0, 0.5);
+      }
+      .modal-content {
+        background: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        border-radius: 4px;
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+      }
+      .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 24px;
+        cursor: pointer;
+      }
+    </style>
 
-    <script src="//402-ALY-118.mktoweb.com/js/forms2/js/forms2.min.js"></script>
+    <script src="https://aem-crm-staging-97d9e1d6-5c50-6a18-83b5-86f4821a0f77.s3.eu-west-1.amazonaws.com/mktoFormFunctions.js"></script>
   </head>
 
   <body>
-    <form class="mktoForm" data-formId="1236" data-formInstance="one"></form>
+    <form class="mktoForm" data-formId="3216" data-formInstance="one"></form>
     <br /><br />
-    <form class="mktoForm" data-formId="1236" data-formInstance="two"></form>
+    <form class="mktoForm" data-formId="3216" data-formInstance="two"></form>
+    <br /><br />
+    <form class="mktoForm" data-formId="1099" data-formInstance="two"></form>
+    <br /><br />
+    <button id="openModalBtn">Abrir Modal con Formulario</button>
 
     <script>
       var mktoFormConfig = {
-        podId: '//402-ALY-118.mktoweb.com',
-        munchkinId: '402-ALY-118',
-        formIds: [1236],
+        podId: '//928-JRO-529.mktoweb.com',
+        munchkinId: '928-JRO-529',
+        formIds: [3216, 1099],
       };
 
       /* ---- NO NEED TO TOUCH ANYTHING BELOW THIS LINE! ---- */
@@ -79,6 +114,201 @@
       }
 
       mktoFormChain(mktoFormConfig);
+
+      // Modal logic (dynamic creation)
+      var openBtn = document.getElementById('openModalBtn');
+      var modal = null;
+
+      openBtn.onclick = function () {
+        if (!modal) {
+          // Create modal HTML
+          modal = document.createElement('div');
+          modal.id = 'myModal';
+          modal.className = 'modal';
+          modal.innerHTML = `
+            <div class="modal-content">
+              <span class="close-modal" id="closeModalBtn">&times;</span>
+              <form class="mktoForm" data-formId="3216" data-formInstance="modal"></form>
+            </div>
+          `;
+          document.body.appendChild(modal);
+
+          // Load Marketo form for modal
+          mktoFormChain({
+            podId: mktoFormConfig.podId,
+            munchkinId: mktoFormConfig.munchkinId,
+            formIds: [3216],
+          });
+
+          // Close logic
+          modal.querySelector('#closeModalBtn').onclick = function () {
+            modal.style.display = 'none';
+          };
+          window.addEventListener('click', function handler(event) {
+            if (event.target === modal) {
+              modal.style.display = 'none';
+            }
+          });
+        }
+        modal.style.display = 'block';
+      };
+    </script>
+
+    <script>
+      function callbackPrograms() {
+        console.log('founded');
+      }
+
+      /**
+       * Observa un elemento raíz para detectar cuando un elemento objetivo es agregado al DOM.
+       *
+       * @param {string|Element} selectorRoot - El selector o el elemento DOM donde se observarán los cambios.
+       * @param {string} selectorTarget - El selector del elemento que esperamos encontrar.
+       * @param {function} callback - Función a ejecutar cuando se encuentra el target. Recibe el elemento encontrado.
+       * @returns {function} - Una función para detener el observador (cleanup) y liberar memoria.
+       */
+      function onElementAdded(selectorRoot, selectorTarget, callback) {
+        // 1. Obtener el elemento raíz
+        const root =
+          typeof selectorRoot === 'string' ? document.querySelector(selectorRoot) : selectorRoot;
+
+        if (!root) {
+          console.error(`El root ${selectorRoot} no existe en el DOM.`);
+          return () => {}; // Retornar función vacía para evitar errores
+        }
+
+        // 2. Definir el callback del MutationObserver
+        const observerCallback = (mutationsList) => {
+          for (const mutation of mutationsList) {
+            if (mutation.type !== 'childList') continue;
+
+            // Recorremos solo los nodos agregados
+            mutation.addedNodes.forEach((node) => {
+              // Ignoramos nodos de texto o comentarios (solo queremos Elementos)
+              if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+              // CASO A: El nodo agregado es el target directamente
+              if (node.matches(selectorTarget)) {
+                callback(node);
+              }
+
+              // CASO B: El target está dentro del nodo agregado (ej. pegamos un div que contiene el input)
+              // Usamos querySelectorAll por si vienen múltiples targets en un solo bloque
+              if (node.children.length > 0) {
+                const nestedMatches = node.querySelectorAll(selectorTarget);
+                nestedMatches.forEach((match) => callback(match));
+              }
+            });
+          }
+        };
+
+        // 3. Crear e iniciar el Observer
+        const observer = new MutationObserver(observerCallback);
+
+        // Configuración: childList para ver agregados/eliminados, subtree para ver en profundidad
+        observer.observe(root, {
+          childList: true,
+          subtree: true,
+        });
+
+        // 4. (Opcional) Verificar si el elemento YA existe al momento de iniciar
+        // Esto es útil si el script carga después de que el form ya renderizó campos
+        const existingElements = root.querySelectorAll(selectorTarget);
+        existingElements.forEach((el) => callback(el));
+
+        // 5. Retornar función de limpieza (CRÍTICO para evitar memory leaks)
+        return () => {
+          observer.disconnect();
+        };
+      }
+
+      /**
+       * Espera a que la librería de Marketo esté lista.
+       * @param {Function} callback - Acción a ejecutar con el objeto 'form'.
+       * @param {number} [maxAttempts=20] - Máximo de reintentos (ej. 20 x 150ms = 3s).
+       */
+      function whenMktoLibraryLoaded(callback, maxAttempts = 20) {
+        let attempts = 0;
+
+        const checkMkto = setInterval(() => {
+          attempts++;
+          console.log('whenMktoLibraryLoaded: checking MktoForms2', { attempts });
+
+          if (typeof MktoForms2 !== 'undefined' && typeof MktoForms2.whenReady === 'function') {
+            console.log('whenMktoLibraryLoaded: MktoForms2 is ready');
+            clearInterval(checkMkto);
+            callback();
+          } else if (attempts >= maxAttempts) {
+            clearInterval(checkMkto);
+            console.log('whenMktoLibraryLoaded: max attempts reached > stop checking');
+          }
+        }, 150);
+      }
+
+      /**
+       * Reordena el campo de consentimiento GDPR antes del botón de envío.
+       * @param {*} form Referencia al objeto de Marketo. Es proporcionado en el on load o ready.
+       */
+      function repositionGDPR(form) {
+        const formEl = form.getFormElem()[0];
+        const consentRow = formEl
+          .querySelector('input[name="mkto_gdprc22"]')
+          ?.closest('.mktoFormRow');
+        const buttonRow = formEl.querySelector('.mktoButtonRow');
+
+        if (consentRow && buttonRow) {
+          buttonRow.parentNode.insertBefore(consentRow, buttonRow);
+        }
+
+        console.log('repositionGDPR: GDPR field repositioned');
+      }
+
+      (function () {
+        whenMktoLibraryLoaded((form) => {
+          MktoForms2.whenReady((form) => {
+            repositionGDPR(form);
+
+            // Eliminar
+            MktoForms2.allForms().forEach((form) => {
+              const countryPicklist = form
+                .getFormElem()[0]
+                .querySelector('select[name="ie_countryid"]');
+
+              // add country pikclist placeholder
+              const placeholderOption = document.createElement('option');
+              placeholderOption.value = '';
+              placeholderOption.textContent = 'Pais...';
+              countryPicklist.insertBefore(placeholderOption, countryPicklist.firstChild);
+
+              if (countryPicklist) {
+                updatePicklist(countryPicklist, [
+                  { id: 'US', name: 'United States' },
+                  { id: 'CA', name: 'Canada' },
+                  { id: 'MX', name: 'Mexico' },
+                ]);
+              }
+            });
+          });
+
+          MktoForms2.onFormRender((form) => {
+            console.log('formId', form.getId(), 'changed');
+
+            const picklist = form
+              .getFormElem()[0]
+              .querySelector('select[name="ie_programmarketoid"]');
+
+            // si picklist esta vacio agregar 3 opciones
+            if (picklist && picklist.options.length <= 1) {
+              const programs = [
+                { id: '101', name: 'Program A' },
+                { id: '102', name: 'Program B' },
+                { id: '103', name: 'Program C' },
+              ];
+              updatePicklist(picklist, programs);
+            }
+          });
+        });
+      })();
     </script>
   </body>
 </html>

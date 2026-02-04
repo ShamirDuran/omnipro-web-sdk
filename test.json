@@ -1,38 +1,28 @@
 {
-  "event": "decisioning.propositionDisplay",
-  "experience": {
+  "_experience": {
     "decisioning": {
       "propositionEventType": {
-        "display": 1
+        "interact": 1
       },
       "propositionAction": {
-        "id": "dps:9386428443c61650e03faa17894a0885f15a84c986597202:1bac51e8d5fa758a",
-        "tokens": ["ur0wyWn73pfIuyR0kNrFPA"]
+        "id": "{{offerId}}",
+        "tokens": ["{{trackingToken}}"]
       },
       "propositions": [
         {
-          "items": [
-            {
-              "name": "MGM CM PZN 20K_Platinum_Widget_2024_0523",
-              "id": "dps:9386428443c61650e03faa17894a0885f15a84c986597202:1bac51e8d5fa758a"
-            }
-          ],
+          "id": "{{subPropositionsId}}",
+          "scope": "{{scope}}",
           "scopeDetails": {
-            "activity": {
-              "id": "278c1130-be0c-449a-bcc9-42a5a03bac3e#3e525ec7-ec84-4440-9f67-98ce823b4fdf",
-              "matchedSurfaces": ["web://americanexpress.com/mgm#mgm_widget"]
-            },
             "characteristics": {
-              "eventToken": "eyJtZXNzYWdlRXhlY3V0aW9uIjp7Im1lc3NhZ2VFeGVjdXRpb25JRCI6IlVFOkluYm91bmQiLCJtZXNzYWdlSUQiOiI1NmM3NWRlNi1hYmUxLTQyZmYtYmEwMC0yNTdhMDMwMjk4NGIiLCJtZXNzYWdlUHVibGljYXRpb25JRCI6ImQ5ZTlmNWE3LWViYTAtNGE1ZC1iOTEzLWRiN2MxMmZmMmI2NCIsIm1lc3NhZ2VUeXBlIjoibWFya2V0aW5nIiwiY2FtcGFpZ25JRCI6IjI3OGMxMTMwLWJlMGMtNDQ5YS1iY2M5LTQyYTVhMDNiYWMzZSIsImNhbXBhaWduVmVyc2lvbklEIjoiNDU5YTQzNmEtNTMwOS00ZWQ3LTg3YjQtYTkyNDc4ODU2NmU2IiwiY2FtcGFpZ25BY3Rpb25JRCI6IjNlNTI1ZWM3LWVjODQtNDQ0MC05ZjY3LTk4Y2U4MjNiNGZkZiJ9LCJtZXNzYWdlUHJvZmlsZSI6eyJtZXNzYWdlUHJvZmlsZUlEIjoiMjNmNGI1MzEtY2MyMy00ODk1LTlmODgtMmJlZTQ2NjhkMWRmIiwiY2hhbm5lbCI6eyJfaWQiOiJodHRwczovL25zLmFkb2JlLmNvbS94ZG0vY2hhbm5lbHMvY29kZSIsIl90eXBlIjoiaHR0cHM6Ly9ucy5hZG9iZS5jb20veGRtL2NoYW5uZWwtdHlwZXMvY29kZSJ9fX0="
+              "eventToken": "{{eventToken}}"
             },
-            "placement": {
-              "id": "web://americanexpress.com/mgm#mgm_widget"
+            "activity": {
+              "id": "{{activity_id}}",
+              "matchedSurfaces": ["{{matchedSurfaces}}"]
             },
-            "correlationID": "d9e9f5a7-eba0-4a5d-b913-db7c12ff2b64-0",
+            "correlationID": "{{correlationId}}",
             "decisionProvider": "AJO"
-          },
-          "scope": "web://localhost#mixedCappingText",
-          "id": "60cc6691-d964-4a98-bf87-99ecb455418f"
+          }
         }
       ]
     }

@@ -1,178 +1,202 @@
-    <script>
-        function setFormFieldCookies(fieldsObj, opts) {
-            opts = opts || {};
-            var days = (typeof opts.days === 'number') ? opts.days : undefined; // sesión si no se indica
-            var includeEmpty = (opts.includeEmpty !== false); // por defecto guarda vacíos
-            var whitelist = opts.whitelist; // opcional: array de claves a permitir
+<script>
+  function setFormFieldCookies(fieldsObj, opts) {
+    opts = opts || {};
+    var days = (typeof opts.days === 'number') ? opts.days : undefined; // sesión si no se indica
+    var includeEmpty = (opts.includeEmpty !== false); // por defecto guarda vacíos
+    var whitelist = opts.whitelist; // opcional: array de claves a permitir
 
-            for (var key in fieldsObj) {
-                if (!fieldsObj.hasOwnProperty(key)) continue;
-                if (whitelist && whitelist.indexOf(key) === -1) continue;
+    for (var key in fieldsObj) {
+      if (!fieldsObj.hasOwnProperty(key)) continue;
+      if (whitelist && whitelist.indexOf(key) === -1) continue;
 
-                var val = fieldsObj[key];
-                if (!includeEmpty && (val == null || val === '')) continue;
+      var val = fieldsObj[key];
+      if (!includeEmpty && (val == null || val === '')) continue;
 
-                setCookie(key, (val == null ? '' : String(val)), days);
-            }
-        }
-    </script>
+      setCookie(key, (val == null ? '' : String(val)), days);
+    }
+  }
+</script>
 
-    <script>
-        (function () {
-            var attempts = 0;
-            var maxAttempts = 8;
+<script>
+(function () {
+  function safeMD5(v) {
+    try { return (typeof MD5 === 'function' && v) ? MD5(v) : ''; } catch(e) { return ''; }
+  }
 
-            var checkExist = setInterval(function () {
-                attempts++;
+  function buildValues(email) {
+    return {
+      // OJO: estos nombres tienen que existir en el form (name="...") o Marketo los ignora
+      consentgroup: getCookie('cbgr') || '',
+      consentId: getCookie('cbcid') || '',
+      ie_hashuserid: getCookie('ie_user_userId') || safeMD5(email || ''),
+      uTMTracking: getCookie('ie_msc') || '',
+      urlorigen: getCookie('nav_previous_page') || ''
+    };
+  }
 
-                if (typeof MktoForms2 !== 'undefined') {
-                    clearInterval(checkExist);
+  function ensureHiddenFields(form, valuesObj) {
+    // Crea hidden fields si no existen. Si el field no existe en Marketo (schema),
+    // no se guardará igualmente, pero al menos te aseguras de que el input está en el DOM del form.
+    var hidden = {};
+    for (var k in valuesObj) if (valuesObj.hasOwnProperty(k)) hidden[k] = '';
+    try { form.addHiddenFields(hidden); } catch(e) {}
+  }
 
-                    MktoForms2.whenReady(function (form) {
-                        console.log('cookiesDebugger: ready');
+  function applyToForm(form, email) {
+    var values = buildValues(email);
 
-                        var emailInputs = document.querySelectorAll('input[name="Email"]');
+    // (Opcional) debug: ver qué campos acepta realmente
+    try {
+      form.setValues(values);
+      // Comprueba si Marketo lo aceptó (si no existen, aquí no suelen aparecer)
+      // console.log('mkto getValues after set:', form.getValues());
+      console.log('cookiesDebugger setValues', values);
+    } catch(e) {
+      console.log('cookiesDebugger setValues error', e);
+    }
+  }
 
-                        // Variable para saber si encontramos alguno en esta vuelta
-                        var foundAny = emailInputs.length > 0;
+  function bindForm(form) {
+    var formEl = form.getFormElem && form.getFormElem()[0] ? form.getFormElem()[0] : null;
+    if (!formEl) return;
 
-                        if (foundAny) {
-                            // 2. Iteramos sobre cada input encontrado
-                            emailInputs.forEach(function (emailInput) {
+    // Evita doble-binding
+    if (formEl.dataset && formEl.dataset.ieMktoBound === '1') return;
+    if (formEl.dataset) formEl.dataset.ieMktoBound = '1';
 
-                                // 3. Verificamos individualmente si este input ya tiene el listener
-                                if (!emailInput.dataset.ieUserIdListenerAttached) {
-                                    console.log('cookiesDebugges', 'listener attached');
+    // 1) Primera aplicación (por si el usuario ya tenía cookies)
+    var emailEl = formEl.querySelector('input[name="Email"]');
+    var emailVal = emailEl ? (emailEl.value || '') : '';
+    var initialValues = buildValues(emailVal);
+    ensureHiddenFields(form, initialValues);
+    applyToForm(form, emailVal);
 
-                                    // Marcamos este input específico como "listo"
-                                    emailInput.dataset.ieUserIdListenerAttached = "true";
+    // 2) Actualiza al escribir / al salir del campo (más fiable que change)
+    if (emailEl) {
+      var handler = function () {
+        var v = emailEl.value || '';
+        if (!v) return;
 
-                                    // Agregamos el evento
-                                    emailInput.addEventListener('change', function (event) {
-                                        console.log('cookiesDebugger', 'change event fired');
+        // guarda cookie hash por si la usas en GA4 también
+        if (typeof setCookie === 'function') setCookie('ie_user_userId', safeMD5(v));
+        applyToForm(form, v);
+      };
+      emailEl.addEventListener('input', handler);
+      emailEl.addEventListener('blur', handler);
+    }
 
+    // 3) Justo antes de enviar: re-setea (evita que Marketo pise o que no haya saltado input/blur)
+    // MktoForms2 soporta onSubmit; aquí es el punto más “seguro”.
+    try {
+      form.onSubmit(function () {
+        var em = emailEl ? (emailEl.value || '') : '';
+        if (typeof setCookie === 'function' && em) setCookie('ie_user_userId', safeMD5(em));
+        applyToForm(form, em);
+        return true; // deja enviar
+      });
+    } catch(e) {}
+  }
 
-                                        var value = event && event.target ? event.target.value : '';
-                                        if (!value) return;
+  // Espera a MktoForms2
+  var tries = 0;
+  var t = setInterval(function () {
+    tries++;
+    if (typeof MktoForms2 !== 'undefined' && MktoForms2.whenReady) {
+      clearInterval(t);
+      MktoForms2.whenReady(function (form) {
+        console.log('cookiesDebugger: mkto whenReady', form && form.getId ? form.getId() : '');
+        bindForm(form);
+      });
+    }
+    if (tries > 80) clearInterval(t); // ~8s
+  }, 100);
+})();
+</script>
 
-                                        // Validación funciones
-                                        if (typeof MD5 === 'function' && typeof setCookie === 'function') {
-                                            console.log('cookiesDebugger', 'setting cookie ie_user_userId');
-                                            // Calculamos y guardamos la cookie
-                                            setCookie('ie_user_userId', MD5(value));
-                                            // Se guarda la cookie
-                                            var values = {
-                                                consentgroup: getCookie('cbgr'),
-                                                consentId: getCookie('cbcid'),
-                                                ie_hashuserid: getCookie('ie_user_userId'),
-                                                uTMTracking: getCookie('ie_msc'),
-                                                urlorigen: getCookie('nav_previous_page')
-                                            };
-                                            form.setValues(values);
-                                            console.log('cookiesDebugger', 'form values set', values);
-                                        }
-                                    });
-                                }
-                            });
-                        }
+<script type="text/javascript">
+  var pollFormElementsIntervalId;
 
-                        // 4. Lógica de reintento
-                        // Si NO encontramos inputs, reintentamos rápido (cada 200ms) esperando a Marketo.
-                        if (!foundAny) {
-                            setTimeout(waitForEmailField, 200);
-                        }
-                    });
-                } else if (attempts >= maxAttempts) {
-                    clearInterval(checkExist);
-                }
-            }, 100);
-        })();
-    </script>
+  function pollFormElements() {
+    var forms = document.querySelectorAll("form[id^='mktoForm_'], form.mktoForm, form[data-formid]");
+    if (forms instanceof NodeList && forms.length) {
+      clearInterval(pollFormElementsIntervalId);
+      forms.forEach(attachEventListener);
+    }
+  }
 
-    <script type="text/javascript">
-        var pollFormElementsIntervalId;
+  function attachEventListener(form) {
+    form.addEventListener("submit", function (evt) {
+      // Wait for validations
+      setTimeout(function () {
+        var isValid = form.querySelectorAll(".mktoInvalid").length === 0;
+        if (!isValid) return;
 
-        function pollFormElements() {
-            var forms = document.querySelectorAll("form[id^='mktoForm_'], form.mktoForm, form[data-formid]");
-            if (forms instanceof NodeList && forms.length) {
-                clearInterval(pollFormElementsIntervalId);
-                forms.forEach(attachEventListener);
-            }
-        }
+        // Extract form fields by name
+        var getValue = function (name) {
+          var el = form.querySelector("[name='" + name + "']");
+          return el ? el.value : undefined;
+        };
 
-        function attachEventListener(form) {
-            form.addEventListener("submit", function (evt) {
-                // Wait for validations
-                setTimeout(function () {
-                    var isValid = form.querySelectorAll(".mktoInvalid").length === 0;
-                    if (!isValid) return;
+        // dataLayer variables preparation
+        var formFields = {
+          ie_form_formId: form.id || (form.dataset && form.dataset.formid) || (form.getAttribute && form.getAttribute('data-formid')) || (form.querySelector("[name='formid']") ? form.querySelector("[name='formid']").value : "") || "",
+          ie_form_formName: form.getAttribute("Name") || (form.dataset && (form.dataset.formname || form.dataset.formid)) || (form.querySelector("[name='formid']") ? form.querySelector("[name='formid']").value : "") || "",
+          ie_form_formType: getValue("mktoFormtype") || "",
+          ie_program_interestedIn: getValue("ie_interestedin") || "",
+          ie_program_pathwayId: getValue("ie_pathwayid") || "",
+          ie_program_pathwayName: IE_crmProgramPathwayMapper(getValue("ie_programmarketoid")) || IE_crmPathwayMapper(getValue("ie_pathwayid")) || IE_crmProgramPathwayMapperByName(getValue("ie_programmarketoid")) || "",
+          ie_program_programId: getValue("ie_programmarketoid") || "",
+          ie_program_programName: IE_crmProgramNameMapper(getValue("ie_programmarketoid")) || "",
+          ie_program_programCode: IE_crmProgramCodeMapper(getValue("ie_programmarketoid")) || IE_crmProgramCodeMapperByName(getValue("ie_programmarketoid")) || "",
+          ie_program_programType: IE_crmProgramTypeMapper(getValue("ie_programmarketoid")) || IE_crmProgramTypeMapperByName(getValue("ie_programmarketoid")) || "",
+          ie_program_programSchool: IE_crmProgramSchoolMapper(getValue("ie_programmarketoid")) || IE_crmProgramSchoolMapperByName(getValue("ie_programmarketoid")) || "",
+          ie_program_programUnit: IE_crmProgramUnitMapper(getValue("ie_programmarketoid")) || IE_crmProgramUnitMapperByName(getValue("ie_programmarketoid")) || "",
+          ie_program_tracks: getValue("tracks") || "",
+          ie_program_typeofDualMastersdegrees: getValue("typeofDualMastersdegrees") || "",
+          ie_program_mktoSummerSpecialization: getValue("mktoSummerSpecialization") || "",
+          ie_geo_countryId: getValue("ie_countryid") || "",
+          ie_geo_country: IE_crmCountryMapper(getValue("ie_countryid")) || "",
+          ie_geo_worldRegion: IE_crmWorldRegionMapper(getValue("ie_countryid")) || "",
+          ie_geo_provinceRegionid: getValue("ie_provinceregionid") || "",
+          ie_geo_provinceRegion: IE_crmProvinceRegionMapper(getValue("ie_provinceregionid")) || "",
+          ie_user_firstName: getValue("FirstName") || "",
+          ie_user_lastName: getValue("MiddleName") || "",
+          ie_user_email: getValue("Email") || "", //
+          ie_user_userId: MD5(getValue("Email")) || "",
+          ie_user_gender: getValue("ie_genderidentity") || "",
+          ie_user_phoneCountryCode: getValue("phoneCountryCode") || "",
+          ie_user_phone: getValue("phone") || "",
+          ie_user_mktoStakeholder: getValue("mktoStakeholder") || "",
+          ie_user_estimateddateofadmissiontoie: getValue("ie_estimateddateofadmissiontoie") || "",
+          ie_user_yearsofexperience: getValue("ie_yearsofexperience") || "",
+          ie_user_linkedinprofileurl: getValue("ie_linkedinprofileurl") || "",
+          ie_user_preferredFormat: getValue("mktoPreferredFormat") || "",
+          ie_user_highschool: getValue("ie_highschool") || "",
+          ie_user_university: getValue("ie_university") || "",
+          ie_user_company: getValue("ie_company") || "",
+          ie_user_currentposition: getValue("ie_currentposition") || "",
+          ie_user_professionalsector: getValue("professionalsector") || "",
+          ie_user_mktoLanguage: getValue("mktoLanguage") || ""
+        };
 
-                    // Extract form fields by name
-                    var getValue = function (name) {
-                        var el = form.querySelector("[name='" + name + "']");
-                        return el ? el.value : undefined;
-                    };
+        // set variables as session cookies
+        setFormFieldCookies(formFields);
 
-                    // dataLayer variables preparation
-                    var formFields = {
-                        ie_form_formId: form.id || (form.dataset && form.dataset.formid) || (form.getAttribute && form.getAttribute('data-formid')) || (form.querySelector("[name='formid']") ? form.querySelector("[name='formid']").value : "") || "",
-                        ie_form_formName: form.getAttribute("Name") || (form.dataset && (form.dataset.formname || form.dataset.formid)) || (form.querySelector("[name='formid']") ? form.querySelector("[name='formid']").value : "") || "",
-                        ie_form_formType: getValue("mktoFormtype") || "",
-                        ie_program_interestedIn: getValue("ie_interestedin") || "",
-                        ie_program_pathwayId: getValue("ie_pathwayid") || "",
-                        ie_program_pathwayName: IE_crmProgramPathwayMapper(getValue("ie_programmarketoid")) || IE_crmPathwayMapper(getValue("ie_pathwayid")) || IE_crmProgramPathwayMapperByName(getValue("ie_programmarketoid")) || "",
-                        ie_program_programId: getValue("ie_programmarketoid") || "",
-                        ie_program_programName: IE_crmProgramNameMapper(getValue("ie_programmarketoid")) || "",
-                        ie_program_programCode: IE_crmProgramCodeMapper(getValue("ie_programmarketoid")) || IE_crmProgramCodeMapperByName(getValue("ie_programmarketoid")) || "",
-                        ie_program_programType: IE_crmProgramTypeMapper(getValue("ie_programmarketoid")) || IE_crmProgramTypeMapperByName(getValue("ie_programmarketoid")) || "",
-                        ie_program_programSchool: IE_crmProgramSchoolMapper(getValue("ie_programmarketoid")) || IE_crmProgramSchoolMapperByName(getValue("ie_programmarketoid")) || "",
-                        ie_program_programUnit: IE_crmProgramUnitMapper(getValue("ie_programmarketoid")) || IE_crmProgramUnitMapperByName(getValue("ie_programmarketoid")) || "",
-                        ie_program_tracks: getValue("tracks") || "",
-                        ie_program_typeofDualMastersdegrees: getValue("typeofDualMastersdegrees") || "",
-                        ie_program_mktoSummerSpecialization: getValue("mktoSummerSpecialization") || "",
-                        ie_geo_countryId: getValue("ie_countryid") || "",
-                        ie_geo_country: IE_crmCountryMapper(getValue("ie_countryid")) || "",
-                        ie_geo_worldRegion: IE_crmWorldRegionMapper(getValue("ie_countryid")) || "",
-                        ie_geo_provinceRegionid: getValue("ie_provinceregionid") || "",
-                        ie_geo_provinceRegion: IE_crmProvinceRegionMapper(getValue("ie_provinceregionid")) || "",
-                        ie_user_firstName: getValue("FirstName") || "",
-                        ie_user_lastName: getValue("MiddleName") || "",
-                        ie_user_email: getValue("Email") || "", //
-                        ie_user_userId: MD5(getValue("Email")) || "",
-                        ie_user_gender: getValue("ie_genderidentity") || "",
-                        ie_user_phoneCountryCode: getValue("phoneCountryCode") || "",
-                        ie_user_phone: getValue("phone") || "",
-                        ie_user_mktoStakeholder: getValue("mktoStakeholder") || "",
-                        ie_user_estimateddateofadmissiontoie: getValue("ie_estimateddateofadmissiontoie") || "",
-                        ie_user_yearsofexperience: getValue("ie_yearsofexperience") || "",
-                        ie_user_linkedinprofileurl: getValue("ie_linkedinprofileurl") || "",
-                        ie_user_preferredFormat: getValue("mktoPreferredFormat") || "",
-                        ie_user_highschool: getValue("ie_highschool") || "",
-                        ie_user_university: getValue("ie_university") || "",
-                        ie_user_company: getValue("ie_company") || "",
-                        ie_user_currentposition: getValue("ie_currentposition") || "",
-                        ie_user_professionalsector: getValue("professionalsector") || "",
-                        ie_user_mktoLanguage: getValue("mktoLanguage") || ""
-                    };
+        // event preparation
+        var payload = {
+          event: "marketo_form_submission",
+          formID: form.id, // form_formId
+          formName: form.getAttribute("Name") || form.id, // form_formName
+          formFields: formFields
+        };
 
-                    // set variables as session cookies
-                    setFormFieldCookies(formFields);
+        // Ensure there is a dataLayer
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(payload);
+      }, 200); // Adjust it for more time if necessary
+    });
+  }
 
-                    // event preparation
-                    var payload = {
-                        event: "marketo_form_submission",
-                        formID: form.id, // form_formId
-                        formName: form.getAttribute("Name") || form.id, // form_formName
-                        formFields: formFields
-                    };
-
-                    // Ensure there is a dataLayer
-                    window.dataLayer = window.dataLayer || [];
-                    window.dataLayer.push(payload);
-                }, 200); // Adjust it for more time if necessary
-            });
-        }
-
-        // Launch polling each 0,5 secs
-        pollFormElementsIntervalId = setInterval(pollFormElements, 500);
-    </script>
+  // Launch polling each 0,5 secs
+  pollFormElementsIntervalId = setInterval(pollFormElements, 500);
+</script>
