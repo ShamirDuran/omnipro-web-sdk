@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -93,10 +93,10 @@
               MktoForms2,
               config.podId,
               config.munchkinId,
-              formId
+              formId,
             ),
             formEls = arrayify(
-              document.querySelectorAll('[' + MKTOFORM_ID_ATTRNAME + '="' + formId + '"]')
+              document.querySelectorAll('[' + MKTOFORM_ID_ATTRNAME + '="' + formId + '"]'),
             );
 
           (function loadFormCb(formEls) {
@@ -232,15 +232,12 @@
 
         const checkMkto = setInterval(() => {
           attempts++;
-          console.log('whenMktoLibraryLoaded: checking MktoForms2', { attempts });
 
           if (typeof MktoForms2 !== 'undefined' && typeof MktoForms2.whenReady === 'function') {
-            console.log('whenMktoLibraryLoaded: MktoForms2 is ready');
             clearInterval(checkMkto);
             callback();
           } else if (attempts >= maxAttempts) {
             clearInterval(checkMkto);
-            console.log('whenMktoLibraryLoaded: max attempts reached > stop checking');
           }
         }, 150);
       }
@@ -259,13 +256,13 @@
         if (consentRow && buttonRow) {
           buttonRow.parentNode.insertBefore(consentRow, buttonRow);
         }
-
-        console.log('repositionGDPR: GDPR field repositioned');
       }
 
       (function () {
         whenMktoLibraryLoaded((form) => {
           MktoForms2.whenReady((form) => {
+            // console.log('formId', form.getId(), 'ready');
+
             repositionGDPR(form);
 
             // Eliminar

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <title>Flicker - custom & pzn</title>
@@ -21,18 +21,18 @@
         if (i) {
           if (a) return;
           var o = e.createElement('style');
-          (o.id = 'anti-flicker-ie'),
+          ((o.id = 'anti-flicker-ie'),
             (o.innerText = n),
             i.appendChild(o),
             setTimeout(function () {
               o.parentNode && o.parentNode.removeChild(o);
-            }, t);
+            }, t));
         }
       })(
         document,
         document.location.href.indexOf('mboxEdit') !== -1,
         'body { opacity: 0 !important }',
-        6000
+        0,
       );
     </script>
 
@@ -311,7 +311,7 @@
       </footer>
     </div>
 
-    <script>
+    <!-- <script>
       window.adobeDataLayer = window.adobeDataLayer || [];
 
       window.adobeDataLayer.push({
@@ -324,6 +324,30 @@
         'ev_traffic': 'none|direct|not set',
         'gtm.uniqueEventId': 35,
       });
+    </script> -->
+
+    <script>
+      setTimeout(() => {
+        window
+          .alloy('sendEvent', {
+            renderDecisions: true,
+            xdm: {
+              web: {
+                webPageDetails: {
+                  viewName: 'global-online-mba', // un nombre de vista estable para esa landing
+                },
+              },
+            },
+          })
+          .then((result) => {
+            lastPropositions = result.propositions;
+            console.log('lastPropositions', lastPropositions);
+          });
+      }, 150);
+
+      setTimeout(function () {
+        document.dispatchEvent(new Event('view-global-online-mba-ready'));
+      }, 1500);
     </script>
 
     <!-- Scripts -->
