@@ -327,23 +327,23 @@
     </script> -->
 
     <script>
-      setTimeout(() => {
-        window
-          .alloy('sendEvent', {
-            renderDecisions: true,
-            xdm: {
-              web: {
-                webPageDetails: {
-                  viewName: 'global-online-mba', // un nombre de vista estable para esa landing
-                },
-              },
-            },
-          })
-          .then((result) => {
-            lastPropositions = result.propositions;
-            console.log('lastPropositions', lastPropositions);
-          });
-      }, 150);
+      // setTimeout(() => {
+      //   window
+      //     .alloy('sendEvent', {
+      //       renderDecisions: true,
+      //       xdm: {
+      //         web: {
+      //           webPageDetails: {
+      //             viewName: 'global-online-mba', // un nombre de vista estable para esa landing
+      //           },
+      //         },
+      //       },
+      //     })
+      //     .then((result) => {
+      //       lastPropositions = result.propositions;
+      //       console.log('lastPropositions', lastPropositions);
+      //     });
+      // }, 150);
 
       setTimeout(function () {
         document.dispatchEvent(new Event('view-global-online-mba-ready'));
