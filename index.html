@@ -314,40 +314,40 @@
     <script>
       window.adobeDataLayer = window.adobeDataLayer || [];
 
-      // window.adobeDataLayer.push({
-      //   'event': 'pageload_event',
-      //   'page_title': 'IE School of Science and Technology | SCI TECH',
-      //   'page_path': '/school-science-technology/',
-      //   'page_section': '/school-science-technology/',
-      //   'page_subsection': '',
-      //   'full_url': 'https://www.pre.thesaurus.ie.edu/school-science-technology/',
-      //   'ev_traffic': 'none|direct|not set',
-      //   'gtm.uniqueEventId': 35,
-      // });
+      window.adobeDataLayer.push({
+        'event': 'pageload_event',
+        'page_title': 'IE School of Science and Technology | SCI TECH',
+        'page_path': '/school-science-technology/',
+        'page_section': '/school-science-technology/',
+        'page_subsection': '',
+        'full_url': 'https://www.pre.thesaurus.ie.edu/school-science-technology/',
+        'ev_traffic': 'none|direct|not set',
+        'gtm.uniqueEventId': 35,
+      });
     </script>
 
     <script>
       // setTimeout(() => {
-      //   window
-      //     .alloy('sendEvent', {
-      //       renderDecisions: true,
-      //       xdm: {
-      //         web: {
-      //           webPageDetails: {
-      //             viewName: 'global-online-mba', // un nombre de vista estable para esa landing
-      //           },
-      //         },
-      //       },
-      //     })
-      //     .then((result) => {
-      //       lastPropositions = result.propositions;
-      //       console.log('lastPropositions', lastPropositions);
-      //     });
-      // // }, 150);
+      window
+        .alloy('sendEvent', {
+          renderDecisions: true,
+          xdm: {
+            web: {
+              webPageDetails: {
+                viewName: 'global-online-mba', // un nombre de vista estable para esa landing
+              },
+            },
+          },
+        })
+        .then((result) => {
+          lastPropositions = result.propositions;
+          console.log('lastPropositions', lastPropositions);
+        });
+      // }, 150);
 
-      // setTimeout(function () {
-      //   document.dispatchEvent(new Event('view-global-online-mba-ready'));
-      // }, 1500);
+      setTimeout(function () {
+        document.dispatchEvent(new Event('view-global-online-mba-ready'));
+      }, 1500);
     </script>
 
     <!-- Scripts -->
