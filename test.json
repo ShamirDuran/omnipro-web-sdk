@@ -1,30 +1,33 @@
 {
-  "_experience": {
-    "decisioning": {
-      "propositionEventType": {
-        "interact": 1
-      },
-      "propositionAction": {
-        "id": "{{offerId}}",
-        "tokens": ["{{trackingToken}}"]
-      },
-      "propositions": [
-        {
-          "id": "{{subPropositionsId}}",
-          "scope": "{{scope}}",
-          "scopeDetails": {
-            "characteristics": {
-              "eventToken": "{{eventToken}}"
-            },
-            "activity": {
-              "id": "{{activity_id}}",
-              "matchedSurfaces": ["{{matchedSurfaces}}"]
-            },
-            "correlationID": "{{correlationId}}",
-            "decisionProvider": "AJO"
-          }
-        }
-      ]
-    }
+  "eventType": "web.webpagedetails.pageViews",
+  "web": {
+    "webPageDetails": {
+      "URL": "https://www.pre.thesaurus.ie.edu/business-school/programs/mba/global-online-mba/",
+      "name": "Global Online MBA Program - Best Online MBA in the World (FT) | IE",
+      "viewName": "Global Online MBA Program - Best Online MBA in the World (FT) | IE",
+      "pageViews": { "value": 1, "_institutodeempresa": { "pageloadValue": 1 } },
+      "siteSection": "/business-school/",
+      "_institutodeempresa": {
+        "path": "/business-school/programs/mba/global-online-mba/",
+        "evTraffic": "referral|statics.teams.cdn.office.net|not set",
+        "subSection": "/programs/mba/global-online-mba/"
+      }
+    },
+    "webReferrer": { "URL": "" }
+  },
+  "device": { "screenHeight": 1112, "screenWidth": 1710, "screenOrientation": "landscape" },
+  "environment": {
+    "type": "browser",
+    "browserDetails": { "viewportWidth": 730, "viewportHeight": 881 }
+  },
+  "placeContext": {
+    "localTimezoneOffset": 300,
+    "localTime": "2026-02-16T16:47:13.235-05:00"
+  },
+  "timestamp": "2026-02-16T21:47:13.235Z",
+  "implementationDetails": {
+    "name": "https://ns.adobe.com/experience/alloy/reactor",
+    "version": "2.30.0+2.33.0",
+    "environment": "browser"
   }
 }
