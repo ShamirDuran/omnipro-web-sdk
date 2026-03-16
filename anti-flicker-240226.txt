@@ -2,13 +2,14 @@
   if (d.location.href.indexOf('mboxEdit') !== -1) return;
 
   var SELECTORS = [
-    '#main-content > div > section.sc-1r54gnd-0.JuKmo > div',
-    '#main-content > div > div:nth-child(4) > section > div > div > div > div.sc-1r54gnd-0.sc-19ljixc-0.flUqbC > div',
+    '#idComponente1',
+    '#idComponente2',
+    // ... add more selectors as needed
   ];
 
   var TTL = 3000;
   var STYLE_ID = 'anti-flicker-ie';
-  var CLASS = 'at-hide'; // clase que activa el overlay
+  var CLASS = 'at-hide';
 
   if (!d.getElementById(STYLE_ID)) {
     var st = d.createElement('style');
@@ -64,7 +65,7 @@
   function release() {
     var els = d.querySelectorAll('.' + CLASS);
     for (var i = 0; i < els.length; i++) els[i].classList.remove(CLASS);
-    // opcional: remover style
+
     var st = d.getElementById(STYLE_ID);
     if (st && st.parentNode) st.parentNode.removeChild(st);
   }
@@ -75,7 +76,6 @@
   };
   w.__antiFlicker.release = release;
 
-  // Run + re-apply por si React monta tarde
   apply();
 
   var scheduled = false;

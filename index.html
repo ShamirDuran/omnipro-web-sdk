@@ -16,23 +16,52 @@
     - Después de 3 segundos, la etiqueta <style> se elimina automáticamente para restaurar la visibilidad del contenido.
   -->
     <script>
-      !(function (e, a, n, t) {
-        var i = e.head;
-        if (i) {
-          if (a) return;
-          var o = e.createElement('style');
-          ((o.id = 'anti-flicker-ie'),
-            (o.innerText = n),
-            i.appendChild(o),
-            setTimeout(function () {
-              o.parentNode && o.parentNode.removeChild(o);
-            }, t));
-        }
+      !(function (e, a, selectors, timeout) {
+        var head = e.head;
+        if (!head || a) return;
+
+        // 1. Definimos el estilo del spinner y el ocultamiento
+        var css = `
+      ${selectors} { 
+        position: relative !important;
+        min-height: 50px; /* Evita que elementos vacíos midan 0px */
+        visibility: hidden !important; 
+      }
+      ${selectors}::before {
+        content: "";
+        visibility: visible !important;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 28px;
+        height: 28px;
+        margin: -14px 0 0 -14px;
+        border: 3px solid rgba(0,0,0,0.1);
+        border-top: 3px solid #3498db;
+        border-radius: 50%;
+        animation: af-spin 0.8s linear infinite;
+        z-index: 999999;
+      }
+      @keyframes af-spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+
+        var style = e.createElement('style');
+        style.id = 'anti-flicker-universal';
+        style.innerText = css;
+        head.appendChild(style);
+
+        // 2. Temporizador de seguridad (Fallback)
+        setTimeout(function () {
+          if (style.parentNode) style.parentNode.removeChild(style);
+        }, timeout);
       })(
         document,
         document.location.href.indexOf('mboxEdit') !== -1,
-        'body { opacity: 0 !important }',
-        0,
+        '#main-content > div > section.sc-1r54gnd-0.JuKmo > div > div, #form1 > div > div > div > div.sc-1r54gnd-0.sc-19ljixc-0.flUqbC > div', // Agrega aquí tus selectores
+        100000000,
       );
     </script>
 
