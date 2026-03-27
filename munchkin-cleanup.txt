@@ -1,0 +1,52 @@
+<script>
+/**
+ * Script 2: Munchkin Cookie Cleanup
+ *
+ * Tag Manager trigger: disparar SIEMPRE en cada page load (All Pages)
+ * Elimina la cookie _mkto_trk si el usuario NO ha dado consentimiento.
+ */
+(function () {
+  function hasConsent() {
+    return (
+      typeof window.OptanonActiveGroups === 'string' &&
+      /C0003/.test(window.OptanonActiveGroups)
+    );
+  }
+
+  function deleteMktoCookie() {
+    if (document.cookie.indexOf('_mkto_trk') === -1) return;
+
+    // Borrar en el subdominio completo (donde Munchkin sin domainLevel la crea)
+    document.cookie =
+      '_mkto_trk=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.' + location.hostname;
+
+    // Borrar en el dominio padre (por si se usó domainLevel o quedó ahí)
+    var parentDomain = location.hostname.split('.').slice(-2).join('.');
+    document.cookie =
+      '_mkto_trk=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.' + parentDomain;
+
+    // Fallback sin dominio
+    document.cookie =
+      '_mkto_trk=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
+
+    console.log('[Munchkin Cleanup] Cookie _mkto_trk eliminada');
+  }
+
+  function check() {
+    if (hasConsent()) return;
+    deleteMktoCookie();
+  }
+
+  // Verificar ahora si OneTrust ya cargó
+  if (typeof window.OptanonActiveGroups === 'string') {
+    check();
+  }
+
+  // Escuchar cambios de consentimiento (ej: usuario revoca desde el banner)
+  var original = window.OptanonWrapper;
+  window.OptanonWrapper = function () {
+    if (typeof original === 'function') original();
+    check();
+  };
+})();
+</script>

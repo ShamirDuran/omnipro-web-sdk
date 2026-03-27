@@ -1,0 +1,86 @@
+(function () {
+  var injected = false;
+
+  function hasConsent() {
+    var consent = (
+      window.OptanonActiveGroups &&
+      /C0003/.test(OptanonActiveGroups) 
+    );
+    return consent;
+  }
+
+  function oneTrustReady() {
+    var ready = typeof window.OptanonActiveGroups === 'string';
+    return ready;
+  }
+
+  function loadMunchkin() {
+    if (injected) {
+      return;
+    }
+    injected = true;
+
+    var didInit = false;
+    function initMunchkin() {
+      if (didInit === false) {
+        didInit = true;
+        console.log('Executing Munchkin.init');
+        Munchkin.init('928-JRO-529');
+      }
+    }
+
+    var s = document.createElement('script');
+    s.type = 'text/javascript';
+    s.async = true;
+    s.src = '//munchkin.marketo.net/munchkin.js';
+    
+    s.onreadystatechange = function () {
+      if (this.readyState == 'complete' || this.readyState == 'loaded') {
+        initMunchkin();
+      }
+    };
+    
+    s.onload = function() {
+      initMunchkin();
+    };
+
+    s.onerror = function() {
+      console.error('Critical Error: Marketo JS file could not be loaded.');
+    };
+
+    document.getElementsByTagName('head')[0].appendChild(s);
+  }
+
+  function deleteMktoCookie() {
+    if (document.cookie.indexOf('_mkto_trk') === -1) {
+      return;
+    }
+    var domain = location.hostname.split('.').slice(-2).join('.');
+    document.cookie =
+      '_mkto_trk=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/; domain=.' + domain;
+    document.cookie =
+      '_mkto_trk=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
+
+    console.log('Munchkin cookie detected and DELETED due to lack of consent on domain: .' + domain);
+  }
+
+  function handleConsent() {
+    if (hasConsent()) {
+      loadMunchkin();
+    } else if (oneTrustReady()) {
+      deleteMktoCookie();
+    }
+  }
+
+  var original = window.OptanonWrapper;
+  window.OptanonWrapper = function () {
+    if (typeof original === 'function') {
+      original();
+    }
+    handleConsent();
+  };
+
+  if (oneTrustReady()) {
+    handleConsent();
+  }
+})();

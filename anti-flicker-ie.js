@@ -2,12 +2,12 @@
   if (d.location.href.indexOf('mboxEdit') !== -1) return;
 
   var SELECTORS = [
-    '#idComponente1',
-    '#idComponente2',
+    '#main-content > div > section.sc-1r54gnd-0.JuKmo',
+    '#form1 > div > div > div > div.sc-1r54gnd-0.sc-19ljixc-0.gbvTrW > div.sc-1r54gnd-0.cwGsjG > div > div',
     // ... add more selectors as needed
   ];
 
-  var TTL = 3000;
+  var TTL = 30000000;
   var STYLE_ID = 'anti-flicker-ie';
   var CLASS = 'at-hide';
 
@@ -24,7 +24,7 @@
         inset:0;
         background:#f2f2f2;
         box-sizing:border-box;
-        z-index:2147483647;
+        z-index:20;
         pointer-events:none;
       }
 

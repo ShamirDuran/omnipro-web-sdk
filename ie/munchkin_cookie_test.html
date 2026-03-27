@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Munchkin Cookie Consent Test</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+      .accept {
+        background: #22c55e;
+        color: white;
+      }
+      .reject {
+        background: #ef4444;
+        color: white;
+      }
+      .clear {
+        background: #6b7280;
+        color: white;
+      }
+      .status {
+        padding: 12px;
+        border-radius: 6px;
+        margin: 16px 0;
+        font-weight: 600;
+      }
+      .status.accepted {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .status.rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .status.none {
+        background: #f3f4f6;
+        color: #374151;
+      }
+      #log {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 16px;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 13px;
+        max-height: 400px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+      }
+      .log-time {
+        color: #6b7280;
+      }
+      .log-inject {
+        color: #22c55e;
+      }
+      .log-remove {
+        color: #ef4444;
+      }
+      .log-change {
+        color: #facc15;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Munchkin Cookie Consent Test</h1>
+    <p>
+      Tests whether we can listen to <code>OptanonConsent</code> cookie changes and inject the
+      Munchkin script immediately upon acceptance.
+    </p>
+
+    <div>
+      <button class="accept" onclick="simulateAccept()">Accept Cookies</button>
+      <button class="reject" onclick="simulateReject()">Reject Cookies</button>
+      <button class="clear" onclick="clearCookie()">Clear Cookie</button>
+    </div>
+
+    <div id="status" class="status none">Cookie not set</div>
+
+    <h3>Event Log</h3>
+    <div id="log"></div>
+
+    <script type="text/javascript">
+      (function () {
+        var didInit = false;
+        function initMunchkin() {
+          if (didInit === false) {
+            didInit = true;
+            Munchkin.init('928-JRO-529');
+          }
+        }
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = '//munchkin.marketo.net/munchkin.js';
+        s.onreadystatechange = function () {
+          if (this.readyState == 'complete' || this.readyState == 'loaded') {
+            initMunchkin();
+          }
+        };
+        s.onload = initMunchkin;
+        document.getElementsByTagName('head')[0].appendChild(s);
+      })();
+    </script>
+
+    <script src="//discovery.ie.edu/js/forms2/js/forms2.min.js"></script> <form id="mktoForm_1040"></form> <script>MktoForms2.loadForm("//discovery.ie.edu", "928-JRO-529", 1040);</script>
+  </body>
+</html>
