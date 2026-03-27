@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <title>Flicker - default & no pzn</title>
+    <title>Flicker - custom & pzn</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <link rel="stylesheet" href="assets/css/main.css" />
@@ -9,37 +9,9 @@
       <link rel="stylesheet" href="assets/css/noscript.css" />
     </noscript>
 
-    <!--
-    Este script inserta dinámicamente una etiqueta <style> en el <head> del documento para ocultar el contenido de la página (estableciendo la opacidad del <body> en 0) durante un máximo de 3 segundos.
-    - El script solo se ejecuta si la URL NO contiene 'mboxEdit'.
-    - El propósito es evitar el parpadeo de contenido antes de que se apliquen ciertas personalizaciones o scripts (por ejemplo, pruebas A/B).
-    - Después de 3 segundos, la etiqueta <style> se elimina automáticamente para restaurar la visibilidad del contenido.
-  -->
-    <script>
-      !(function (e, a, n, t) {
-        var i = e.head;
-        if (i) {
-          if (a) return;
-          var o = e.createElement('style');
-          (o.id = 'alloy-prehiding'),
-            (o.innerText = n),
-            i.appendChild(o),
-            setTimeout(function () {
-              o.parentNode && o.parentNode.removeChild(o);
-            }, t);
-        }
-      })(
-        document,
-        document.location.href.indexOf('mboxEdit') !== -1,
-        'body { opacity: 0 !important }',
-        6000
-      );
-    </script>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://assets.adobedtm.com https://cdn1.adoberesources.net;">
 
-    <script
-      src="https://assets.adobedtm.com/27a87f218a28/826035ec3009/launch-aac4f6409141-development.min.js"
-      async
-    ></script>
+<script src="https://assets.adobedtm.com/27a87f218a28/81d067493d15/launch-f98fee2a479c-development.min.js" async></script>
   </head>
 
   <body class="is-preload">
@@ -271,7 +243,7 @@
                 >
               </li>
               <li>
-                <a href="#" class="icon brands style2 fa-facebook-f"
+                <a id="facebook-button" href="#" class="icon brands style2 fa-facebook-f"
                   ><span class="label">Facebook</span></a
                 >
               </li>
@@ -310,21 +282,6 @@
         </div>
       </footer>
     </div>
-
-    <script>
-      window.adobeDataLayer = window.adobeDataLayer || [];
-
-      window.adobeDataLayer.push({
-        'event': 'pageload_event',
-        'page_title': 'IE School of Science and Technology | SCI TECH',
-        'page_path': '/school-science-technology/',
-        'page_section': '/school-science-technology/',
-        'page_subsection': '',
-        'full_url': 'https://www.pre.thesaurus.ie.edu/school-science-technology/',
-        'ev_traffic': 'none|direct|not set',
-        'gtm.uniqueEventId': 35,
-      });
-    </script>
 
     <!-- Scripts -->
     <script src="assets/js/jquery.min.js"></script>
